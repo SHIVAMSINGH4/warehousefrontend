@@ -1,17 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import '../components/header.css'
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useParams } from 'react-router';
 
 export default function Header() {
     const [user, setUser] = useState({ type: "select user" })
+    const {param} = useParams();
     function userV(event) {
         console.log(event.target.innerHTML)
         setUser({ type: `${event.target.innerHTML}` })
     }
+    useEffect(()=>{
+        console.log(param)
+    },[param])
 
     return (
         <Navbar className=' p-1 ps-5 pe-5' expand="lg"  style={{ backgroundColor: "#428BCA"}}>
