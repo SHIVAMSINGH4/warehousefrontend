@@ -58,23 +58,16 @@ export default function Login() {
                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                     <Form.Control type="email" name="email" onChange={handleChange} placeholder="Enter email" />
                                 </Form.Group>
-
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
                                     <Form.Control type="password" name="password" onChange={handleChange} placeholder="Password" />
                                 </Form.Group>
-
                                 <Button variant="primary" onClick={handleSubmit} className="login" style={{ width: '23rem' }}>
                                     Login
                                 </Button>
-
                                 <Link to={"forgot"} className="forgot">forgoton password?</Link>
-
                                 <div style={{ width: "23rem" }} className="br"></div>
-
                                 <Link to={"signup"} ><Button variant="secondary" className="signup">signup</Button></Link>
-
                             </Form>
-
                         </Card.Body>
                     </Card>    
                     </div>                    
