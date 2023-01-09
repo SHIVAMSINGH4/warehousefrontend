@@ -3,7 +3,6 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import SideNav from '../../sidenav/SideNav';
 import img1 from '../../../public/img/OIP.jpg';
 import img2 from '../../../public/img/OIP (1).jpg';
 import img3 from '../../../public/img/OIP (2).jpg';
@@ -12,7 +11,6 @@ function BasicExample() {
 
   return (
     <>
-      <SideNav />
       <Container id="main">
         <Row>
           <Col >

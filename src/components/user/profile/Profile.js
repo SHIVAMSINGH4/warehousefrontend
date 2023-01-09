@@ -4,7 +4,6 @@ import SideNav from "../../sidenav/SideNav";
 export default function Profile() {
     return (
         <>
-            <SideNav />
             <Container id="main">
                 <Row>
                     <h1>Profile component</h1>

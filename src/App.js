@@ -9,6 +9,7 @@ import Stocks from './components/user/stocks/Stocks';
 import Bill from './components/user/billing/Bill';
 import Profile from './components/user/profile/Profile';
 import Cart from './components/user/billing/Cart';
+import SideNav from './components/sidenav/SideNav';
 
 
 function App() {
@@ -18,11 +19,11 @@ function App() {
         <Header />
         <Routes>
           <Route path={"/"} element={<Adminlogin />} />
-          <Route path={"/dashboard"} element={<Dashboard />} />
-          <Route path={"/stocks"} element={<Stocks />} />
-          <Route path={"/bill"} element={<Bill />} />
-          <Route path={"/profile"} element={<Profile/>} />
-          <Route path={"/cart"} element={<Cart/>}/>
+          <Route path={"/dashboard"} element={<SideNav><Dashboard /></SideNav>} />
+          <Route path={"/stocks"} element={<SideNav><Stocks /></SideNav>} />
+          <Route path={"/bill"} element={<SideNav><Bill /></SideNav>} />
+          <Route path={"/profile"} element={<SideNav><Profile/></SideNav>} />
+          <Route path={"/cart"} element={<SideNav><Cart/></SideNav>}/>
         </Routes>
       </Router>
     </GlobalContext>

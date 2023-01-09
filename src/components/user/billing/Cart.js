@@ -4,7 +4,6 @@ import SideNav from "../../sidenav/SideNav";
 export default function Cart(){
     return(
         <>
-            <SideNav/>
             <Container id="main">
                 <Row>
                     <Col>

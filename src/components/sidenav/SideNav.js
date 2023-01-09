@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import "./SideNav.css"
 
-export default function SideNav(){
+export default function SideNav({children}){
 
     return (
         <>
@@ -11,6 +11,7 @@ export default function SideNav(){
                 <Link to="/stocks">Stocks</Link>
                 <Link to="/bill">Bill</Link>
             </div>
+            {children}
         </>
     )
 }

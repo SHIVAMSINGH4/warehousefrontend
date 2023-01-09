@@ -10,7 +10,6 @@ export default function Bill() {
     }
     return (
         <>
-            <SideNav />
             <Container fluid id="main">
                 <Row className="text-center bg-success mt-2">
                     <h1>Invoice</h1>

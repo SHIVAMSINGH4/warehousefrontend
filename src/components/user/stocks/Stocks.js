@@ -5,7 +5,6 @@ import SideNav from '../../sidenav/SideNav';
 export default function Stocks() {
     return (
         <>
-            <SideNav />
             <Container fluid id='main'>
                 <Row>
                     <Table striped bordered hover>
