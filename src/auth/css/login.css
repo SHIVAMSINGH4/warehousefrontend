@@ -1,0 +1,39 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+    
+}
+.card{
+    margin: 100px 0px 0px 800px;
+}
+/* .login{
+    font-size: 30px;
+    color: #428BCA;
+} */
+/* .forgot{
+    margin: 20px 0px 0px 110px;
+} */
+/* .br{
+    margin-top: 10px;
+    padding: 1px;
+    background-color: grey;
+} */
+/* .signup{
+    margin: auto!important;
+} */
+/* .fbutton{
+    margin: auto!important;
+} */
+.sButton{
+    border-radius: 0.3rem;
+    border: 0.1rem ;
+    padding: 0.5rem 1rem;
+    background-color: gray;
+    display: block;
+    margin: auto;
+    color:whitesmoke;
+    /* position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%); */
+}
