@@ -10,26 +10,36 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SetToken from "../constant/Constant";
 // import Dashboard from "../component/Dashboard/Dashboard";
-// import SetToken from "../constant/Constant";
-// import { Maincontext } from "../context/Context";
+import { Maincontext } from "../context/Context";
 
-export default function Login() {
+export default function Adminlogin() {
     const [form, setForm] = useState();
     const navigate = useNavigate();
 
-    // const{setid}=useContext(Maincontext)
+    const { setid } = useContext(Maincontext)
 
     function handleChange(event) {
         setForm({ ...form, [event.target.name]: event.target.value })
     }
 
     async function handleSubmit(event) {
+        // const hello={}
+        //  hello.type="login"
         event.preventDefault();
-        console.log(form)
-        setTimeout(()=>{
+        SetToken("token")
+        sessionStorage.setItem("idinfo", JSON.stringify({ name: "user" }))
+        setid(JSON.parse(sessionStorage.getItem("idinfo")).name)
+        setTimeout(() => {
             navigate("dashboard")
-        },2000)
+        }, 2000)
+        // reducer(hello)
+
+        // console.log(form)
+        // setTimeout(()=>{
+        //     navigate("dashboard")
+        // },2000)
         // const response = await login(form)
         // console.log(response)
         // if (response.status == "success") {
@@ -64,15 +74,10 @@ export default function Login() {
                                     <Form.Group className="mb-3" controlId="formBasicPassword">
                                         <Form.Control type="password" name="password" onChange={handleChange} placeholder="Password" />
                                     </Form.Group>
+                                    <hr />
                                     <Button onClick={handleSubmit} className="login mt-2" style={{ width: '23rem' }}>
                                         Login
                                     </Button>
-                                    <hr />
-                                    <div className="mt-2 text-center">
-                                        <Link to={"forgot"} className="forgot">forgot password?</Link>
-                                    </div>
-                                    <div style={{ width: "23rem" }} className="br"></div>
-                                    <button className=" mt-2 sButton">Submit</button>
                                 </Form>
                             </Card.Body>
                         </Card>
