@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Adminlogin from './auth/Adminlogin';
 import Header from './components/Header';
 import GlobalContext from './context/ContextGlobal';
-import Dashboard from './dashboard/Dashboard';
+import Dashboard from './components/user/dashboard/Dashboard';
 
 
 function App() {
