@@ -13,6 +13,13 @@ function BasicExample() {
     <>
       <Container id="main">
         <Row>
+          <Col className='text-center'>
+            <h1>
+              Dashboard
+            </h1>
+          </Col>
+        </Row>
+        <Row>
           <Col >
             <img src={img1} style={{ width: "350px",marginTop:"10rem" }}></img>
           </Col>

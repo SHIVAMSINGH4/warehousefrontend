@@ -1,8 +1,10 @@
 import { Container, Row } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import SideNav from '../../sidenav/SideNav';
+import db from "../../../db.json";
 
 export default function Stocks() {
+    const data = db.stock;
+    console.log(data)
     return (
         <>
             <Container fluid id='main'>
@@ -20,15 +22,20 @@ export default function Stocks() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                            </tr>
+                            {data.map((v, i) => {
+                                return (
+                                    <tr key={i}>
+                                        <td >{i + 1}</td>
+                                        <td>{v.sapref}</td>
+                                        <td>{v.description}</td>
+                                        <td>{v.application}</td>
+                                        <td>{v.make}</td>
+                                        <td>{v.qty}</td>
+                                        <td>{v.mrp}</td>
+                                        {/* <td><button value={i} onClick={deldata}>-</button></td> */}                                        
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </Table>
                 </Row>

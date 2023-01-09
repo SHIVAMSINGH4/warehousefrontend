@@ -1,0 +1,92 @@
+{
+    "stock":[
+        {
+            "sapref":"FGLX4397",
+            "itemref":"LX4397",
+            "description":"Air Filter",
+            "application":"Discovery V",
+            "loc":"A1",
+            "qty":"4",
+            "mrp":"1688",
+            "make":"Mahle"
+
+        },
+        {
+            "sapref":"FGLX123",
+            "itemref":"LX4397",
+            "description":"Air Filter",
+            "application":"BMW",
+            "loc":"A1",
+            "qty":"1",
+            "mrp":"2688",
+            "make":"Mahle"
+
+        },
+        {
+            "sapref":"FGLX2348",
+            "itemref":"LX4397",
+            "description":"brake pads",
+            "application":"Audi",
+            "loc":"A1",
+            "qty":"4",
+            "mrp":"7688",
+            "make":"Mahle"
+
+        },
+        {
+            "sapref":"FGLX8765",
+            "itemref":"LX4397",
+            "description":"clutch pads",
+            "application":"mercedes",
+            "loc":"A1",
+            "qty":"4",
+            "mrp":"5688",
+            "make":"Mahle"
+
+        },
+        {
+            "sapref":"FGLX9897",
+            "itemref":"LX4397",
+            "description":"brake pads",
+            "application":"ferrari",
+            "loc":"A1",
+            "qty":"4",
+            "mrp":"20688",
+            "make":"Mahle"
+
+        },
+        {
+            "sapref":"FGLX4326",
+            "itemref":"LX4397",
+            "description":"Air Filter",
+            "application":"porsche",
+            "loc":"A1",
+            "qty":"4",
+            "mrp":"19688",
+            "make":"Mahle"
+
+        },
+        {
+            "sapref":"FGLX8436",
+            "itemref":"LX4397",
+            "description":"cabin filter",
+            "application":"bentley",
+            "loc":"A1",
+            "qty":"4",
+            "mrp":"12688",
+            "make":"Mahle"
+
+        },
+        {
+            "sapref":"FGLX7397",
+            "itemref":"LX4397",
+            "description":"Air Filter",
+            "application":"rolls royace",
+            "loc":"A1",
+            "qty":"4",
+            "mrp":"70688",
+            "make":"Mahle"
+
+        }
+    ]
+}

@@ -33,7 +33,7 @@ export default function Adminlogin() {
         setid(JSON.parse(sessionStorage.getItem("idinfo")).name)
         setTimeout(() => {
             navigate("dashboard")
-        }, 2000)
+        }, 100)
         // reducer(hello)
 
         // console.log(form)

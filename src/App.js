@@ -22,7 +22,7 @@ function App() {
           <Route path={"/dashboard"} element={<SideNav><Dashboard /></SideNav>} />
           <Route path={"/stocks"} element={<SideNav><Stocks /></SideNav>} />
           <Route path={"/bill"} element={<SideNav><Bill /></SideNav>} />
-          <Route path={"/profile"} element={<SideNav><Profile/></SideNav>} />
+          {/* <Route path={"/profile"} element={<SideNav><Profile/></SideNav>} /> */}
           <Route path={"/cart"} element={<SideNav><Cart/></SideNav>}/>
         </Routes>
       </Router>
