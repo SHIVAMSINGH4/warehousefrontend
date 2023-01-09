@@ -45,9 +45,9 @@ export default function Header() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" className='justify-content-end'>
                     <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic" style={{backgroundColor:"ghostwhite",color:"#428BCA"}}>
+                        {/* <Dropdown.Toggle variant="success" id="dropdown-basic" style={{backgroundColor:"ghostwhite",color:"#428BCA"}}>
                             {user.type}
-                        </Dropdown.Toggle>
+                        </Dropdown.Toggle> */}
                         <Dropdown.Menu>
                             {/* <li className='hi'>hi</li> */}
                             <Dropdown.Item className='admin' onClick={userV}>admin</Dropdown.Item>

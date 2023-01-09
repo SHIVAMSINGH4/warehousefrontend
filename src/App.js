@@ -8,6 +8,7 @@ import Dashboard from './components/user/dashboard/Dashboard';
 import Stocks from './components/user/stocks/Stocks';
 import Bill from './components/user/billing/Bill';
 import Profile from './components/user/profile/Profile';
+import Cart from './components/user/billing/Cart';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path={"/stocks"} element={<Stocks />} />
           <Route path={"/bill"} element={<Bill />} />
           <Route path={"/profile"} element={<Profile/>} />
+          <Route path={"/cart"} element={<Cart/>}/>
         </Routes>
       </Router>
     </GlobalContext>
