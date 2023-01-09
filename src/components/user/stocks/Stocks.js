@@ -6,7 +6,7 @@ export default function Stocks() {
     return (
         <>
             <SideNav />
-            <Container id='main'>
+            <Container fluid id='main'>
                 <Row>
                     <Table striped bordered hover>
                         <thead>

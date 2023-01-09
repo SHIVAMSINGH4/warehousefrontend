@@ -6,6 +6,8 @@ import Header from './components/header/Header';
 import GlobalContext from './context/ContextGlobal';
 import Dashboard from './components/user/dashboard/Dashboard';
 import Stocks from './components/user/stocks/Stocks';
+import Bill from './components/user/billing/Bill';
+import Profile from './components/user/profile/Profile';
 
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
           <Route path={"/"} element={<Adminlogin />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
           <Route path={"/stocks"} element={<Stocks />} />
+          <Route path={"/bill"} element={<Bill />} />
+          <Route path={"/profile"} element={<Profile/>} />
         </Routes>
       </Router>
     </GlobalContext>
