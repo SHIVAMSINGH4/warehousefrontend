@@ -1,8 +1,8 @@
 // import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Adminlogin from './auth/Adminlogin';
-import Header from './components/Header';
+import Adminlogin from './auth/admin/Adminlogin';
+import Header from './components/header/Header';
 import GlobalContext from './context/ContextGlobal';
 import Dashboard from './components/user/dashboard/Dashboard';
 

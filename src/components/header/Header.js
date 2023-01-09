@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import '../components/header.css'
+import './header.css'
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Maincontext } from '../context/Context';
+import { Maincontext } from '../../context/Context';
 import { useNavigate } from 'react-router';
 
 export default function Header() {
@@ -17,24 +17,24 @@ export default function Header() {
     }
 
     function logout() {
-        import ("../constant/Constant").then(ff=>{ff.clearToken()})
+        import ("../../constant/Constant").then(ff=>{ff.clearToken()})
         navigate('/')
         setid("choose user")
     }
     
     useEffect(()=>{
-        var admin = document.querySelector(".li");
-        console.log("id.name")
-        console.log(admin)
+        // var admin = document.querySelector(".li");
+        // console.log("id.name")
+        // console.log(admin)
         // console.log(id.name)
         setUser({type: id.name})
         // if(!user.type==id.name)
     },[id])
 
-    useEffect(()=>{
-        var admin = document.querySelector(".logout");
-        console.log(admin)
-    },[])
+    // useEffect(()=>{
+    //     var admin = document.querySelector(".logout");
+    //     console.log(admin)
+    // },[])
 
     return (
         <Navbar className=' p-1 ps-5 pe-5' expand="lg"  style={{ backgroundColor: "#428BCA"}}>
@@ -49,7 +49,7 @@ export default function Header() {
                             {user.type}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {/* <li className='hi'>hi</li> */}
+                            <li className='hi'>hi</li>
                             <Dropdown.Item className='admin' onClick={userV}>admin</Dropdown.Item>
                             <Dropdown.Item className='user' onClick={userV}>user</Dropdown.Item>
                             <Dropdown.Item className='logout' onClick={logout}>logout</Dropdown.Item>

@@ -5,14 +5,14 @@ import { Link } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
 import "./css/login.css";
 import { Container, Navbar, Row } from "react-bootstrap";
-import { login } from "../api/Api";
+import { login } from "../../api/Api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SetToken from "../constant/Constant";
+import SetToken from "../../constant/Constant";
 // import Dashboard from "../component/Dashboard/Dashboard";
-import { Maincontext } from "../context/Context";
+import { Maincontext } from "../../context/Context";
 
 export default function Adminlogin() {
     const [form, setForm] = useState();
