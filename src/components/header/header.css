@@ -4,3 +4,6 @@
 .navb{
     padding: 0!important;
 }
+.name{
+    cursor:pointer;
+}

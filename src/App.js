@@ -5,6 +5,7 @@ import Adminlogin from './auth/admin/Adminlogin';
 import Header from './components/header/Header';
 import GlobalContext from './context/ContextGlobal';
 import Dashboard from './components/user/dashboard/Dashboard';
+import Stocks from './components/user/stocks/Stocks';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path={"/"} element={<Adminlogin />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
+          <Route path={"/stocks"} element={<Stocks />} />
         </Routes>
       </Router>
     </GlobalContext>

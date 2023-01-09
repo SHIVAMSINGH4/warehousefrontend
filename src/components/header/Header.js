@@ -39,7 +39,7 @@ export default function Header() {
     return (
         <Navbar className=' p-1 ps-5 pe-5' expand="lg"  style={{ backgroundColor: "#428BCA"}}>
             <Container fluid className='ps-5'>
-                <Navbar.Brand style={{ color: "ghostwhite", fontFamily: "monospace", fontWeight: "bold", fontSize: "2rem" }}>
+                <Navbar.Brand className='name' style={{ color: "ghostwhite", fontFamily: "monospace", fontWeight: "bold", fontSize: "2rem" }}>
                     WMS
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -49,10 +49,10 @@ export default function Header() {
                             {user.type}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            <li className='hi'>hi</li>
+                            {/* <li className='hi'>hi</li> */}
                             <Dropdown.Item className='admin' onClick={userV}>admin</Dropdown.Item>
                             <Dropdown.Item className='user' onClick={userV}>user</Dropdown.Item>
-                            <Dropdown.Item className='logout' onClick={logout}>logout</Dropdown.Item>
+                            {/* <Dropdown.Item className='logout' onClick={logout}>logout</Dropdown.Item> */}
                         </Dropdown.Menu>
                     </Dropdown>
                 </Navbar.Collapse>
