@@ -66,7 +66,7 @@ export default function Bill() {
                 </Row>
                 <Row>
                     <Col className="px-5 mt-4">
-                        <Table striped bordered hover>
+                        <Table striped bordered hover responsive="sm">
                             <thead>
                                 <tr>
                                     <th>S.No.</th>

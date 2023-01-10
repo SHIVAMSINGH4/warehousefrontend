@@ -9,7 +9,7 @@ export default function Stocks() {
         <>
             <Container fluid id='main'>
                 <Row>
-                    <Table striped bordered hover>
+                    <Table striped bordered hover responsive="sm">
                         <thead>
                             <tr>
                                 <th>S.No.</th>

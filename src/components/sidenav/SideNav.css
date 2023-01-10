@@ -34,6 +34,7 @@
   
   /* Position and style the close button (top right corner) */
   .sidenav .closebtn {
+    display: none;
     position: absolute;
     top: 0;
     right: 25px;
@@ -49,7 +50,7 @@
   }
 
   /* button for mobile setup */
-  .btn{
+  .mbtn{
     display:none !important;
   }
 
@@ -69,9 +70,12 @@
       margin-left: 0;
     }
     .sidenav a {font-size: 18px;}
-    .btn{
+    .mbtn{
       display: inline-flex!important;
       vertical-align: middle!important;
+    }
+    .closebtn{
+      display: block!important;
     }
   }
   

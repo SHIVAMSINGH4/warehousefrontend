@@ -20,8 +20,8 @@ export default function SideNav({ children }) {
 
     return (
         <>
-            <Button variant="primary" className="btn" onClick={openNav}>
-                BTN
+            <Button variant="primary" className="mbtn" onClick={openNav}>
+                MENU
             </Button>
             {/* <div className="sidenav">
                 <Offcanvas id="mySidenav" show={show} onHide={handleClose} className="sidenav" style={{ color: "ghostwhite" }} >
@@ -29,7 +29,7 @@ export default function SideNav({ children }) {
                 </Offcanvas>
             </div> */}
             <div id="mySidenav" className="sidenav" style={{ color: "ghostwhite" }} >
-                <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>&times;</a>
+                <a className="closebtn" onClick={closeNav}>&times;</a>
                 <Link to="/dashboard">Dashboard</Link>
                 {/* <Link to="/profile">Profile</Link> */}
                 <Link to="/stocks">Stocks</Link>
