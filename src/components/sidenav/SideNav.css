@@ -11,6 +11,10 @@
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
   }
+.show{
+  width: 50%!important;
+  height: 90%;
+}
   
   /* The navigation menu links */
   .sidenav a {
@@ -43,10 +47,31 @@
     padding-left: 15%;
     padding-right: 2%;
   }
+
+  /* button for mobile setup */
+  .btn{
+    display:none !important;
+  }
+
+  /* .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  } */
   
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-  @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
+  @media screen and (max-width: 450px) {
+    .sidenav {padding-top: 15px;    
+      position: absolute;
+      width: 0;
+      margin-left: 0;
+    }
     .sidenav a {font-size: 18px;}
+    .btn{
+      display: inline-flex!important;
+      vertical-align: middle!important;
+    }
   }
   

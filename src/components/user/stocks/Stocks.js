@@ -4,7 +4,7 @@ import db from "../../../db.json";
 
 export default function Stocks() {
     const data = db.stock;
-    console.log(data)
+    // console.log(data)
     return (
         <>
             <Container fluid id='main'>

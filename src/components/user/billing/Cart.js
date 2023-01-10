@@ -9,11 +9,12 @@ export default function Cart() {
     }
     return (
         <>
-            <Container fluid id="main">
+            <Container fluid id="main" style={{display:"inline-block",verticalAlign:"middle"}}>
                 <Row className="text-center mt-2"  style={{backgroundColor:"lightgrey"}}>
                     <h1>Cart</h1>
                 </Row>
-                <Row className=" mt-3"  style={{backgroundColor:"#428BCA"}}>
+                <Container fluid>
+             <Row className=" mt-3"  style={{backgroundColor:"#428BCA"}}>
                     <Col className=" text-center">
                         <span><h6>Sales person = Ramu</h6></span>
                     </Col>
@@ -28,7 +29,7 @@ export default function Cart() {
                   </div>
                 </Row>
                 <Row>
-                <Table striped bordered hover>
+                <Table striped bordered hover responsive="sm" >
                         <thead>
                             <tr>
                                 <th>S.No.</th>
@@ -56,7 +57,8 @@ export default function Cart() {
                     <Button onClick={moveToBill}>View Bill</Button>
                     </Col>
                 </Row>
-
+                </Container>
+        
             </Container>
         </>
     )
