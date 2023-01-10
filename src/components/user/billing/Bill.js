@@ -1,11 +1,51 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row, Modal } from "react-bootstrap";
 import logo from "../../../public/img/logo.jpg";
 import Table from 'react-bootstrap/Table';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function MyVerticallyCenteredModal(props) {
+    const navigate = useNavigate()
+    function moveO(){
+        props.onHide()
+        navigate("/order")
+    }
+    return (
+        <Modal
+            {...props}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    ORDER
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <h4>DONE</h4>
+                <p>
+                    ORDER CHECKOUT SUCCESSFULLY
+                </p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={moveO}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
 
 export default function Bill() {
+    const [modalShow, setModalShow] = useState(false);
+
     return (
         <>
-            <Container id="main">
+            <MyVerticallyCenteredModal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+            />
+
+            <Container fluid id="main" className="mb-5">
                 <Row className="mt-1" style={{ backgroundColor: "#428BCA" }}>
                     <Col>
                         <div style={{ width: "100%", height: "1rem" }}></div>
@@ -121,21 +161,28 @@ export default function Bill() {
                                     <span style={{ display: "block", paddingRight: "3rem" }}>0</span>
                                 </div>
                             </div>
-                            <div style={{ marginLeft: "9.4rem", width: "70%", height: "0.1rem", backgroundColor: "black" }}></div>
-                            <div style={{marginBottom:"1rem", marginLeft: "12.6rem", width: "60%"}}>
-                                <div style={{textAlign:"center",display:"inline-block", width: "50%", fontSize: "1rem",fontWeight:"bold" }}>
+                            <div style={{ marginLeft: "11.8rem", width: "70%", height: "0.1rem", backgroundColor: "black" }}></div>
+                            <div style={{ marginBottom: "1rem", marginLeft: "15.6rem", width: "60%" }}>
+                                <div style={{ textAlign: "center", display: "inline-block", width: "50%", fontSize: "1rem", fontWeight: "bold" }}>
                                     BALANCE
-                                </div>                                
-                                <div style={{ backgroundColor: "lightblue" , display:"inline-block",width: "50%", fontSize: "1rem" }}>
-                                    <div style={{ textAlign:"center",display:"inline-block",width: "50%" }}>
-                                        <span style={{ }}>$</span>
-                                    </div>                                
-                                    <div style={{textAlign:"center",paddingRight:"18%",display:"inline-block", width: "50%" }}>
-                                        <span style={{ }}>0</span>
+                                </div>
+                                <div style={{ backgroundColor: "lightblue", display: "inline-block", width: "50%", fontSize: "1rem" }}>
+                                    <div style={{ textAlign: "center", display: "inline-block", width: "50%" }}>
+                                        <span style={{}}>$</span>
+                                    </div>
+                                    <div style={{ textAlign: "center", paddingRight: "11    %", display: "inline-block", width: "50%" }}>
+                                        <span style={{}}>0</span>
                                     </div>
                                 </div>
-                                <div style={{ marginLeft: "50%",width: "50%", height: "0.1rem", backgroundColor: "black" }}></div>
+                                <div style={{ marginLeft: "50%", width: "50%", height: "0.1rem", backgroundColor: "black" }}></div>
                             </div>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="text-end pe-5">
+                        <div>
+                            <Button onClick={() => setModalShow(true)}>CHECKOUT</Button>
                         </div>
                     </Col>
                 </Row>

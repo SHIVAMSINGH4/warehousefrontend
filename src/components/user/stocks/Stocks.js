@@ -1,4 +1,4 @@
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row ,Col} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import db from "../../../db.json";
 
@@ -8,6 +8,18 @@ export default function Stocks() {
     return (
         <>
             <Container fluid id='main'>
+                <Col className='text-center'>
+                    <h1>
+                        Stocks
+                    </h1>
+                    <div style={{ marginLeft: "40%", marginBottom: "1%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
+                    <Row className="text-justify">
+                    <div style={{ backgroundColor: "#428BCA" }}>
+                        <input name="scan"  placeholder="search items" ></input>
+                        <button>search</button>
+                    </div>
+                </Row>
+                </Col>
                 <Row>
                     <Table striped bordered hover responsive="sm">
                         <thead>
@@ -32,7 +44,7 @@ export default function Stocks() {
                                         <td>{v.make}</td>
                                         <td>{v.qty}</td>
                                         <td>{v.mrp}</td>
-                                        {/* <td><button value={i} onClick={deldata}>-</button></td> */}                                        
+                                        {/* <td><button value={i} onClick={deldata}>-</button></td> */}
                                     </tr>
                                 )
                             })}

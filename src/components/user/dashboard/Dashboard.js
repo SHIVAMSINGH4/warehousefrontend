@@ -11,12 +11,13 @@ function BasicExample() {
 
   return (
     <>
-      <Container id="main">
+      <Container fluid id="main">
         <Row>
           <Col className='text-center'>
             <h1>
               Dashboard
             </h1>
+            <div style={{marginLeft:"40%",marginBottom:"1%",display:"block",width:"20%",height:"0.2rem",backgroundColor:"black"}}></div>
           </Col>
         </Row>
         <Row>

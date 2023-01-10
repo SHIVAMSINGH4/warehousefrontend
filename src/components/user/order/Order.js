@@ -1,46 +1,26 @@
-import { Button, Col, Container, Row } from "react-bootstrap";
-import Table from 'react-bootstrap/Table';
-import { useNavigate } from "react-router-dom";
+import { Container, Row ,Col,Table,Button} from "react-bootstrap";
+import SideNav from "../../sidenav/SideNav";
 
-export default function Cart() {
-    const navigate = useNavigate();
-    function moveToBill() {
-        navigate("/bill")
-    }
+export default function Order() {
     return (
         <>
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
                 <Row className="text-center mt-2" style={{ backgroundColor: "lightgrey" }}>
-                    <h1>Cart</h1>
+                    <h1>ORDER</h1>
                     <div style={{ marginLeft: "40%", marginBottom: "1%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
                 </Row>
-                <Row className=" mt-3" style={{ backgroundColor: "#428BCA" }}>
-                    <Col className=" text-center">
-                        <span><h6>Sales person = Ramu</h6></span>
-                    </Col>
-                    <Col className="text-center">
-                        <span><h6>Invoice Id = 246</h6></span>
-                    </Col>
-                </Row>
-                <Row style={{ backgroundColor: "#428BCA" }}>
-                    <Col className="text-center">
-                        <div >
-                            <input name="scan" placeholder="add item" ></input>
-                            <button>add</button>
-                        </div>
-                    </Col>
-                    <Col className="text-start">
-                        <div >                    
-                            <button>scan</button>
-                        </div>
-                    </Col>
+                <Row>
+                    <div style={{ backgroundColor: "#428BCA" }}>
+                        <input name="scan" placeholder="search bill"></input>
+                        <button>scan</button>
+                    </div>
                 </Row>
                 <Row>
                     <Table striped bordered hover responsive="sm" >
                         <thead>
                             <tr>
                                 <th>S.No.</th>
-                                <th>Ref. Id</th>
+                                <th>Order Id</th>
                                 <th>Desciption</th>
                                 <th>Application</th>
                                 <th>Quantity</th>
@@ -50,7 +30,7 @@ export default function Cart() {
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>FGLX4397</td>
+                                <td>1001</td>
                                 <td>Air Filter</td>
                                 <td>Discovery V</td>
                                 <td>4</td>
@@ -75,13 +55,13 @@ export default function Cart() {
                         </tbody>
                     </Table>
                 </Row>
-                <Row>
+                {/* <Row>
                     <Col className="text-end ">
                         <div>
                             <Button onClick={moveToBill}>View Bill</Button>
                         </div>
                     </Col>
-                </Row>
+                </Row> */}
             </Container>
         </>
     )

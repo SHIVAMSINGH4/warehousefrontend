@@ -7,9 +7,9 @@ import GlobalContext from './context/ContextGlobal';
 import Dashboard from './components/user/dashboard/Dashboard';
 import Stocks from './components/user/stocks/Stocks';
 import Bill from './components/user/billing/Bill';
-import Profile from './components/user/profile/Profile';
 import Cart from './components/user/billing/Cart';
 import SideNav from './components/sidenav/SideNav';
+import Order from './components/user/order/Order';
 
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <Route path={"/dashboard"} element={<SideNav><Dashboard /></SideNav>} />
           <Route path={"/stocks"} element={<SideNav><Stocks /></SideNav>} />
           <Route path={"/bill"} element={<SideNav><Bill /></SideNav>} />
-          {/* <Route path={"/profile"} element={<SideNav><Profile/></SideNav>} /> */}
+          <Route path={"/order"} element={<SideNav><Order/></SideNav>} />
           <Route path={"/cart"} element={<SideNav><Cart/></SideNav>}/>
         </Routes>
       </Router>

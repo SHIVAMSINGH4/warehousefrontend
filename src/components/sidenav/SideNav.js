@@ -7,14 +7,14 @@ export default function SideNav({ children }) {
     function openNav() {
         var sidenav = document.getElementsByClassName("sidenav")[0];
         // console.log(sidenav)
-        sidenav.classList.add("show")
+        sidenav.classList.add("showbar")
         document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
     }
 
     function closeNav(){
         var sidenav = document.getElementsByClassName("sidenav")[0];
         // console.log(sidenav)
-        sidenav.classList.remove("show")
+        sidenav.classList.remove("showbar")
         document.body.style.removeProperty("background-color");
     }
 
@@ -23,17 +23,12 @@ export default function SideNav({ children }) {
             <Button variant="primary" className="mbtn" onClick={openNav}>
                 MENU
             </Button>
-            {/* <div className="sidenav">
-                <Offcanvas id="mySidenav" show={show} onHide={handleClose} className="sidenav" style={{ color: "ghostwhite" }} >
-
-                </Offcanvas>
-            </div> */}
             <div id="mySidenav" className="sidenav" style={{ color: "ghostwhite" }} >
                 <a className="closebtn" onClick={closeNav}>&times;</a>
-                <Link to="/dashboard">Dashboard</Link>
-                {/* <Link to="/profile">Profile</Link> */}
+                <Link to="/dashboard">Dashboard</Link>                
                 <Link to="/stocks">Stocks</Link>
                 <Link to="/cart">Cart</Link>
+                <Link to="/order">Order</Link>
             </div>
             {children}
         </>
