@@ -1,4 +1,4 @@
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row ,InputGroup,Form} from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from "react-router-dom";
 
@@ -10,11 +10,11 @@ export default function Cart() {
     return (
         <>
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
-                <Row className="text-center mt-2" style={{ backgroundColor: "lightgrey" }}>
-                    <h1>Cart</h1>
-                    <div style={{ marginLeft: "40%", marginBottom: "1%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
+                <Row className="text-center mt-1" >
+                    <h2>Cart</h2>
+                    <div style={{ marginLeft: "40%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
                 </Row>
-                <Row className=" mt-3" style={{ backgroundColor: "#428BCA" }}>
+                <Row className=" mt-1 p-2" style={{ backgroundColor: "#428BCA" }}>
                     <Col className=" text-center">
                         <span><h6>Sales person = Ramu</h6></span>
                     </Col>
@@ -22,22 +22,38 @@ export default function Cart() {
                         <span><h6>Invoice Id = 246</h6></span>
                     </Col>
                 </Row>
-                <Row style={{ backgroundColor: "#428BCA" }}>
-                    <Col className="text-center">
+                <Row className="pb-2" style={{ backgroundColor: "#428BCA" }}>
+                    {/* <Col className="text-center">
                         <div >
                             <input name="scan" placeholder="add item" ></input>
                             <button>add</button>
                         </div>
+                    </Col> */}
+                    <Col sm="3">
+                        <InputGroup>
+                            <Form.Control
+                                placeholder="Add Item"
+                                aria-label="Recipient's username"
+                                aria-describedby="basic-addon2"
+                            />
+                            <Button variant="light" id="button-addon2">
+                                ADD
+                            </Button>
+                        </InputGroup>
                     </Col>
-                    <Col >
-                        <div style={{ display: "inline-block" }}>
-                            <button>scan</button>
-                        </div>
+                    <Col >                    
+                          <Button variant="light" id="button-addon2">
+                                SCAN
+                            </Button>
                     </Col>
-                    <Col>
-                        <div style={{ display: "inline-block" }}>
-                            <input name="scan" placeholder="customer phone no." ></input>
-                        </div>
+                    <Col sm="3">                       
+                         <InputGroup>
+                            <Form.Control
+                                placeholder="CUSTOMER PHONE NO."
+                                aria-label="Recipient's username"
+                                aria-describedby="basic-addon2"
+                            />                           
+                        </InputGroup>
                     </Col>
                 </Row>
                 <Row>

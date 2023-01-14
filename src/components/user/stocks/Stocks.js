@@ -1,4 +1,4 @@
-import { Container, Row ,Col} from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, InputGroup } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import db from "../../../db.json";
 
@@ -9,16 +9,26 @@ export default function Stocks() {
         <>
             <Container fluid id='main'>
                 <Col className='text-center'>
-                    <h1>
-                        Stocks
-                    </h1>
-                    <div style={{ marginLeft: "40%", marginBottom: "1%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
-                    <Row className="text-justify">
-                    <div style={{ backgroundColor: "#428BCA" }}>
-                        <input name="scan"  placeholder="search items" ></input>
-                        <button>search</button>
-                    </div>
-                </Row>
+                    <h2>Stocks</h2>
+                    <div style={{ margin:"auto", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
+                    <Row className="justify-content-center p-1 mt-1" style={{ backgroundColor: "#428BCA" }}  >
+                        {/* <div style={{ backgroundColor: "#428BCA" }}>
+                            <input name="scan" placeholder="search items" style={{ borderRadius:"5rem solid"}}></input>
+                            <Button variant="light" style={{marginLeft:"1rem"}}>search</Button>
+                        </div> */}
+                        <Col sm="5">
+                            <InputGroup>
+                                <Form.Control
+                                    placeholder="Search Item"
+                                    aria-label="Recipient's username"
+                                    aria-describedby="basic-addon2"
+                                />
+                                <Button variant="light" id="button-addon2">
+                                    Search
+                                </Button>
+                            </InputGroup>
+                        </Col>
+                    </Row>
                 </Col>
                 <Row>
                     <Table striped bordered hover responsive="sm">

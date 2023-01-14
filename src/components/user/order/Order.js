@@ -1,19 +1,33 @@
-import { Container, Row ,Col,Table,Button} from "react-bootstrap";
+import { Container, Row ,Col,Table,Button,InputGroup,Form} from "react-bootstrap";
 import SideNav from "../../sidenav/SideNav";
 
 export default function Order() {
     return (
         <>
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
-                <Row className="text-center mt-2" style={{ backgroundColor: "lightgrey" }}>
-                    <h1>ORDER</h1>
-                    <div style={{ marginLeft: "40%", marginBottom: "1%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
+                <Row className="justify-content-center mt-1">
+                    <Col className="text-center">
+                    <h2>ORDER HISTORY</h2>
+                    <div style={{margin:"auto", display: "block", width: "25%", height: "0.2rem", backgroundColor: "black" }}></div>                    
+                    </Col >                                    
                 </Row>
-                <Row>
-                    <div style={{ backgroundColor: "#428BCA" }}>
+                <Row  className="justify-content-center mt-1 p-1" style={{ backgroundColor: "#428BCA" }}>
+                    {/* <div style={{ backgroundColor: "#428BCA" }}>
                         <input name="scan" placeholder="search bill"></input>
                         <button>scan</button>
-                    </div>
+                    </div> */}
+                    <Col sm="3">
+                        <InputGroup>
+                            <Form.Control
+                                placeholder="ORDER NO."
+                                aria-label="Recipient's username"
+                                aria-describedby="basic-addon2"
+                            />
+                            <Button variant="light" id="button-addon2">
+                                SEARCH
+                            </Button>
+                        </InputGroup>
+                    </Col>
                 </Row>
                 <Row>
                     <Table striped bordered hover responsive="sm" >
