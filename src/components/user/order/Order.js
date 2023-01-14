@@ -11,15 +11,25 @@ export default function Order() {
                     <div style={{margin:"auto", display: "block", width: "25%", height: "0.2rem", backgroundColor: "black" }}></div>                    
                     </Col >                                    
                 </Row>
-                <Row  className="justify-content-center mt-1 p-1" style={{ backgroundColor: "#428BCA" }}>
-                    {/* <div style={{ backgroundColor: "#428BCA" }}>
-                        <input name="scan" placeholder="search bill"></input>
-                        <button>scan</button>
-                    </div> */}
-                    <Col sm="3">
+                <Row  className="justify-content-center mt-1 p-1" style={{ backgroundColor: "#428BCA" }}>                   
+                    <Col sm="4">
                         <InputGroup>
                             <Form.Control
-                                placeholder="ORDER NO."
+                                placeholder="ORDER ID"
+                                aria-label="Recipient's username"
+                                aria-describedby="basic-addon2"
+                            />
+                            <Button variant="light" id="button-addon2">
+                                SEARCH
+                            </Button>
+                        </InputGroup>
+                    </Col>
+                    <Col sm="1">
+                    </Col>
+                    <Col sm="4">
+                        <InputGroup>
+                            <Form.Control
+                                placeholder="CUSTOMER PHONE NO"
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
                             />
@@ -72,14 +82,7 @@ export default function Order() {
                             </tr>
                         </tbody>
                     </Table>
-                </Row>
-                {/* <Row>
-                    <Col className="text-end ">
-                        <div>
-                            <Button onClick={moveToBill}>View Bill</Button>
-                        </div>
-                    </Col>
-                </Row> */}
+                </Row>           
             </Container>
         </>
     )

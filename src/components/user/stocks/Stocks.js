@@ -11,11 +11,7 @@ export default function Stocks() {
                 <Col className='text-center'>
                     <h2>Stocks</h2>
                     <div style={{ margin:"auto", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
-                    <Row className="justify-content-center p-1 mt-1" style={{ backgroundColor: "#428BCA" }}  >
-                        {/* <div style={{ backgroundColor: "#428BCA" }}>
-                            <input name="scan" placeholder="search items" style={{ borderRadius:"5rem solid"}}></input>
-                            <Button variant="light" style={{marginLeft:"1rem"}}>search</Button>
-                        </div> */}
+                    <Row className="justify-content-center p-1 mt-1" style={{ backgroundColor: "#428BCA" }}  >                      
                         <Col sm="5">
                             <InputGroup>
                                 <Form.Control
