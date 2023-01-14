@@ -29,9 +29,14 @@ export default function Cart() {
                             <button>add</button>
                         </div>
                     </Col>
-                    <Col className="text-start">
-                        <div >                    
+                    <Col >
+                        <div style={{ display: "inline-block" }}>
                             <button>scan</button>
+                        </div>
+                    </Col>
+                    <Col>
+                        <div style={{ display: "inline-block" }}>
+                            <input name="scan" placeholder="customer phone no." ></input>
                         </div>
                     </Col>
                 </Row>

@@ -21,6 +21,7 @@ export default function Order() {
                             <tr>
                                 <th>S.No.</th>
                                 <th>Order Id</th>
+                                <th>Customer Phone</th>
                                 <th>Desciption</th>
                                 <th>Application</th>
                                 <th>Quantity</th>
@@ -31,6 +32,7 @@ export default function Order() {
                             <tr>
                                 <td>1</td>
                                 <td>1001</td>
+                                <td>9555356244</td>
                                 <td>Air Filter</td>
                                 <td>Discovery V</td>
                                 <td>4</td>
@@ -39,6 +41,7 @@ export default function Order() {
                             <tr>
                                 <td>2</td>
                                 <td>1003</td>
+                                <td>9555356244</td>
                                 <td>Air Filter</td>
                                 <td>Volkswagen</td>
                                 <td>6</td>
@@ -47,6 +50,7 @@ export default function Order() {
                             <tr>
                                 <td>3</td>
                                 <td>1002</td>
+                                <td>9555356244</td>
                                 <td>Air Filter</td>
                                 <td>Rolls Royace</td>
                                 <td>2</td>
