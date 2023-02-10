@@ -1,34 +1,61 @@
-import { Button, Col, Container, Row ,InputGroup,Form} from "react-bootstrap";
+import { useReducer,useState } from "react";
+import { Button, Col, Container, Row, InputGroup, Form, Dropdown } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from "react-router-dom";
+import BillModal from "./Bill";
 
 export default function Cart() {
-    const navigate = useNavigate();
-    function moveToBill() {
-        navigate("/bill")
+
+    //cart
+    const cart = { type: "purchase", option: "sell" }
+    const [state, dispatch] = useReducer(reducer, cart)
+
+    function reducer(state, action) {
+        switch (action.type) {
+            case "sell":
+                return { type: "purchase", option: "sell" };
+            case "purchase":
+                return { type: "sell", option: "purchase" };
+        }
     }
+
+    // BILL
+    const [modalShow, setModalShow] = useState(false);
+    function moveToBill() {
+        // navigate("/bill")
+        setModalShow(true)
+    }
+
+
     return (
         <>
+            {/* bill */}
+            <BillModal show={modalShow} onHide={() => setModalShow(false)} />
+
+            {/* cart */}
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
-                <Row className="text-center mt-1" >
-                    <h2>Cart</h2>
-                    <div style={{ marginLeft: "40%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
+                <Row className=" mt-1" >
+                    <Col sm="4"></Col>
+                    <Col sm="4" className="text-center">
+                        <h2>Cart</h2>
+                        <div style={{ margin: "auto", width: "30%", height: "0.2rem", backgroundColor: "black" }}></div>
+                    </Col>
+
+                    {/*cart button */}
+
+                    <Col sm="4" className="text-end pt-2">
+                        <Dropdown>
+                            <Dropdown.Toggle variant="secondary" id="dropdown-basic" style={{ backgroundColor: "ghostwhite", color: "#428BCA" }}>
+                                {state.type}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => { dispatch({ type: state.type }); console.log(state) }}>{state.option}</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
                 </Row>
+
                 <Row className=" mt-1 p-2" style={{ backgroundColor: "#428BCA" }}>
-                    <Col className=" text-center">
-                        <span><h6>Sales person = Ramu</h6></span>
-                    </Col>
-                    <Col className="text-center">
-                        <span><h6>Invoice Id = 246</h6></span>
-                    </Col>
-                </Row>
-                <Row className="pb-2" style={{ backgroundColor: "#428BCA" }}>
-                    {/* <Col className="text-center">
-                        <div >
-                            <input name="scan" placeholder="add item" ></input>
-                            <button>add</button>
-                        </div>
-                    </Col> */}
                     <Col sm="3">
                         <InputGroup>
                             <Form.Control
@@ -41,18 +68,18 @@ export default function Cart() {
                             </Button>
                         </InputGroup>
                     </Col>
-                    <Col >                    
-                          <Button variant="light" id="button-addon2">
-                                SCAN
-                            </Button>
+                    <Col >
+                        <Button variant="light" id="button-addon2">
+                            SCAN
+                        </Button>
                     </Col>
-                    <Col sm="3">                       
-                         <InputGroup>
+                    <Col sm="3">
+                        <InputGroup>
                             <Form.Control
                                 placeholder="CUSTOMER PHONE NO."
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
-                            />                           
+                            />
                         </InputGroup>
                     </Col>
                 </Row>
