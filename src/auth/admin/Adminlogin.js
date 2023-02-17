@@ -65,7 +65,9 @@ export default function Adminlogin() {
             <Container fluid>
                 <Row className="mx-5 ">
                     <div className="col-md-12" >
-                        <Card border="secondary" style={{ width: '25rem' }} className="card mx-auto">
+                        <Card border="secondary" style={{ boxShadow: 'inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),0.3em 0.3em 1em rgba(0, 0, 0, 0.3)',
+                                                 width: '25rem' }} 
+                                className="card mx-auto">
                             <Card.Body>
                                 <Form>
                                     <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">

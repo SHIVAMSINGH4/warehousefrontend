@@ -3,34 +3,32 @@ import Table from 'react-bootstrap/Table';
 import db from "../../../db.json";
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 import "./stocks.css"
 
 export default function Stocks() {
     //data fetch from db.stock file
     const data = db.stock;
-    // console.log(data)
+    // console.log(data);
 
     //filtered data on search
     var searchD = {};
 
     // input box function 
-    const [sInput, setInput] = useState({ keywords: "" })
+    var result = [];
+    const [sInput, setInput] = useState([{ keywords: "" }])
     const handleChange = function (event) {
         handleShow();
-        setInput({ [event.target.name]: event.target.value })
-        // const count = searchD.keywords.length
-        const result = data.filter(e => {
-            console.log(e.sapref.toLowerCase())
-            return e.sapref.toLowerCase().startsWith(sInput.keywords)
-        })
-        console.log(result)
-        console.log(sInput)
-    }
-    //search button function
-    const search = function () {
-
+        // setInput([{ [event.target.name]: event.target.value }]);        
+        // const count = searchD.keywords.length;
+        searchD = { [event.target.name]: event.target.value }
+        result = data.filter(e => {
+            // console.log(e.sapref.toLowerCase());        
+            return e.sapref.toLowerCase().startsWith(searchD.keywords)
+        });
+        setInput(result)
+        console.log(result);
     }
 
     //search box
@@ -42,15 +40,15 @@ export default function Stocks() {
     useEffect(() => {
         var searchbox = document.getElementsByClassName("searchbox")[0];
         var card = document.getElementsByClassName("cad")[0];
-        if (sInput.keywords != "") {
+        if (sInput[0].keywords != "") {
             // console.log(searchbox)
             searchbox.style = "display:block";
             card.classList.add("anime");
         }
-        if (sInput.keywords == "") {            
+        if (sInput[0].keywords == "") {
             setTimeout(() => {
                 searchbox.style.display = "none";
-            },1000);
+            }, 1000);
             card.classList.remove("anime");
         }
     }, [sInput])
@@ -73,21 +71,54 @@ export default function Stocks() {
                                     onChange={handleChange}
                                     name="keywords"
                                 />
-                                <Button variant="light" id="button-addon2" onClick={search}>
+                                {/* <Button variant="light" id="button-addon2" onClick={search}>
                                     Search
-                                </Button>
+                                </Button> */}
                             </InputGroup>
                         </Col>
                     </Row>
                 </Col>
                 <Row>
-                    <Col className=" bg-success">
-                        <div className='searchbox bg-primary' style={{height:"7rem"}}>
+                    <Col className="">
+                        <div className='searchbox mt-1 bg-primary' style={{ height: "auto" }}>
                             <Card className="cad mx-auto my-0 bg-primary" style={{ width: "100%" }}>
-                                <Card.Body className=' bg-primary' style={{ display: "inline-block", backgroundColor: "orange" }}>This is some text within a card body.</Card.Body>
-                                <span className="closebtn" style={{ position: "absolute", right: "0.5%" }} onClick={handleClose}>
-                                    <AiOutlineClose />
-                                </span>
+                                <div>
+                                    <span className="closebtn" style={{ marginRight: "0.5%" }} onClick={handleClose}>
+                                        <AiOutlineClose />
+                                    </span>
+                                </div>
+                                <Card.Body className=' bg-light' style={{ height: "auto", display: "inline-block", backgroundColor: "orange" }}>
+                                    <Table striped bordered variant="dark" hover responsive="sm">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No.</th>
+                                                <th>Ref. Id</th>
+                                                <th>Desciption</th>
+                                                <th>Application</th>
+                                                <th>Maker</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {sInput.map((v, i) => {
+                                                console.log(v)
+                                                return (
+                                                    <tr key={i}>
+                                                        <td >{i + 1}</td>
+                                                        <td>{v.sapref}</td>
+                                                        <td>{v.description}</td>
+                                                        <td>{v.application}</td>
+                                                        <td>{v.make}</td>
+                                                        <td>{v.qty}</td>
+                                                        <td>{v.mrp}</td>
+                                                        {/* <td><button value={i} onClick={deldata}>-</button></td> */}
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </Table>
+                                </Card.Body>
                             </Card>
                         </div>
                     </Col>
