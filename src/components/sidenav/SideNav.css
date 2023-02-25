@@ -42,6 +42,9 @@
     background-color: white!important;
   }
 
+  .cad .closebtn:hover{
+    color:dodgerblue ;
+  }
 
   /* Position and style the close button (top right corner) */
   .sidenav .closebtn {

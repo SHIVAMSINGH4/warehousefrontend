@@ -39,7 +39,7 @@ export default function Header() {
 
     return (
         <>
-            <Navbar className=' p-1 ps-5 pe-5 header mb-1' style={{ backgroundColor: "#428BCA", }} fixed="top">
+            <Navbar className=' p-1 ps-5 pe-5 header mb-1' style={{height:"10%", backgroundColor: "#428BCA", }} fixed="top">
                 <Container fluid className='ps-5'>
                     <Navbar.Brand className='name' style={{ color: "ghostwhite", fontFamily: "monospace", fontWeight: "bold", fontSize: "2rem" }}>
                         WMS
