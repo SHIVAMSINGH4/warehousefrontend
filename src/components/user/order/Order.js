@@ -2,8 +2,10 @@ import { Container, Row, Col, Table, Button, InputGroup, Form } from "react-boot
 import SideNav from "../../sidenav/SideNav";
 
 export default function Order() {
+
     return (
         <>
+           
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
                 <Row className="justify-content-center mt-1">
                     <Col className="text-center">

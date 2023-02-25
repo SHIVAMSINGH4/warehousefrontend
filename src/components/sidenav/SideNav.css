@@ -6,11 +6,14 @@
     z-index: 1; /* Stay on top */
     bottom: 0;  /* Stay at the top */
     left: 0;   
-    background-color: #f1f1f1; /* Black*/
+    background-color: lightgray; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px;  /* Place content 60px from the top */
     transition: 0.5s;   /* 0.5 second transition effect to slide in the sidenav */
   }
+  /* .sidenav li button{
+    background-color: slategray!important;
+  } */
 .showbar {
   width: 50%!important;
   height: 90%;
@@ -27,16 +30,18 @@
   }
   
   /* When you mouse over the navigation links, change their color */
-  .sidenav a:hover {
-    color: #f1f1f1;
+  .sidenav a:hover{
+    color: dodgerblue!important;
     cursor: pointer;
-    background-color: slategray;
+    background-color: #f1f1f1!important;
   } 
-  
-  /* .active{
-    color:#f1f1f1!important;
-    background-color: slategray!important;
-  } */
+
+  .active{
+    color: dodgerblue!important;
+    cursor: pointer;
+    background-color: white!important;
+  }
+
 
   /* Position and style the close button (top right corner) */
   .sidenav .closebtn {
@@ -71,16 +76,18 @@
   
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
   @media screen and (max-width: 450px) {
-    .sidenav {padding-top: 15px;    
+    .sidenav {
+      padding-top: 5rem;    
       position: absolute;
       width: 0;
       margin-left: 0;
     }
     .sidenav a {font-size: 18px;}
     .mbtn{
+      margin-top: 5rem;
       display: inline-flex!important;
-      vertical-align: middle!important;
-    }
+      vertical-align: middle!important;      
+    }    
     .closebtn{
       display: block!important;
     }

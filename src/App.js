@@ -20,8 +20,7 @@ function App() {
         <Routes>
           <Route path={"/"} element={<Adminlogin />} />
           <Route path={"/dashboard"} element={<SideNav><Dashboard /></SideNav>} />
-          <Route path={"/stocks"} element={<SideNav><Stocks /></SideNav>} />
-          <Route path={"/bill"} element={<SideNav><Bill /></SideNav>} />
+          <Route path={"/stocks"} element={<SideNav><Stocks /></SideNav>} />        
           <Route path={"/order"} element={<SideNav><Order/></SideNav>} />
           <Route path={"/cart"} element={<SideNav><Cart/></SideNav>}/>
         </Routes>

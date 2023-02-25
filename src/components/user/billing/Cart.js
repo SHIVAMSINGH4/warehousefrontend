@@ -1,8 +1,10 @@
-import { useReducer,useState } from "react";
+import { useReducer, useState,useEffect } from "react";
 import { Button, Col, Container, Row, InputGroup, Form, Dropdown } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
-import { useNavigate } from "react-router-dom";
 import BillModal from "./Bill";
+import db from "../../../db.json";
+import Card from 'react-bootstrap/Card';
+import * as ai from "react-icons/ai";
 
 export default function Cart() {
 
@@ -26,11 +28,57 @@ export default function Cart() {
         setModalShow(true)
     }
 
+     //data fetch from db.stock file
+     const data = db.stock; 
+
+     //filtered data on search
+     var searchD = {};
+ 
+     // input box function 
+     var result = [];
+     const [sInput, setInput] = useState([{ keywords: "" }])
+     const handleChange = function (event) {        
+         searchD = { [event.target.name]: event.target.value }  
+         console.log(searchD)      
+         if(searchD.keywords!=""){
+             handleShow();
+             result = data.filter(e => {                    
+                 return e.sapref.toLowerCase().startsWith(searchD.keywords)
+             })
+         setInput(result)
+         console.log(sInput)
+         };
+         if(searchD.keywords==""){
+             setInput([searchD])            
+             handleClose();
+         }
+         console.log(result);                
+     }
+ 
+     //search box
+     const [show, setShow] = useState(false);
+ 
+     const handleClose = () => setShow(false);
+     const handleShow = () => setShow(true);
+ 
+     useEffect(() => {
+         var searchbox = document.getElementsByClassName("searchbox")[0];
+         var card = document.getElementsByClassName("cad")[0];      
+         if(show==true){
+             searchbox.style.display = "block";
+             card.classList.add("anime");
+         }
+         if (show==false) {
+                 setTimeout(() => {
+                     searchbox.style.display = "none";
+                 }, 500);
+                 card.classList.remove("anime");
+             }
+         
+     }, [sInput]);
 
     return (
-        <>
-            {/* bill */}
-            <BillModal show={modalShow} onHide={() => setModalShow(false)} />
+        <>            
 
             {/* cart */}
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
@@ -55,6 +103,7 @@ export default function Cart() {
                     </Col>
                 </Row>
 
+                {/* add item block */}
                 <Row className=" mt-1 p-2" style={{ backgroundColor: "#428BCA" }}>
                     <Col sm="3">
                         <InputGroup>
@@ -62,6 +111,8 @@ export default function Cart() {
                                 placeholder="Add Item"
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
+                                onChange={handleChange}
+                                name="keywords"
                             />
                             <Button variant="light" id="button-addon2">
                                 ADD
@@ -83,6 +134,54 @@ export default function Cart() {
                         </InputGroup>
                     </Col>
                 </Row>
+
+                {/* search box */}
+                <Row>
+                    <Col className="">                    
+                        <div className='searchbox mt-1 bg-primary' style={{ height: "auto" }}>
+                            <Card className="cad mx-auto my-0 bg-primary" style={{ width: "100%" }}>                            
+                            <div>
+                                <span className="closebtn" style={{ marginRight: "0.5%" }} onClick={handleClose}>
+                                    <ai.AiOutlineClose />
+                                </span>
+                            </div>
+                                <Card.Body className=' bg-light' style={{height:"auto", display: "inline-block", backgroundColor: "orange" }}>
+                                    <Table striped bordered variant="dark" hover responsive="sm">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No.</th>
+                                                <th>Ref. Id</th>
+                                                <th>Desciption</th>
+                                                <th>Application</th>
+                                                <th>Maker</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {sInput.map((e, i) => {
+                                                // console.log(e)                                                
+                                                return (
+                                                    <tr key={i}>
+                                                        <td >{i + 1}</td>
+                                                        <td>{e.sapref}</td>
+                                                        <td>{e.description}</td>
+                                                        <td>{e.application}</td>
+                                                        <td>{e.make}</td>
+                                                        <td>{e.qty}</td>
+                                                        <td>{e.mrp}</td>
+                                                        {/* <td><button value={i} onClick={deldata}>-</button></td> */}
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </Table>
+                                </Card.Body>                                
+                            </Card>
+                        </div>                        
+                    </Col>
+                </Row>
+
                 <Row>
                     <Table striped bordered hover responsive="sm" >
                         <thead>
@@ -131,6 +230,8 @@ export default function Cart() {
                     </Col>
                 </Row>
             </Container>
+            {/* bill */}
+            <BillModal show={modalShow} onHide={() => setModalShow(false)} />
         </>
     )
 }

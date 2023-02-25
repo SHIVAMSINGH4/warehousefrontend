@@ -1,12 +1,15 @@
 import { useEffect, useReducer, useState } from "react";
 import { Button } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom"
-import "./SideNav.css"
-import iconDash from "../../public/logo/dashboard.svg"
-import { AiOutlineShop} from "react-icons/ai";
-import { AiOutlineShoppingCart} from "react-icons/ai";
-import { AiOutlineSnippets} from "react-icons/ai";
-import {AiOutlineAreaChart} from "react-icons/ai"
+import { Link, useNavigate, useParams } from "react-router-dom";
+import "./SideNav.css";
+import iconDash from "../../public/logo/dashboard.svg";
+import { AiOutlineShop } from "react-icons/ai";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineSnippets } from "react-icons/ai";
+import { AiOutlineAreaChart } from "react-icons/ai";
+import { useLocation} from 'react-router-dom';
+
+
 export default function SideNav({ children }) {
     function openNav() {
         var sidenav = document.getElementsByClassName("sidenav")[0];
@@ -20,74 +23,54 @@ export default function SideNav({ children }) {
         // console.log(sidenav)
         sidenav.classList.remove("showbar")
         document.body.style.removeProperty("background-color");
-    }
+    }    
 
-    //active tab
+    //  const [state, dispatch] = useReducer(reducer, activ);
+    const [menu,setMenu] = useState([
+        {title:"Dashboard",path:'dashboard',icon:<AiOutlineAreaChart />},
+        {title:"Stocks",path:'stocks',icon:<AiOutlineShop />},
+        {title:"Cart",path:'cart',icon: <AiOutlineShoppingCart />},
+        {title:"Order",path:'order',icon: <AiOutlineSnippets />},
+    ])
 
-    const [activ, setActiv] = useState({ type: "dashboard" })
-    const [state,dispatch] = useReducer(reducer,activ)
+    //active tabs
+    const [tab,setTab] = useState(0)    
+    const locations = useLocation().pathname.substring(1);    
 
-    function reducer(state,active){
-        const atab = document.getElementsByClassName("active")
-        const dlink = document.getElementsByClassName("dlink")[0]
-        // console.log(atab)
-        console.log(dlink)
-        if(atab.length>0)
-            atab[0].classList.remove("active")
-        switch(active.type){
-            case "dashboard": dlink.classList.add("active")
-        }
-    }
-    // function active(event) {
-    //     var arr = document.querySelector(".active")
-    //     console.log(arr)
-    //     if(arr)
-    //         arr.classList.remove("active")
-    //     //    for(let i=0;i<arr.length;i++){
-    //     //         arr[i].classList.remove("active")
-    //     //    }
-    //     // console.log(event.target)
-    //     event.target.classList.add("active")
-    //     console.log(event.target.innerHTML)        
-    // }
-
-    useEffect(() => {
-        var arr = document.getElementsByClassName("active")
-        console.log(arr)            
-    }, [])
+    useEffect(()=>{
+        menu.forEach((e,i)=>{
+            if(e.title.toLowerCase()==locations){
+                setTab(i)                
+            }
+        })        
+    })
 
     return (
         <>
             <Button variant="primary" className="mbtn" onClick={openNav}>
-                MENU
-
+                &#9776;
             </Button>
-            <div id="mySidenav" className="sidenav" style={{ textAlign: "start"}}>
+
+            <div id="mySidenav" className="sidenav" style={{ textAlign: "start" }}>
                 <a className="closebtn" onClick={closeNav}>&times;</a>
-                <ul style={{ padding: "0", listStyle: "none" }}>
-                    <li style={{}}>
-                        <button className=" dlink" onClick={(event) => {dispatch({type:"dashboard"})}} style={{ width: "100%", backgroundColor: "#f1f1f1", border: "0" }}>
-                            <Link className="tablink" to="/dashboard"><AiOutlineAreaChart/>Dashboard</Link>
-                        </button>
-                    </li>
-                    <li style={{}} >
-                        <button onClick={(event) => {dispatch(event)}} style={{ width: "100%", backgroundColor: "#f1f1f1", border: "0" }}>
-                            <Link className="tablink slink"  to="/stocks"><AiOutlineShop/>Stocks</Link>
-                        </button>
-                    </li>
-                    <li style={{}}>
-                        <button onClick={(event) =>{dispatch(event)}} style={{ width: "100%", backgroundColor: "#f1f1f1", border: "0" }}>
-                            <Link className="tablink clink" to="/cart"><AiOutlineShoppingCart/>Cart</Link>
-                        </button>
-                    </li>
-                    <li style={{}}>
-                        <button onClick={(event) => {dispatch(event)}} style={{ width: "100%", backgroundColor: "#f1f1f1", border: "0" }}>
-                            <Link className="tablink olink" to="/order"><AiOutlineSnippets/>Order</Link>
-                        </button>
-                    </li>
-                </ul>
+                <ul style={{ listStyle: "none", padding: "0" }}>
+                    {
+                        menu.map((ele,index)=>
+                            <li  >
+                            <Link key={index} to={`/${ele.path}`} onClick={()=>setTab(index)} className={`${index==tab?'active':''}`} style={{ marginLeft: "0" }}>                                
+                                <div style={{display:"inline-block",width: "30%",textAlign: "center" }}>
+                                    {ele.icon}
+                                </div>
+                                <div style={{display:"inline-block", width: "70%", textAlign: "start" }} >
+                                     {ele.title}
+                                </div>
+                            </Link>
+                        </li>)
+                    }                  
+                </ul>                
             </div>
             {children}
+        
         </>
     )
 }
