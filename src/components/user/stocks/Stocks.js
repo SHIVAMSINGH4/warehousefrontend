@@ -45,8 +45,8 @@ export default function Stocks() {
         var stable = document.getElementsByClassName("stable")[0];
         if (show == true) {
             searchbox.style.display = "block";
-            card.classList.add("anime");            
-            stable.style.height = "35vh"            
+            card.classList.add("anime");
+            stable.style.height = "35vh"
         }
         if (show == false) {
             setTimeout(() => {
@@ -62,9 +62,10 @@ export default function Stocks() {
 
     const [showEbox, setEbox] = useState(false);
     const [edata, setEdata] = useState({});
-    function edit(event, i) {
+    function edit(i) {
         setEdata(data[i]);
         setEbox(true);
+        console.log(i)
         console.log(edata)
     }
 
@@ -76,13 +77,13 @@ export default function Stocks() {
                 {/* header */}
                 <Row>
                     <Col className='text-center'>
-                        <div style={{  width: "100%", paddingLeft: "45%" }}>
+                        <div style={{ width: "100%", paddingLeft: "45%" }}>
                             <div style={{ zIndex: "2", width: "10%", position: "fixed" }}>
                                 <h2 style={{ marginBottom: "-0.1rem" }}>Stocks</h2>
                                 <div style={{ margin: "auto", display: "block", width: "100%", height: "0.1rem", backgroundColor: "black" }}></div>
                             </div>
                         </div>
-                        <Row className="justify-content-center p-1" style={{borderRadius:"1rem", marginTop: "2.6rem", backgroundColor: "#428BCA" }}  >
+                        <Row className="justify-content-center p-1" style={{ borderRadius: "1rem", marginTop: "2.6rem", backgroundColor: "#428BCA" }}  >
                             <Col sm="5">
                                 <InputGroup >
                                     <Form.Control
@@ -103,19 +104,17 @@ export default function Stocks() {
                 {/* search box */}
                 <Row>
                     <Col>
-                        <div className='searchbox cad' style={{borderRadius:"1rem", backgroundColor: "lightgray", width: "100%" }} >
-                            {/* <Card className="cad mx-auto my-0 bg-primary text-end" >
-                                <Card.Body
-                                    style={{ display: "inline-block", backgroundColor: "orange", paddingTop: "0" }}>                                                                    
-                                </Card.Body>
-                            </Card> */}
-                            <div style={{ width: "98%", display: "inline-block" }}></div>
+                        <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >                         
+                            {/* close button */}
+                            <div style={{ width: "98%", display: "inline-block" }}></div>                            
                             <div style={{ width: "1%", display: "inline-block" }}>
                                 <span className="closebtn" onClick={handleClose}>
                                     <ai.AiOutlineClose size=".9rem" />
                                 </span>
-                            </div>                            
-                            <div style={{width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
+                            </div>
+
+                            {/* search table */}
+                            <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
                                 <Table striped bordered variant="dark" hover responsive="sm">
                                     <thead>
                                         <tr>
@@ -147,7 +146,7 @@ export default function Stocks() {
                                         {sInput.map((e, i) => {
                                             // console.log(v)                                                
                                             return (
-                                                <tr key={i}>
+                                                <tr key={i} onClick={() => { edit(i) }}>
                                                     <td >{i + 1}</td>
                                                     <td>{e.sapref}</td>
                                                     <td>{e.description}</td>
@@ -161,7 +160,7 @@ export default function Stocks() {
                                         })}
                                     </tbody>
                                 </Table>
-                            </div>                                                      
+                            </div>
                         </div>
                     </Col>
                 </Row>
@@ -169,38 +168,23 @@ export default function Stocks() {
                 {/* stocks table */}
                 <Row>
                     <Col >
-                        <div className='stable' style={{  width: "100%", overflowY: "scroll", overflowX: "auto" }}>
+                        <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
                                 <thead className="sticky-top">
                                     <tr>
                                         <th>S.No.</th>
-                                        <th>SAPREF</th>
-                                        <th>ITEMS REF</th>
-                                        <th>O.E. REF.</th>
-                                        <th>MEYLE REF.</th>
                                         <th>Ref. Id</th>
-                                        <th>MAHLE REF.</th>
-                                        <th>MAAN REF.</th>
-                                        <th>HENGEST/OTH</th>
-                                        <th>OTHER REF</th>
-                                        <th>DESCRIPTION</th>
-                                        <th>APPLICATION</th>
-                                        <th>LOC</th>
-                                        <th>QUANTITY</th>
-                                        <th>MRP</th>
-                                        <th>MAKE</th>
-                                        <th>NEW MRP</th>
-                                        <th>P COST</th>
-                                        <th>OP BALANCE</th>
-                                        <th>PUR</th>
-                                        <th>SALES</th>
-                                        <th>MUNDKA</th>
+                                        <th>Desciption</th>
+                                        <th>Application</th>
+                                        <th>Maker</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {data.map((v, i) => {
                                         return (
-                                            <tr key={i} onClick={(event) => { edit(event, i) }}>
+                                            <tr key={i} onClick={() => { edit(i) }}>
                                                 <td >{i + 1}</td>
                                                 <td>{v.sapref}</td>
                                                 <td>{v.description}</td>
@@ -232,20 +216,36 @@ export default function Stocks() {
                         view stock
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body  style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                     <Table striped bordered hover responsive="sm">
                         <thead>
                             <tr>
+                                <th>S.No.</th>
+                                <th>SAPREF</th>
+                                <th>ITEMS REF</th>
+                                <th>O.E. REF.</th>
+                                <th>MEYLE REF.</th>
                                 <th>Ref. Id</th>
-                                <th>Desciption</th>
-                                <th>Application</th>
-                                <th>Maker</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
+                                <th>MAHLE REF.</th>
+                                <th>MAAN REF.</th>
+                                <th>HENGEST/OTH</th>
+                                <th>OTHER REF</th>
+                                <th>DESCRIPTION</th>
+                                <th>APPLICATION</th>
+                                <th>LOC</th>
+                                <th>QUANTITY</th>
+                                <th>MRP</th>
+                                <th>MAKE</th>
+                                <th>NEW MRP</th>
+                                <th>P COST</th>
+                                <th>OP BALANCE</th>
+                                <th>PUR</th>
+                                <th>SALES</th>
+                                <th>MUNDKA</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr >
                                 <td>{edata.sapref}</td>
                                 <td>{edata.description}</td>
                                 <td>{edata.application}</td>

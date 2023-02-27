@@ -1,10 +1,11 @@
-import { useReducer, useState,useEffect } from "react";
+import { useReducer, useState, useEffect } from "react";
 import { Button, Col, Container, Row, InputGroup, Form, Dropdown } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
 import BillModal from "./Bill";
 import db from "../../../db.json";
 import Card from 'react-bootstrap/Card';
 import * as ai from "react-icons/ai";
+import { continueStatement } from "@babel/types";
 
 export default function Cart() {
 
@@ -24,67 +25,97 @@ export default function Cart() {
     // BILL
     const [modalShow, setModalShow] = useState(false);
     function moveToBill() {
-        // navigate("/bill")
         setModalShow(true)
     }
 
-     //data fetch from db.stock file
-     const data = db.stock; 
+    //data fetch from db.stock file
+    const data = db.stock;
 
-     //filtered data on search
-     var searchD = {};
- 
-     // input box function 
-     var result = [];
-     const [sInput, setInput] = useState([{ keywords: "" }])
-     const handleChange = function (event) {        
-         searchD = { [event.target.name]: event.target.value }  
-         console.log(searchD)      
-         if(searchD.keywords!=""){
-             handleShow();
-             result = data.filter(e => {                    
-                 return e.sapref.toLowerCase().startsWith(searchD.keywords)
-             })
-         setInput(result)
-         console.log(sInput)
-         };
-         if(searchD.keywords==""){
-             setInput([searchD])            
-             handleClose();
-         }
-         console.log(result);                
-     }
- 
-     //search box
-     const [show, setShow] = useState(false);
- 
-     const handleClose = () => setShow(false);
-     const handleShow = () => setShow(true);
- 
-     useEffect(() => {
-         var searchbox = document.getElementsByClassName("searchbox")[0];
-         var card = document.getElementsByClassName("cad")[0];      
-         if(show==true){
-             searchbox.style.display = "block";
-             card.classList.add("anime");
-         }
-         if (show==false) {
-                 setTimeout(() => {
-                     searchbox.style.display = "none";
-                 }, 500);
-                 card.classList.remove("anime");
-             }
-         
-     }, [sInput]);
+    //filtered data on search
+    var searchD = {};
+
+    // input box function 
+    var result = [];
+    const [sInput, setInput] = useState([{ keywords: "" }])
+    const handleChange = function (event) {
+        searchD = { [event.target.name]: event.target.value }
+        if (searchD.keywords != "") {
+            handleShow();
+            result = data.filter(e => {
+                return e.sapref.toLowerCase().startsWith(searchD.keywords)
+            })
+            setInput(result)
+        };
+        if (searchD.keywords == "") {
+            setInput([searchD])
+            handleClose();
+        }
+        console.log(result);
+    }
+
+    //search box
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    useEffect(() => {
+        var searchbox = document.getElementsByClassName("searchbox")[0];
+        var card = document.getElementsByClassName("cad")[0];
+        var sTable = document.getElementsByClassName("sTable")[0];
+        var cTable = document.getElementsByClassName("cTable")[0];
+        if (show == true) {
+            searchbox.style.display = "block";
+            card.classList.add("anime");
+            sTable.style.height = "38vh"
+            cTable.style.height = "30vh"
+        }
+        if (show == false) {
+            setTimeout(() => {
+                searchbox.style.display = "none";
+            }, 500);
+            card.classList.remove("anime");
+            cTable.style.height = "70vh"
+        }
+
+    }, [sInput, show]);
+
+    //cart list
+    const [cList, setClist] = useState([
+    ]);
+
+    function aList(i) {
+        let itemid = sInput[i].sapref
+        let item = {}
+        data.forEach((e, i) => {
+            if (e.sapref == itemid) {
+                item = e
+                setClist([...cList, item])
+            }
+        })
+    }
+    
+    function rList(i) {
+        let itemid = cList[i].sapref
+        cList.forEach((e, i) => {
+            if (e.sapref == itemid) {                
+                continueStatement()   
+            }
+            setClist([...cList,e])
+        })
+        setClist(cList.filter(e =>e.sapref !== itemid))
+    }
+    
+
 
     return (
-        <>            
+        <>
 
             {/* cart */}
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
                 <Row className=" mt-1" >
                     <Col sm="4"></Col>
-                    <Col sm="4" className="text-center">
+                    <Col sm="4" className="text-center" >
                         <h2>Cart</h2>
                         <div style={{ margin: "auto", width: "30%", height: "0.2rem", backgroundColor: "black" }}></div>
                     </Col>
@@ -104,7 +135,7 @@ export default function Cart() {
                 </Row>
 
                 {/* add item block */}
-                <Row className=" mt-1 p-2" style={{ backgroundColor: "#428BCA" }}>
+                <Row className=" mt-1 p-2" style={{ borderRadius: "1rem", backgroundColor: "#428BCA" }}>
                     <Col sm="3">
                         <InputGroup>
                             <Form.Control
@@ -131,6 +162,7 @@ export default function Cart() {
                                 placeholder="CUSTOMER PHONE NO."
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
+                            // onChange={{ cphone }}
                             />
                         </InputGroup>
                     </Col>
@@ -138,91 +170,106 @@ export default function Cart() {
 
                 {/* search box */}
                 <Row>
-                    <Col className="">                    
-                        <div className='searchbox mt-1 bg-primary' style={{ height: "auto" }}>
-                            <Card className="cad mx-auto my-0 bg-primary" style={{ width: "100%" }}>                            
-                            <div>
-                                <span className="closebtn" style={{ marginRight: "0.5%" }} onClick={handleClose}>
-                                    <ai.AiOutlineClose />
+                    <Col>
+                        <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >
+                            <div style={{ width: "98%", display: "inline-block" }}></div>
+                            {/* close button */}
+                            <div style={{ width: "1%", display: "inline-block" }}>
+                                <span className="closebtn" onClick={handleClose}>
+                                    <ai.AiOutlineClose size=".9rem" />
                                 </span>
                             </div>
-                                <Card.Body className=' bg-light' style={{height:"auto", display: "inline-block", backgroundColor: "orange" }}>
-                                    <Table striped bordered variant="dark" hover responsive="sm">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No.</th>
-                                                <th>Ref. Id</th>
-                                                <th>Desciption</th>
-                                                <th>Application</th>
-                                                <th>Maker</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {sInput.map((e, i) => {
-                                                // console.log(e)                                                
-                                                return (
-                                                    <tr key={i}>
-                                                        <td >{i + 1}</td>
-                                                        <td>{e.sapref}</td>
-                                                        <td>{e.description}</td>
-                                                        <td>{e.application}</td>
-                                                        <td>{e.make}</td>
-                                                        <td>{e.qty}</td>
-                                                        <td>{e.mrp}</td>
-                                                        {/* <td><button value={i} onClick={deldata}>-</button></td> */}
-                                                    </tr>
-                                                )
-                                            })}
-                                        </tbody>
-                                    </Table>
-                                </Card.Body>                                
-                            </Card>
-                        </div>                        
+
+                            {/* search table */}
+                            <div className="sTable" style={{ width: "100%", marginBottom: "0.5rem", overflowY: "scroll", overflowX: "scroll", }}>
+                                <Table striped bordered variant="dark" hover responsive="sm">
+                                    <thead className="sticky-top">
+                                        <tr>
+                                            <th>S.No.</th>
+                                            <th>Ref. Id</th>
+                                            <th>Desciption</th>
+                                            <th>Application</th>
+                                            <th>Maker</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sInput.map((e, i) => {
+                                            // console.log(v)                                                
+                                            return (
+                                                <tr key={i} >
+                                                    <td >
+                                                        <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
+                                                        <span>
+                                                            <button style={{ border: ".09rem solid black" }} onClick={() => { aList(i) }}>
+                                                                +
+                                                            </button>
+                                                        </span>
+                                                    </td>
+                                                    <td>{e.sapref}</td>
+                                                    <td>{e.description}</td>
+                                                    <td>{e.application}</td>
+                                                    <td>{e.make}</td>
+                                                    <td>{e.qty}</td>
+                                                    <td>{e.mrp}</td>
+                                                    {/* <td><button value={i} onClick={deldata}>-</button></td> */}
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>
+                            </div>
+                        </div>
                     </Col>
                 </Row>
 
+
+                {/* CART LIST */}
                 <Row>
-                    <Table striped bordered hover responsive="sm" >
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>Ref. Id</th>
-                                <th>Desciption</th>
-                                <th>Application</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>FGLX4397</td>
-                                <td>Air Filter</td>
-                                <td>Discovery V</td>
-                                <td>4</td>
-                                <td>1688</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>1003</td>
-                                <td>Air Filter</td>
-                                <td>Volkswagen</td>
-                                <td>6</td>
-                                <td>1688</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>1002</td>
-                                <td>Air Filter</td>
-                                <td>Rolls Royace</td>
-                                <td>2</td>
-                                <td>168800</td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                    <Col>
+                        <div className='cTable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
+                            <Table striped bordered hover responsive="sm" >
+                                <thead className="sticky-top">
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Ref. Id</th>
+                                        <th>Desciption</th>
+                                        <th>Application</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {cList.map((e, i) => {
+                                        return (
+                                            <tr key={i}>
+                                                <td >
+                                                    <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
+                                                    <span>
+                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { rList(i) }}>
+                                                            -
+                                                        </button>
+                                                    </span>
+                                                </td>
+                                                <td>{e.sapref}</td>
+                                                <td>{e.description}</td>
+                                                <td>{e.application}</td>
+                                                <td>{e.make}</td>
+                                                <td>{e.qty}</td>
+                                                <td>{e.mrp}</td>
+                                                {/* <td></td> */}
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </Table>
+                        </div>
+                    </Col>
+
                 </Row>
+
+                {/* BILL BUTTON */}
                 <Row>
                     <Col className="text-end ">
                         <div>

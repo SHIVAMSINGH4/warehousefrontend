@@ -1,4 +1,4 @@
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 
@@ -38,37 +38,42 @@ function Dashboard() {
             <div style={{ marginLeft: "40%", marginBottom: "1%", display: "block", width: "20%", height: "0.2rem", backgroundColor: "black" }}></div>
           </Col>
         </Row>
-        <Row>
-          <Col >
-            {/* <img src={img1} style={{ width: "350px",marginTop:"10rem" }}></img> */}
+        <Row  style={{marginTop:"1%"}}>
+          <Col md={5}>
+            <Card style={{width: "100%", margin: "auto",marginTop:"50%",textAlign:"center",
+              boxShadow: 'inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),0.3em 0.3em 1em rgba(0, 0, 0, 0.3)'}}>
+              <h4>total sales:<span>200</span></h4>
+              <h4>total purchases:<span>200</span></h4>
+            </Card>
           </Col>
-          <Col >
-            {/* <div style={{ display: "flex", justifyContent: "end" }}>
-              <img src={img3} className="" style={{ width: "400px",marginTop:"10rem"}}></img>
-            </div> */}
+          <Col md={2}>
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <div class="vr" style={{ height: "80vh",width:".2rem" }}></div>
+            </div>
           </Col>
-          <Col>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart width={400} height={400}>
-                <Pie
-                  data={data}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </Col>
-        </Row>
-      </Container>
+          <Col md={5}>
+            <Card style={{width: "100%", margin: "auto",marginTop:"10%",
+              boxShadow: 'inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),0.3em 0.3em 1em rgba(0, 0, 0, 0.3)'}}>
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
     </>
   );
 }
