@@ -25,7 +25,6 @@ export default function SideNav({ children }) {
         document.body.style.removeProperty("background-color");
     }    
 
-    //  const [state, dispatch] = useReducer(reducer, activ);
     const [menu,setMenu] = useState([
         {title:"Dashboard",path:'dashboard',icon:<AiOutlineAreaChart />},
         {title:"Stocks",path:'stocks',icon:<AiOutlineShop />},

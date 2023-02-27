@@ -6,7 +6,6 @@ import Header from './components/header/Header';
 import GlobalContext from './context/ContextGlobal';
 import Dashboard from './components/user/dashboard/Dashboard';
 import Stocks from './components/user/stocks/Stocks';
-import Bill from './components/user/billing/Bill';
 import Cart from './components/user/billing/Cart';
 import SideNav from './components/sidenav/SideNav';
 import Order from './components/user/order/Order';

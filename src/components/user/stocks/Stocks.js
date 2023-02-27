@@ -45,15 +45,15 @@ export default function Stocks() {
         var stable = document.getElementsByClassName("stable")[0];
         if (show == true) {
             searchbox.style.display = "block";
-            card.classList.add("anime");
-            stable.style.height = "35vh"
+            card.classList.add("anime");            
+            stable.style.height = "35vh"            
         }
         if (show == false) {
             setTimeout(() => {
                 searchbox.style.display = "none";
             }, 100);
             card.classList.remove("anime");
-            stable.style.height = "81vh"
+            stable.style.height = "79vh"
         }
 
     }, [sInput, show]);
@@ -76,13 +76,13 @@ export default function Stocks() {
                 {/* header */}
                 <Row>
                     <Col className='text-center'>
-                        <div style={{ width: "100%", paddingLeft: "45%" }}>
+                        <div style={{  width: "100%", paddingLeft: "45%" }}>
                             <div style={{ zIndex: "2", width: "10%", position: "fixed" }}>
                                 <h2 style={{ marginBottom: "-0.1rem" }}>Stocks</h2>
                                 <div style={{ margin: "auto", display: "block", width: "100%", height: "0.1rem", backgroundColor: "black" }}></div>
                             </div>
                         </div>
-                        <Row className="justify-content-center p-1" style={{ marginTop: "2.6rem", backgroundColor: "#428BCA" }}  >
+                        <Row className="justify-content-center p-1" style={{borderRadius:"1rem", marginTop: "2.6rem", backgroundColor: "#428BCA" }}  >
                             <Col sm="5">
                                 <InputGroup >
                                     <Form.Control
@@ -103,11 +103,10 @@ export default function Stocks() {
                 {/* search box */}
                 <Row>
                     <Col>
-                        <div className='searchbox cad' style={{ backgroundColor: "lightgray", width: "100%" }} >
+                        <div className='searchbox cad' style={{borderRadius:"1rem", backgroundColor: "lightgray", width: "100%" }} >
                             {/* <Card className="cad mx-auto my-0 bg-primary text-end" >
                                 <Card.Body
-                                    style={{ display: "inline-block", backgroundColor: "orange", paddingTop: "0" }}>
-                                                                    
+                                    style={{ display: "inline-block", backgroundColor: "orange", paddingTop: "0" }}>                                                                    
                                 </Card.Body>
                             </Card> */}
                             <div style={{ width: "98%", display: "inline-block" }}></div>
@@ -115,8 +114,8 @@ export default function Stocks() {
                                 <span className="closebtn" onClick={handleClose}>
                                     <ai.AiOutlineClose size=".9rem" />
                                 </span>
-                            </div>
-                            <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
+                            </div>                            
+                            <div style={{width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
                                 <Table striped bordered variant="dark" hover responsive="sm">
                                     <thead>
                                         <tr>
@@ -162,7 +161,7 @@ export default function Stocks() {
                                         })}
                                     </tbody>
                                 </Table>
-                            </div>
+                            </div>                                                      
                         </div>
                     </Col>
                 </Row>
@@ -170,7 +169,7 @@ export default function Stocks() {
                 {/* stocks table */}
                 <Row>
                     <Col >
-                        <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
+                        <div className='stable' style={{  width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
                                 <thead className="sticky-top">
                                     <tr>
