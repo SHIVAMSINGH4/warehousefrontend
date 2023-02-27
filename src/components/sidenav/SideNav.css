@@ -1,6 +1,6 @@
 /* The side navigation menu */
 .sidenav {
-    height: 90%;  /* 100% Full-height */
+    height: 93%;  /* 100% Full-height */
     width: 13%;   /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
@@ -61,7 +61,7 @@
     transition: margin-left .5s;
     padding-left: 15%;
     padding-right: 2%;
-    padding-top: 5%;
+    padding-top: 3.5%;
   }
 
   /* button for mobile setup */

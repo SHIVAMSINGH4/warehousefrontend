@@ -12,8 +12,7 @@ export default function Header() {
     const [user, setUser] = useState({ type: id.name })
     const navigate = useNavigate()
 
-    function userV(event) {
-        // console.log(event.target.innerHTML)
+    function userV(event) {        
         setUser({ type: `${event.target.innerHTML}` })
     }
 
@@ -39,7 +38,7 @@ export default function Header() {
 
     return (
         <>
-            <Navbar className=' p-1 ps-5 pe-5 header mb-1' style={{height:"10%", backgroundColor: "#428BCA", }} fixed="top">
+            <Navbar className=' p-1 px-5 header' style={{zIndex:"1",height:"7%", backgroundColor: "#428BCA", }} fixed="top">
                 <Container fluid className='ps-5'>
                     <Navbar.Brand className='name' style={{ color: "ghostwhite", fontFamily: "monospace", fontWeight: "bold", fontSize: "2rem" }}>
                         WMS
@@ -60,7 +59,7 @@ export default function Header() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container fluid className='text-end bg-light mt-5 fix' style={{height:"1.5rem"}}></Container>            
+            {/* <Container fluid className='text-end bg-light mt-3 fix' style={{height:"1.5rem"}}></Container>             */}
         </>
     )
 }

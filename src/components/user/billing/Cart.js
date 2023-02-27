@@ -108,15 +108,16 @@ export default function Cart() {
                     <Col sm="3">
                         <InputGroup>
                             <Form.Control
-                                placeholder="Add Item"
+                                placeholder="search item"
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
                                 onChange={handleChange}
                                 name="keywords"
+                                autoComplete="disabled"
                             />
-                            <Button variant="light" id="button-addon2">
+                            {/* <Button variant="light" id="button-addon2">
                                 ADD
-                            </Button>
+                            </Button> */}
                         </InputGroup>
                     </Col>
                     <Col >

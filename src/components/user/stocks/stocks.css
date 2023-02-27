@@ -1,3 +1,6 @@
+/* .closebtn{    
+    background-color: aqua;
+} */
 .closebtn:hover{    
     color:white;
     cursor: pointer;
@@ -6,7 +9,7 @@
     display: none;    
 }   
 .anime{
-    position: absolute;
+    position: relative;
     animation: name duration timing-function delay iteration-count direction fill-mode;;
     animation-name: anim;
     animation-duration: 1s ;
@@ -20,6 +23,6 @@
     from{margin-top: -2rem;}
     to{margin-bottom: 0;}
 }
-.cad{
+/* .cad{
     height:auto!important;
-}
+} */
