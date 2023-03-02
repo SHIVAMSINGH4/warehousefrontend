@@ -46,7 +46,7 @@ export default function Cart() {
         if (searchD.keywords == "") {
             setInput([searchD])
             handleClose();
-        }        
+        }
     }
 
     //search box
@@ -84,10 +84,10 @@ export default function Cart() {
         let item = {}
         data.forEach((e, i) => {
             if (e.sapref == itemid) {
-                item = { data: e, qty: 1 }                
+                item = { data: e, qty: 1 }
                 setClist([...cList, item])
             }
-        })        
+        })
     }
 
     function rList(i) {                          //remove item in list
@@ -101,25 +101,32 @@ export default function Cart() {
         setClist(cList.filter(e => e.sapref !== itemid))
     }
 
-    function inc(id){                             //increase quantity of item in list
-        // let update = {data:cList[id].data,qty:cList[id].qty+1};
-        let newQty = cList[id].qty+1;
+    function inc(id) {                             //increase quantity of item in list        
+        let newQty = cList[id].qty + 1;
         let obj = cList;
-        obj.forEach((e,i)=>{
-            if(e.qty==obj[id].qty){
+        obj.forEach((e, i) => {
+            if (e.data.sapref == obj[id].data.sapref) {
                 e.qty = newQty;
                 console.log(obj[id])
             }
         })
-        console.log(obj) 
-        // setClist([...cList.filter(e =>e.data.sapref!==cList[id].data.sapref)]);
-        setClist(obj)
+        console.log(obj)
+        setClist([...obj])
     }
 
-    function dec(id){                                //decrease quantity of item in list
-        let update = {...cList[id],qty:cList[id].qty-1};
-        if(update.qty>0)
-            setClist([...cList,update]);
+    function dec(id) {                                //decrease quantity of item in list
+        if (cList[id].qty > 1) {
+            let newQty = cList[id].qty - 1
+            let obj = cList;
+            obj.forEach((e, i) => {
+                if (e.data.sapref == obj[id].data.sapref) {
+                    e.qty = newQty;
+                    console.log(obj[id])
+                }
+            })
+            console.log(obj)
+            setClist([...obj])
+        }
     }
 
 
@@ -282,7 +289,7 @@ export default function Cart() {
                                                         </button>
                                                         <button style={{ border: ".09rem solid black" }} onClick={() => { dec(i) }}>
                                                             *
-                                                        </button>                                                        
+                                                        </button>
                                                     </span>
                                                 </td>
                                                 <td>{e.data.mrp}</td>
@@ -306,7 +313,7 @@ export default function Cart() {
                     </Col>
                 </Row>
             </Container>
-          
+
             {/* bill */}
             <BillModal show={modalShow} onHide={() => setModalShow(false)} />
         </>
