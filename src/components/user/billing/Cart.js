@@ -46,8 +46,7 @@ export default function Cart() {
         if (searchD.keywords == "") {
             setInput([searchD])
             handleClose();
-        }
-        console.log(result);
+        }        
     }
 
     //search box
@@ -80,19 +79,18 @@ export default function Cart() {
     //cart list
     const [cList, setClist] = useState([]);
 
-    function aList(i) {
+    function aList(i) {                         //add item in list
         let itemid = sInput[i].sapref
         let item = {}
         data.forEach((e, i) => {
             if (e.sapref == itemid) {
-                item = { data: e, qty: 1 }
-                console.log(item)
+                item = { data: e, qty: 1 }                
                 setClist([...cList, item])
             }
         })        
     }
 
-    function rList(i) {
+    function rList(i) {                          //remove item in list
         let itemid = cList[i].sapref
         cList.forEach((e, i) => {
             if (e.sapref == itemid) {
@@ -103,17 +101,28 @@ export default function Cart() {
         setClist(cList.filter(e => e.sapref !== itemid))
     }
 
-    function inc(id){
-        let update = {data:cList[id].data,qty:cList[id].qty+1};
-        console.log(cList.filter(e =>e[id].data!==cList[id].data))       
-        setClist([...cList.filter(e =>e[id].data.sapref!==cList[id].data.sapref),update]);
+    function inc(id){                             //increase quantity of item in list
+        // let update = {data:cList[id].data,qty:cList[id].qty+1};
+        let newQty = cList[id].qty+1;
+        let obj = cList;
+        obj.forEach((e,i)=>{
+            if(e.qty==obj[id].qty){
+                e.qty = newQty;
+                console.log(obj[id])
+            }
+        })
+        console.log(obj) 
+        // setClist([...cList.filter(e =>e.data.sapref!==cList[id].data.sapref)]);
+        setClist(obj)
     }
 
-    function dec(id){
+    function dec(id){                                //decrease quantity of item in list
         let update = {...cList[id],qty:cList[id].qty-1};
         if(update.qty>0)
             setClist([...cList,update]);
     }
+
+
 
     return (
         <>
