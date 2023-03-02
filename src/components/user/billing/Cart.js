@@ -89,7 +89,7 @@ export default function Cart() {
                 console.log(item)
                 setClist([...cList, item])
             }
-        })
+        })        
     }
 
     function rList(i) {
@@ -104,9 +104,9 @@ export default function Cart() {
     }
 
     function inc(id){
-        let update = {...cList[id],qty:cList[id].qty+1};
-        console.log(cList.filter(e => e[id]!==cList[id]))        
-        setClist([update]);
+        let update = {data:cList[id].data,qty:cList[id].qty+1};
+        console.log(cList.filter(e =>e[id].data!==cList[id].data))       
+        setClist([...cList.filter(e =>e[id].data.sapref!==cList[id].data.sapref),update]);
     }
 
     function dec(id){
