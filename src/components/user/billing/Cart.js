@@ -101,30 +101,15 @@ export default function Cart() {
         setClist(cList.filter(e => e.sapref !== itemid))
     }
 
-    function inc(id) {                             //increase quantity of item in list        
-        let newQty = cList[id].qty + 1;
-        let obj = cList;
-        obj.forEach((e, i) => {
-            if (e.data.sapref == obj[id].data.sapref) {
-                e.qty = newQty;
-                console.log(obj[id])
-            }
-        })
-        console.log(obj)
-        setClist([...obj])
-    }
-
-    function dec(id) {                                //decrease quantity of item in list
-        if (cList[id].qty > 1) {
-            let newQty = cList[id].qty - 1
+    function handleQty(e,id) {                  // increase/decrease funtion of quantity of item in list
+        if (cList[id].qty > 0) {
+            let newQty = e.target.value            
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
-                    e.qty = newQty;
-                    console.log(obj[id])
+                    e.qty = newQty;                    
                 }
             })
-            console.log(obj)
             setClist([...obj])
         }
     }
@@ -253,8 +238,8 @@ export default function Cart() {
                 {/* CART LIST */}
                 <Row>
                     <Col>
-                        <div className='cTable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
-                            <Table striped bordered hover responsive="sm" >
+                        <div className='cTable' style={{ width: "100%", overflowY: "scroll", overflowX: "scroll" }}>
+                            <Table striped bordered hover >
                                 <thead className="sticky-top">
                                     <tr>
                                         <th>S.No.</th>
@@ -281,18 +266,21 @@ export default function Cart() {
                                                 <td>{e.data.description}</td>
                                                 <td>{e.data.application}</td>
                                                 <td>{e.data.make}</td>
-                                                <td>
-                                                    <div style={{ display: "inline-block", width: "50%" }}>{e.qty}</div>
-                                                    <span>
+                                                <td>                                                    
+                                                    <input style={{ display: "inline-block", width: "50%" }} name="quantity" type="number"
+                                                        onChange={(e)=>handleQty(e,i)}  placeholder="1" min={1} />
+
+                                                    {/* <div style={{ display: "inline-block", width: "50%" }}>{e.qty}</div> */}    
+                                                    {/* <span>
                                                         <button style={{ border: ".09rem solid black" }} onClick={() => { inc(i) }}>
                                                             ~
                                                         </button>
                                                         <button style={{ border: ".09rem solid black" }} onClick={() => { dec(i) }}>
                                                             *
                                                         </button>
-                                                    </span>
+                                                    </span> */}
                                                 </td>
-                                                <td>{e.data.mrp}</td>
+                                                <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>
                                                 {/* <td></td> */}
                                             </tr>
                                         )
