@@ -82,12 +82,26 @@ export default function Cart() {
     function aList(i) {                         //add item in list
         let itemid = sInput[i].sapref
         let item = {}
-        data.forEach((e, i) => {
-            if (e.sapref == itemid) {
-                item = { data: e, qty: 1 }
-                setClist([...cList, item])
-            }
-        })
+        if (cList.length == 0) {
+            data.forEach((e) => {
+                if (e.sapref == itemid) {
+                    item = { data: e, qty: 1 }
+                    setClist([...cList, item])
+                }
+            })
+        }
+        else{
+            cList.forEach((ele) => {                
+                if (ele.data.sapref != itemid) {
+                    data.forEach((e) => {
+                        if (e.sapref == itemid) {
+                            item = { data: e, qty: 1 }
+                            setClist([...cList, item])
+                        }
+                    })
+                }
+            })
+        }        
     }
 
     function rList(i) {                          //remove item in list
@@ -101,29 +115,28 @@ export default function Cart() {
         setClist(cList.filter(e => e.sapref !== itemid))
     }
 
-    function handleQty(e,id) {                  // increase/decrease funtion for quantity of item in list
+    function handleQty(e, id) {                  // increase/decrease funtion for quantity of item in list
         if (cList[id].qty > 0) {
-            let newQty = e.target.value            
+            let newQty = e.target.value
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
-                    e.qty = newQty;                    
+                    e.qty = newQty;
                 }
             })
             setClist([...obj])
         }
-        if(cList[id].qty<1||e.target.value==""){
-            let newQty = 1        
+        if (cList[id].qty < 1 || e.target.value == "") {
+            let newQty = 1
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
-                    e.qty = newQty;                    
+                    e.qty = newQty;
                 }
             })
             setClist([...obj])
         }
     }
-
 
 
     return (
@@ -166,9 +179,6 @@ export default function Cart() {
                                 name="keywords"
                                 autoComplete="disabled"
                             />
-                            {/* <Button variant="light" id="button-addon2">
-                                ADD
-                            </Button> */}
                         </InputGroup>
                     </Col>
                     <Col >
@@ -250,7 +260,7 @@ export default function Cart() {
                     <Col>
                         <div className='cTable' style={{ width: "100%", overflowY: "scroll", overflowX: "scroll" }}>
                             <Table striped bordered hover >
-                                <thead className="sticky-top" style={{backdropFilter:"blur(5px)"}}>
+                                <thead className="sticky-top" style={{ backdropFilter: "blur(5px)" }}>
                                     <tr>
                                         <th>S.No.</th>
                                         <th>Ref. Id</th>
@@ -276,11 +286,11 @@ export default function Cart() {
                                                 <td>{e.data.description}</td>
                                                 <td>{e.data.application}</td>
                                                 <td>{e.data.make}</td>
-                                                <td>                                                    
-                                                    <input style={{ textAlign:'center',display: "inline-block" }} name="quantity" type="number"
-                                                        onChange={(e)=>handleQty(e,i)} value={e.qty} min={1} />                                                  
+                                                <td>
+                                                    <input style={{ textAlign: 'center', display: "inline-block" }} name="quantity" type="number"
+                                                        onChange={(e) => handleQty(e, i)} value={e.qty} min={1} />
                                                 </td>
-                                                <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>                                                
+                                                <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>
                                             </tr>
                                         )
                                     })}
