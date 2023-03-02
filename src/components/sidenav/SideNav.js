@@ -55,8 +55,8 @@ export default function SideNav({ children }) {
                 <ul style={{ listStyle: "none", padding: "0" }}>
                     {
                         menu.map((ele,index)=>
-                            <li  >
-                            <Link key={index} to={`/${ele.path}`} onClick={()=>setTab(index)} className={`${index==tab?'active':''}`} style={{ marginLeft: "0" }}>                                
+                            <li key={index}>
+                            <Link  to={`/${ele.path}`} onClick={()=>setTab(index)} className={`${index==tab?'active':''}`} style={{ marginLeft: "0" }}>                                
                                 <div style={{display:"inline-block",width: "30%",textAlign: "center" }}>
                                     {ele.icon}
                                 </div>

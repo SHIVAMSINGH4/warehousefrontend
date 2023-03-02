@@ -101,9 +101,19 @@ export default function Cart() {
         setClist(cList.filter(e => e.sapref !== itemid))
     }
 
-    function handleQty(e,id) {                  // increase/decrease funtion of quantity of item in list
+    function handleQty(e,id) {                  // increase/decrease funtion for quantity of item in list
         if (cList[id].qty > 0) {
             let newQty = e.target.value            
+            let obj = cList;
+            obj.forEach((e, i) => {
+                if (e.data.sapref == obj[id].data.sapref) {
+                    e.qty = newQty;                    
+                }
+            })
+            setClist([...obj])
+        }
+        if(cList[id].qty<1||e.target.value==""){
+            let newQty = 1        
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
@@ -193,7 +203,7 @@ export default function Cart() {
                             {/* search table */}
                             <div className="sTable" style={{ width: "100%", marginBottom: "0.5rem", overflowY: "scroll", overflowX: "scroll", }}>
                                 <Table striped bordered variant="dark" hover responsive="sm">
-                                    <thead className="sticky-top">
+                                    <thead className="sticky-top" >
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Ref. Id</th>
@@ -240,7 +250,7 @@ export default function Cart() {
                     <Col>
                         <div className='cTable' style={{ width: "100%", overflowY: "scroll", overflowX: "scroll" }}>
                             <Table striped bordered hover >
-                                <thead className="sticky-top">
+                                <thead className="sticky-top" style={{backdropFilter:"blur(5px)"}}>
                                     <tr>
                                         <th>S.No.</th>
                                         <th>Ref. Id</th>
@@ -267,21 +277,10 @@ export default function Cart() {
                                                 <td>{e.data.application}</td>
                                                 <td>{e.data.make}</td>
                                                 <td>                                                    
-                                                    <input style={{ display: "inline-block", width: "50%" }} name="quantity" type="number"
-                                                        onChange={(e)=>handleQty(e,i)}  placeholder="1" min={1} />
-
-                                                    {/* <div style={{ display: "inline-block", width: "50%" }}>{e.qty}</div> */}    
-                                                    {/* <span>
-                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { inc(i) }}>
-                                                            ~
-                                                        </button>
-                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { dec(i) }}>
-                                                            *
-                                                        </button>
-                                                    </span> */}
+                                                    <input style={{ textAlign:'center',display: "inline-block" }} name="quantity" type="number"
+                                                        onChange={(e)=>handleQty(e,i)} value={e.qty} min={1} />                                                  
                                                 </td>
-                                                <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>
-                                                {/* <td></td> */}
+                                                <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>                                                
                                             </tr>
                                         )
                                     })}
