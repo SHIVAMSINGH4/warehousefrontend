@@ -9,7 +9,7 @@ import { continueStatement } from "@babel/types";
 
 export default function Cart() {
 
-    //cart
+    //cart tab
     const cart = { type: "purchase", option: "sell" }
     const [state, dispatch] = useReducer(reducer, cart)
 
@@ -28,13 +28,10 @@ export default function Cart() {
         setModalShow(true)
     }
 
-    //data fetch from db.stock file
-    const data = db.stock;
-
-    //filtered data on search
-    var searchD = {};
+    const data = db.stock;    //data fetch from db.stock file
 
     // input box function 
+    var searchD = {};   //filtered data on search
     var result = [];
     const [sInput, setInput] = useState([{ keywords: "" }])
     const handleChange = function (event) {
@@ -81,38 +78,50 @@ export default function Cart() {
     }, [sInput, show]);
 
     //cart list
-    const [cList, setClist] = useState([
-    ]);
+    const [cList, setClist] = useState([]);
 
     function aList(i) {
         let itemid = sInput[i].sapref
         let item = {}
         data.forEach((e, i) => {
             if (e.sapref == itemid) {
-                item = e
+                item = { data: e, qty: 1 }
+                console.log(item)
                 setClist([...cList, item])
             }
         })
     }
-    
+
     function rList(i) {
         let itemid = cList[i].sapref
         cList.forEach((e, i) => {
-            if (e.sapref == itemid) {                
-                continueStatement()   
+            if (e.sapref == itemid) {
+                continueStatement()
             }
-            setClist([...cList,e])
+            setClist([...cList, e])
         })
-        setClist(cList.filter(e =>e.sapref !== itemid))
+        setClist(cList.filter(e => e.sapref !== itemid))
     }
-    
 
+    function inc(id){
+        let update = {...cList[id],qty:cList[id].qty+1};
+        console.log(cList.filter(e => e[id]!==cList[id]))        
+        setClist([update]);
+    }
+
+    function dec(id){
+        let update = {...cList[id],qty:cList[id].qty-1};
+        if(update.qty>0)
+            setClist([...cList,update]);
+    }
 
     return (
         <>
 
             {/* cart */}
             <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
+
+                {/* header */}
                 <Row className=" mt-1" >
                     <Col sm="4"></Col>
                     <Col sm="4" className="text-center" >
@@ -237,7 +246,7 @@ export default function Cart() {
                                         <th>Desciption</th>
                                         <th>Application</th>
                                         <th>Price</th>
-                                        <th>Quantity</th>                                       
+                                        <th>Quantity</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -252,12 +261,22 @@ export default function Cart() {
                                                         </button>
                                                     </span>
                                                 </td>
-                                                <td>{e.sapref}</td>
-                                                <td>{e.description}</td>
-                                                <td>{e.application}</td>
-                                                <td>{e.make}</td>
-                                                <td>{e.qty}</td>
-                                                <td>{e.mrp}</td>
+                                                <td>{e.data.sapref}</td>
+                                                <td>{e.data.description}</td>
+                                                <td>{e.data.application}</td>
+                                                <td>{e.data.make}</td>
+                                                <td>
+                                                    <div style={{ display: "inline-block", width: "50%" }}>{e.qty}</div>
+                                                    <span>
+                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { inc(i) }}>
+                                                            ~
+                                                        </button>
+                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { dec(i) }}>
+                                                            *
+                                                        </button>                                                        
+                                                    </span>
+                                                </td>
+                                                <td>{e.data.mrp}</td>
                                                 {/* <td></td> */}
                                             </tr>
                                         )
@@ -278,6 +297,7 @@ export default function Cart() {
                     </Col>
                 </Row>
             </Container>
+          
             {/* bill */}
             <BillModal show={modalShow} onHide={() => setModalShow(false)} />
         </>
