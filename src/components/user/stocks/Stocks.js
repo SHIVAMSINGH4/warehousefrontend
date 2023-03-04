@@ -17,11 +17,13 @@ export default function Stocks() {
     };
 
     useEffect(() => {
-        callData()
-    }, [])
-    useEffect(() => {
-        console.log(data)
+        if(data==[])
+            callData()
+            console.log(data)
     }, [data])
+    // useEffect(() => {
+        
+    // }, [data])
 
     //filtered data on search
     var searchD = {};
@@ -46,61 +48,76 @@ export default function Stocks() {
     }
 
     //search box
-    const [show, setShow] = useState(false);
+    // const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    // const handleClose = () => setShow(false);
+    // const handleShow = () => setShow(true);
 
-    useEffect(() => {
-        var searchbox = document.getElementsByClassName("searchbox")[0];
-        var card = document.getElementsByClassName("cad")[0];
-        var stable = document.getElementsByClassName("stable")[0];
-        if (show == true) {
-            searchbox.style.display = "block";
-            card.classList.add("anime");
-            stable.style.height = "35vh"
-        }
-        if (show == false) {
-            setTimeout(() => {
-                searchbox.style.display = "none";
-            }, 100);
-            card.classList.remove("anime");
-            stable.style.height = "79vh"
-        }
+    // useEffect(() => {
+    //     var searchbox = document.getElementsByClassName("searchbox")[0];
+    //     var card = document.getElementsByClassName("cad")[0];
+    //     var stable = document.getElementsByClassName("stable")[0];
+    //     if (show == true) {
+    //         searchbox.style.display = "block";
+    //         card.classList.add("anime");
+    //         stable.style.height = "35vh"
+    //     }
+    //     if (show == false) {
+    //         setTimeout(() => {
+    //             searchbox.style.display = "none";
+    //         }, 100);
+    //         card.classList.remove("anime");
+    //         stable.style.height = "79vh"
+    //     }
 
-    }, [sInput, show]);
+    // }, [sInput, show]);
 
     // item desc box
 
-    const [showVbox, setVbox] = useState(false);
-    const [Vdata, setVdata] = useState({});
-    function view(i) {
-        setVdata(data[i]);
-        setVbox(true);
-    }
+    // const [showVbox, setVbox] = useState(false);
+    // const [Vdata, setVdata] = useState({});
+    // function view(i) {
+    //     setVdata(data[i]);
+    //     setVbox(true);
+    // }
 
+    //search item
+    
+    // const [sItem,setSItem] = useState()
+    // const  [params] = useState([""])
+    // function handleSChange(e){
+    //     data.filter(ele=>{
+    //         for(key in ele){
+    //             if()  
+    //         }
+    //     })
 
+    // }
 
     return (
         <>
             <Container fluid id='main'>
                 {/* header */}
                 <Row>
-                    <Col className='text-center'>
-                        <div style={{ width: "100%", paddingLeft: "45%" }}>
-                            <div style={{ zIndex: "2", width: "10%", position: "fixed" }}>
-                                <h2 style={{ marginBottom: "-0.1rem" }}>Stocks</h2>
-                                <div style={{ margin: "auto", display: "block", width: "100%", height: "0.1rem", backgroundColor: "black" }}></div>
+                    <Col className='text-center'>                        
+                        <Row>
+                            <div style={{ marginTop: ".2%", width: "100%", paddingLeft: "35%", position: "fixed", zIndex: "1", backgroundColor: "white", height: "6%" }}>
+                                <div style={{ width: "18%" }}>
+                                    <h2 style={{ marginBottom: "-0.1rem" }}>Stocks</h2>
+                                    <div style={{ margin: "auto", display: "block", width: "100%", height: "0.1rem", backgroundColor: "black" }}></div>
+                                </div>
                             </div>
-                        </div>
-                        <Row className="justify-content-center p-1" style={{ borderRadius: "1rem", marginTop: "2.6rem", backgroundColor: "#428BCA" }}  >
+                        </Row>
+
+                        {/* search input */}
+                        <Row className="justify-content-center p-1" style={{ borderRadius: "1rem", marginTop: "4.2%", backgroundColor: "#428BCA" }}  >
                             <Col sm="5">
                                 <InputGroup >
                                     <Form.Control
                                         placeholder="Search Item"
                                         aria-label="Recipient's username"
                                         aria-describedby="basic-addon2"
-                                        onChange={handleChange}
+                                        onChange={handleSChange}
                                         name="keywords"
                                         autoComplete='disabled'
                                     />
@@ -164,7 +181,6 @@ export default function Stocks() {
                                                     <td>{e.make}</td>
                                                     <td>{e.qty}</td>
                                                     <td>{e.mrp}</td>
-                                                    {/* <td><button value={i} onClick={deldata}>-</button></td> */}
                                                 </tr>
                                             )
                                         })}
@@ -181,7 +197,7 @@ export default function Stocks() {
                         {/* ITEMS TABLE */}
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
-                                <thead className="sticky-top">
+                                <thead>
                                     <tr>
                                         <th>MAKER</th>
                                         <th>ITEM REF</th>
@@ -190,17 +206,11 @@ export default function Stocks() {
                                         <th>PURCHASING COST</th>
                                         <th>QUANTITY</th>
                                         <th>STOCK LOCATION</th>
-                                    </tr>
-                                    <tr>MEYLE REF.1</tr>
-                                    <tr>MAHLE REF.2</tr>
-                                    <tr>MAAN REF.3</tr>
-                                    <tr>O.E. REF.</tr>
+                                    </tr>                                                                     
 
                                 </thead>
-                                <tbody>
-                                    {data.map((v, i) => {
-                                        return (
-                                            <tr key={i} onClick={() => { view(i) }}>
+                                <tbody>                                   
+                                            <tr >
                                                 <td >{ }</td>
                                                 <td>{v.sapref}</td>
                                                 <td>{v.description}</td>
@@ -211,9 +221,7 @@ export default function Stocks() {
                                                 <td>{v.mrp}</td>
                                                 <td>{v.mrp}</td>
                                                 {/* <td><button value={i} onClick={deldata}>-</button></td> */}
-                                            </tr>
-                                        )
-                                    })}
+                                            </tr>                                     
                                 </tbody>
                             </Table>
                         </div>
@@ -226,24 +234,18 @@ export default function Stocks() {
                                     <tr><th>O.E. REF</th></tr>
                                 </thead>
                                 <tbody>
-                                    {data.map((v, i) => {
-                                        return (
-                                            <>
-                                                <tr>
-                                                    <th>DESCRIPTION</th>
-                                                    <td>{v.Descripation}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>APPLICATION</th>
-                                                    <td>{v["O_E REF"]}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>O.E. REF</th>
-                                                    <td>{v.APPLICATION}</td>
-                                                </tr>
-                                            </>
-                                        )
-                                    })}
+                                    <tr>
+                                        <th>DESCRIPTION</th>
+                                        <td>{data[0] && data[0].Descripation}</td>
+                                    </tr >
+                                    <tr>
+                                        <th>APPLICATION</th>
+                                        <td>{data[0] && data[0]["O_E REF"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>O.E. REF</th>
+                                        <td>{data[0] && data[0].APPLICATION}</td>
+                                    </tr>
                                 </tbody>
                             </Table>
                         </div>
