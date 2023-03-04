@@ -5,11 +5,20 @@ import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 import * as ai from "react-icons/ai";
 import "./stocks.css"
+import { getAllProducts } from '../../../api/Api';
 // import Modal from 'react-bootstrap/Modal';
 
 export default function Stocks() {
     //data fetch from db.stock file
-    const data = db.stock;
+    const [data,setData]=useState([])
+    const callData = async ()=>{
+        const d = await getAllProducts();
+        setData(d)
+    };
+
+    useEffect(()=>{
+        callData()
+    },[])
 
     //filtered data on search
     var searchD = {};
