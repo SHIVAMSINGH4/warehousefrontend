@@ -60,11 +60,13 @@ export default function BillModal(props) {
                 </Modal.Header>
                 <Modal.Body className="show-grid">
                     <Container fluid id="main" className="mb-5" style={{padding:"1rem"}}>
-                        <Row className="mt-1" style={{ backgroundColor: "#428BCA" }}>
+                        {/* gap / blue line*/}
+                        <Row className="mt-1" style={{ backgroundColor: "#428BCA" }}>   
                             <Col>
                                 <div style={{ width: "100%", height: "1rem" }}></div>
                             </Col>
                         </Row>
+                        {/* receipt header */}
                         <Row style={{ backgroundColor: "lightgrey" }}>
                             <Col className="mt-4 ps-5">
                                 <div style={{ display: "inline-block" }}>
@@ -93,6 +95,7 @@ export default function BillModal(props) {
                                 </div>
                             </Col>
                         </Row>
+                        {/* customer info */}
                         <Row>
                             <Col className="px-5 mt-3">
                                 <div style={{ display: "inline-block", width: "38%", verticalAlign: "middle", fontSize: "1rem" }}>
@@ -107,6 +110,7 @@ export default function BillModal(props) {
                                 </div>
                             </Col>
                         </Row>
+                        {/* receipt body */}
                         <Row>
                             <Col className="px-5 mt-4">
                                 <Table striped bordered hover responsive="sm">

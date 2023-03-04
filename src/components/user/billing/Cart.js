@@ -63,15 +63,15 @@ export default function Cart() {
         if (show == true) {
             searchbox.style.display = "block";
             card.classList.add("anime");
-            sTable.style.height = "38vh"
-            cTable.style.height = "30vh"
+            sTable.style.height = "38vh";
+            cTable.style.height = "30vh";
         }
         if (show == false) {
             setTimeout(() => {
                 searchbox.style.display = "none";
             }, 500);
             card.classList.remove("anime");
-            cTable.style.height = "70vh"
+            cTable.style.height = "70vh";
         }
 
     }, [sInput, show]);
@@ -80,44 +80,45 @@ export default function Cart() {
     const [cList, setClist] = useState([]);
 
     function aList(i) {                         //add item in list
-        let itemid = sInput[i].sapref
-        let item = {}
+        let itemid = sInput[i].sapref;
+        let newItem = {};
         if (cList.length == 0) {
             data.forEach((e) => {
                 if (e.sapref == itemid) {
-                    item = { data: e, qty: 1 }
-                    setClist([...cList, item])
+                    newItem = { data: e, qty: 1 }
+                    setClist([newItem])
                 }
             })
         }
-        else{
-            cList.forEach((ele) => {                
-                if (ele.data.sapref != itemid) {
-                    data.forEach((e) => {
-                        if (e.sapref == itemid) {
-                            item = { data: e, qty: 1 }
-                            setClist([...cList, item])
+        else {
+            data.forEach((e) => {
+                if (e.sapref == itemid) {
+                    newItem = { data: e, qty: 1 }
+                    var counter = 0;
+                    cList.forEach((e, i) => {
+                        if (e.data.sapref == itemid) {
+                            counter += 1;
+                            console.log(counter);
                         }
                     })
+                    if (counter == 0) {
+                        console.log("ok");
+                        setClist([...cList, newItem]);
+                    }
+
                 }
             })
-        }        
+        }
     }
 
     function rList(i) {                          //remove item in list
-        let itemid = cList[i].sapref
-        cList.forEach((e, i) => {
-            if (e.sapref == itemid) {
-                continueStatement()
-            }
-            setClist([...cList, e])
-        })
-        setClist(cList.filter(e => e.sapref !== itemid))
+        let itemid = cList[i].data.sapref
+        setClist([...cList.filter(e => e.data.sapref != itemid)])
     }
 
-    function handleQty(e, id) {                  // increase/decrease funtion for quantity of item in list
-        if (cList[id].qty > 0) {
-            let newQty = e.target.value
+    function handleQty(e, id) {                  // increase/decrease funtion for quantity of item in list      
+            if(e.target.value>=0){    
+            let newQty = e.target.value             
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
@@ -125,9 +126,11 @@ export default function Cart() {
                 }
             })
             setClist([...obj])
-        }
-        if (cList[id].qty < 1 || e.target.value == "") {
-            let newQty = 1
+             }            
+    }
+    function blurQty(e,id){                     //input quantity after focus out
+        if(e.target.value==""||e.target.value==0){    
+            let newQty = 1            
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
@@ -135,7 +138,7 @@ export default function Cart() {
                 }
             })
             setClist([...obj])
-        }
+             }    
     }
 
 
@@ -288,7 +291,7 @@ export default function Cart() {
                                                 <td>{e.data.make}</td>
                                                 <td>
                                                     <input style={{ textAlign: 'center', display: "inline-block" }} name="quantity" type="number"
-                                                        onChange={(e) => handleQty(e, i)} value={e.qty} min={1} />
+                                                      onBlur={(e)=>blurQty(e,i)}  onChange={e=>handleQty(e, i)} value={e.qty} min={1} />
                                                 </td>
                                                 <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>
                                             </tr>
@@ -312,7 +315,7 @@ export default function Cart() {
             </Container>
 
             {/* bill */}
-            <BillModal show={modalShow} onHide={() => setModalShow(false)} />
+            <BillModal cList={cList} show={modalShow} onHide={() => setModalShow(false)} />
         </>
     )
 }
