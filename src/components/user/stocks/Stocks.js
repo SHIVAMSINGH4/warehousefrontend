@@ -10,15 +10,18 @@ import { getAllProducts } from '../../../api/Api';
 
 export default function Stocks() {
     //data fetch from db.stock file
-    const [data,setData]=useState([])
-    const callData = async ()=>{
+    const [data, setData] = useState([])
+    const callData = async () => {
         const d = await getAllProducts();
-        setData(d)
+        setData([...d])
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         callData()
-    },[])
+    }, [])
+    useEffect(() => {
+        console.log(data)
+    }, [data])
 
     //filtered data on search
     var searchD = {};
@@ -69,13 +72,11 @@ export default function Stocks() {
 
     // item desc box
 
-    const [showEbox, setEbox] = useState(false);
-    const [edata, setEdata] = useState({});
-    function edit(i) {
-        setEdata(data[i]);
-        setEbox(true);
-        console.log(i)
-        console.log(edata)
+    const [showVbox, setVbox] = useState(false);
+    const [Vdata, setVdata] = useState({});
+    function view(i) {
+        setVdata(data[i]);
+        setVbox(true);
     }
 
 
@@ -113,9 +114,9 @@ export default function Stocks() {
                 {/* search box */}
                 <Row>
                     <Col>
-                        <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >                         
+                        <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >
                             {/* close button */}
-                            <div style={{ width: "98%", display: "inline-block" }}></div>                            
+                            <div style={{ width: "98%", display: "inline-block" }}></div>
                             <div style={{ width: "1%", display: "inline-block" }}>
                                 <span className="closebtn" onClick={handleClose}>
                                     <ai.AiOutlineClose size=".9rem" />
@@ -155,7 +156,7 @@ export default function Stocks() {
                                         {sInput.map((e, i) => {
                                             // console.log(v)                                                
                                             return (
-                                                <tr key={i} onClick={() => { edit(i) }}>
+                                                <tr key={i} onClick={() => { view(i) }}>
                                                     <td >{i + 1}</td>
                                                     <td>{e.sapref}</td>
                                                     <td>{e.description}</td>
@@ -177,32 +178,70 @@ export default function Stocks() {
                 {/* stocks table */}
                 <Row>
                     <Col >
+                        {/* ITEMS TABLE */}
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
                                 <thead className="sticky-top">
                                     <tr>
-                                        <th>S.No.</th>
-                                        <th>Ref. Id</th>
-                                        <th>Desciption</th>
-                                        <th>Application</th>
-                                        <th>Maker</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
+                                        <th>MAKER</th>
+                                        <th>ITEM REF</th>
+                                        <th>DESCRIPTION</th>
+                                        <th>APPLICATION</th>
+                                        <th>PURCHASING COST</th>
+                                        <th>QUANTITY</th>
+                                        <th>STOCK LOCATION</th>
                                     </tr>
+                                    <tr>MEYLE REF.1</tr>
+                                    <tr>MAHLE REF.2</tr>
+                                    <tr>MAAN REF.3</tr>
+                                    <tr>O.E. REF.</tr>
+
                                 </thead>
                                 <tbody>
                                     {data.map((v, i) => {
                                         return (
-                                            <tr key={i} onClick={() => { edit(i) }}>
-                                                <td >{i + 1}</td>
+                                            <tr key={i} onClick={() => { view(i) }}>
+                                                <td >{ }</td>
                                                 <td>{v.sapref}</td>
                                                 <td>{v.description}</td>
                                                 <td>{v.application}</td>
                                                 <td>{v.make}</td>
                                                 <td>{v.qty}</td>
                                                 <td>{v.mrp}</td>
+                                                <td>{v.mrp}</td>
+                                                <td>{v.mrp}</td>
                                                 {/* <td><button value={i} onClick={deldata}>-</button></td> */}
                                             </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </Table>
+                        </div>
+                        {/* ITEMS DESCRIPTION */}
+                        <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
+                            <Table striped bordered hover variant='light' >
+                                <thead className="sticky-top">
+                                    <tr><th>DESCRIPTION</th></tr>
+                                    <tr><th>APPLICATION</th></tr>
+                                    <tr><th>O.E. REF</th></tr>
+                                </thead>
+                                <tbody>
+                                    {data.map((v, i) => {
+                                        return (
+                                            <>
+                                                <tr>
+                                                    <th>DESCRIPTION</th>
+                                                    <td>{v.Descripation}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>APPLICATION</th>
+                                                    <td>{v["O_E REF"]}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>O.E. REF</th>
+                                                    <td>{v.APPLICATION}</td>
+                                                </tr>
+                                            </>
                                         )
                                     })}
                                 </tbody>
@@ -214,8 +253,8 @@ export default function Stocks() {
 
             {/* view stock component */}
             <Modal
-                show={showEbox}
-                onHide={() => { setEbox(false); console.log(edata) }}
+                show={showVbox}
+                onHide={() => { setVbox(false); console.log(Vdata) }}
                 // dialogClassName="modal-90w"
                 size="xl"
                 aria-labelledby="example-custom-modal-styling-title"
@@ -225,7 +264,7 @@ export default function Stocks() {
                         view stock
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body  style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
+                <Modal.Body style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                     <Table striped bordered hover responsive="sm">
                         <thead>
                             <tr>
@@ -255,12 +294,12 @@ export default function Stocks() {
                         </thead>
                         <tbody>
                             <tr >
-                                <td>{edata.sapref}</td>
-                                <td>{edata.description}</td>
-                                <td>{edata.application}</td>
-                                <td>{edata.make}</td>
-                                <td>{edata.qty}</td>
-                                <td>{edata.mrp}</td>
+                                <td>{Vdata.sapref}</td>
+                                <td>{Vdata.description}</td>
+                                <td>{Vdata.application}</td>
+                                <td>{Vdata.make}</td>
+                                <td>{Vdata.qty}</td>
+                                <td>{Vdata.mrp}</td>
                                 {/* <td><button value={i} onClick={deldata}>-</button></td> */}
                             </tr>
                         </tbody>

@@ -9,7 +9,7 @@ export const getAllProducts = async()=>{
         }
     }
     const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_all_Product}`,header);
-    const data = await response.json();
-    console.log(data)
-    // return data ;
+    const body = await response.json();
+    const data = body.data;
+    return data;
 }
