@@ -48,7 +48,7 @@ function Dashboard() {
           </Col>
           <Col md={2}>
             <div style={{ width: "100%", textAlign: "center" }}>
-              <div class="vr" style={{ height: "80vh",width:".2rem" }}></div>
+              <div className="vr" style={{ height: "80vh",width:".2rem" }}></div>
             </div>
           </Col>
           <Col md={5}>

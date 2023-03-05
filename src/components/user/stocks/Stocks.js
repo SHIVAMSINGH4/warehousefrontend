@@ -17,12 +17,12 @@ export default function Stocks() {
     };
 
     useEffect(() => {
-        if(data==[])
+        if (data=="")
             callData()
-            console.log(data)
+        console.log(data)
     }, [data])
     // useEffect(() => {
-        
+
     // }, [data])
 
     //filtered data on search
@@ -31,21 +31,21 @@ export default function Stocks() {
     // input box function 
     var result = [];
     const [sInput, setInput] = useState([{ keywords: "" }])
-    const handleChange = function (event) {
-        searchD = { [event.target.name]: event.target.value }
-        if (searchD.keywords != "") {
-            handleShow();
-            result = data.filter(e => {
-                return e.sapref.toLowerCase().startsWith(searchD.keywords)
-            })
-            setInput(result)
-        };
-        if (searchD.keywords == "") {
-            setInput([searchD])
-            handleClose();
-        }
-        console.log(result);
-    }
+    // const handleChange = function (event) {
+    //     searchD = { [event.target.name]: event.target.value }
+    //     if (searchD.keywords != "") {
+    //         handleShow();
+    //         result = data.filter(e => {
+    //             return e.sapref.toLowerCase().startsWith(searchD.keywords)
+    //         })
+    //         setInput(result)
+    //     };
+    //     if (searchD.keywords == "") {
+    //         setInput([searchD])
+    //         handleClose();
+    //     }
+    //     console.log(result);
+    // }
 
     //search box
     // const [show, setShow] = useState(false);
@@ -82,24 +82,28 @@ export default function Stocks() {
     // }
 
     //search item
-    
-    // const [sItem,setSItem] = useState()
-    // const  [params] = useState([""])
-    // function handleSChange(e){
-    //     data.filter(ele=>{
-    //         for(key in ele){
-    //             if()  
-    //         }
-    //     })
 
-    // }
+    const [sItem, setSItem] = useState({})
+    const [params] = useState([""])
+    function handleSChange(e) {
+        const q = e.target.value
+        data.filter(ele => {
+            for (let key in ele) {
+                if (ele[`${key.toLowerCase()}`] == q.toLowerCase()) {
+                    console.log(key)
+                    // setSItem([...sItem])
+                }
+            }
+        })
+
+    }
 
     return (
         <>
             <Container fluid id='main'>
                 {/* header */}
                 <Row>
-                    <Col className='text-center'>                        
+                    <Col className='text-center'>
                         <Row>
                             <div style={{ marginTop: ".2%", width: "100%", paddingLeft: "35%", position: "fixed", zIndex: "1", backgroundColor: "white", height: "6%" }}>
                                 <div style={{ width: "18%" }}>
@@ -132,7 +136,7 @@ export default function Stocks() {
                 <Row>
                     <Col>
                         <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >
-                            {/* close button */}
+                            {/* close button
                             <div style={{ width: "98%", display: "inline-block" }}></div>
                             <div style={{ width: "1%", display: "inline-block" }}>
                                 <span className="closebtn" onClick={handleClose}>
@@ -141,7 +145,7 @@ export default function Stocks() {
                             </div>
 
                             {/* search table */}
-                            <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
+                            {/* <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
                                 <Table striped bordered variant="dark" hover responsive="sm">
                                     <thead>
                                         <tr>
@@ -186,7 +190,7 @@ export default function Stocks() {
                                         })}
                                     </tbody>
                                 </Table>
-                            </div>
+                            </div> */}
                         </div>
                     </Col>
                 </Row>
@@ -199,29 +203,40 @@ export default function Stocks() {
                             <Table striped bordered hover variant='light' >
                                 <thead>
                                     <tr>
-                                        <th>MAKER</th>
-                                        <th>ITEM REF</th>
-                                        <th>DESCRIPTION</th>
-                                        <th>APPLICATION</th>
-                                        <th>PURCHASING COST</th>
-                                        <th>QUANTITY</th>
+                                        <th></th>
+                                        <th></th>       
+                                        <th></th>
                                         <th>STOCK LOCATION</th>
-                                    </tr>                                                                     
-
+                                        <th></th>                                        
+                                        <th>STOCK LOCATION</th>
+                                    </tr>
+                                    <tr>
+                                        <th>MAKER</th>
+                                        <th>ITEM REF</th>  
+                                        <th></th>     
+                                        <th>QUANTITY</th>
+                                        <th>PUR MRP</th>
+                                        <th>NEW MRP</th>
+                                        {/* <th>COST</th> */}
+                                        <th></th>
+                                        <th>QUANTITY</th>
+                                        <th>PUR MRP</th>
+                                        <th>NEW MRP</th>
+                                    </tr>
                                 </thead>
-                                <tbody>                                   
-                                            <tr >
-                                                <td >{ }</td>
-                                                <td>{v.sapref}</td>
-                                                <td>{v.description}</td>
-                                                <td>{v.application}</td>
-                                                <td>{v.make}</td>
-                                                <td>{v.qty}</td>
-                                                <td>{v.mrp}</td>
-                                                <td>{v.mrp}</td>
-                                                <td>{v.mrp}</td>
-                                                {/* <td><button value={i} onClick={deldata}>-</button></td> */}
-                                            </tr>                                     
+                                <tbody>
+                                    <tr >                                        
+                                        <td>{sItem&&sItem.MAKE}</td>
+                                        <td>{sItem&&sItem["ITEMS REF"]}</td>
+                                        <td></td>
+                                        <td>{sItem&&sItem.QTY}</td>
+                                        <td>{sItem&&sItem.MRP}</td>
+                                        <td>{sItem&&sItem["NEW MRP"]}</td>  
+                                        <td></td>     
+                                        <td>{sItem&&sItem.QTY}</td>
+                                        <td>{sItem&&sItem.MRP}</td>
+                                        <td>{sItem&&sItem["NEW MRP"]}</td>                                   
+                                    </tr>
                                 </tbody>
                             </Table>
                         </div>
@@ -236,15 +251,15 @@ export default function Stocks() {
                                 <tbody>
                                     <tr>
                                         <th>DESCRIPTION</th>
-                                        <td>{data[0] && data[0].Descripation}</td>
+                                        <td>{sItem && sItem.Descripation}</td>
                                     </tr >
                                     <tr>
                                         <th>APPLICATION</th>
-                                        <td>{data[0] && data[0]["O_E REF"]}</td>
+                                        <td>{sItem && sItem["O_E REF"]}</td>
                                     </tr>
                                     <tr>
                                         <th>O.E. REF</th>
-                                        <td>{data[0] && data[0].APPLICATION}</td>
+                                        <td>{sItem && sItem.APPLICATION}</td>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -254,7 +269,8 @@ export default function Stocks() {
             </Container>
 
             {/* view stock component */}
-            <Modal
+
+            {/* <Modal
                 show={showVbox}
                 onHide={() => { setVbox(false); console.log(Vdata) }}
                 // dialogClassName="modal-90w"
@@ -302,12 +318,12 @@ export default function Stocks() {
                                 <td>{Vdata.make}</td>
                                 <td>{Vdata.qty}</td>
                                 <td>{Vdata.mrp}</td>
-                                {/* <td><button value={i} onClick={deldata}>-</button></td> */}
+                                {/* <td><button value={i} onClick={deldata}>-</button></td> 
                             </tr>
                         </tbody>
                     </Table>
                 </Modal.Body>
-            </Modal>
+             </Modal> */}
         </>
     )
 }
