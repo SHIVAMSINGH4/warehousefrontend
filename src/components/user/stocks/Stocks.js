@@ -10,19 +10,16 @@ import { getAllProducts, getOneProduct } from '../../../api/Api';
 
 export default function Stocks() {
     //data fetch from db.stock file
-    const [data, setData] = useState([])
-    const callData = async () => {
-        const d = await getAllProducts();
-        setData([...d])
-    };
-
-    useEffect(() => {
-        if (data == "")
-            callData()
-        console.log(data)
-    }, [data])
+    // const [data, setData] = useState([])
+    // const callData = async () => {
+    //     const d = await getAllProducts();
+    //     setData([...d])
+    // };
+    // useEffect(() => {        
+    //     callData()        
+    // }, [])
     // useEffect(() => {
-
+    //     console.log(data)
     // }, [data])
 
     //filtered data on search
@@ -218,7 +215,7 @@ export default function Stocks() {
                                         <th></th>
                                         <th colSpan={3}>{sItem && sItem.QTY_BY_STORE&& sItem.QTY_BY_STORE[0].STORE}</th>
                                         <th></th>
-                                        <th colSpan={3}>{sItem && sItem.QTY_BY_STORE&& sItem.QTY_BY_STORE[0].STORE}</th>
+                                        <th colSpan={3}>{sItem && sItem.QTY_BY_STORE&& sItem.QTY_BY_STORE[1].STORE}</th>
                                     </tr>
                                     <tr>
                                         <th>MAKER</th>
@@ -226,15 +223,15 @@ export default function Stocks() {
                                         <th></th>
                                         <th>QUANTITY</th>
                                         <th>PUR MRP</th>
-                                        <th>NEW MRP</th>
+                                        <th>NEW MRP</th>                                        
                                         {/* <th>COST</th> */}
                                         <th></th>
                                         <th>QUANTITY</th>
                                         <th>PUR MRP</th>
-                                        <th>NEW MRP</th>
+                                        <th>NEW MRP</th>                                        
                                     </tr>
                                 </thead>
-                                <tbody>                                   
+                                <tbody>
                                     <tr >
                                         <td>{sItem && sItem.MAKE}</td>
                                         <td>{sItem && sItem["ITEMS_REF"]}</td>
@@ -242,10 +239,12 @@ export default function Stocks() {
                                         <td>{sItem&&sItem.QTY_BY_STORE && sItem.QTY_BY_STORE[0].QTY}</td>
                                         <td>{sItem && sItem.MRP}</td>
                                         <td>{sItem && sItem["NEW MRP"]}</td>
+                                        <th>+</th>
                                         <td></td>
                                         <td>{sItem && sItem.QTY}</td>
                                         <td>{sItem && sItem.MRP}</td>
                                         <td>{sItem && sItem["NEW MRP"]}</td>
+                                        <th>+</th>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -260,11 +259,11 @@ export default function Stocks() {
                                     </tr >
                                     <tr>
                                         <th>APPLICATION</th>
-                                        <td>{sItem && sItem["O_E REF"]}</td>
+                                        <td>{sItem && sItem.APPLICATION}</td>
                                     </tr>
                                     <tr>
                                         <th>O.E. REF</th>
-                                        <td>{sItem && sItem.APPLICATION}</td>
+                                        <td>{sItem && sItem["O_E_REF"]}</td>                                        
                                     </tr>
                                 </tbody>
                             </Table>
