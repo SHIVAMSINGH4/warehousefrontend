@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 import * as ai from "react-icons/ai";
 import "./stocks.css"
-import { getAllProducts } from '../../../api/Api';
+import { getAllProducts, getOneProduct } from '../../../api/Api';
 // import Modal from 'react-bootstrap/Modal';
 
 export default function Stocks() {
@@ -17,7 +17,7 @@ export default function Stocks() {
     };
 
     useEffect(() => {
-        if (data=="")
+        if (data == "")
             callData()
         console.log(data)
     }, [data])
@@ -84,19 +84,27 @@ export default function Stocks() {
     //search item
 
     const [sItem, setSItem] = useState({})
-    const [params] = useState([""])
+    const [q, setQ] = useState("")
     function handleSChange(e) {
         const q = e.target.value
-        data.filter(ele => {
-            for (let key in ele) {
-                if (ele[`${key.toLowerCase()}`] == q.toLowerCase()) {
-                    console.log(key)
-                    // setSItem([...sItem])
-                }
-            }
-        })
-
+        setQ(q)
+        // data.filter(ele => {
+        //     for (let key in ele) {
+        //         if (ele[`${key.toLowerCase()}`] == q.toLowerCase()) {
+        //             console.log(key)
+        //             // setSItem([...sItem])
+        //         }
+        //     }
+        // })
     }
+
+    async function search(e) {
+        const id = q;
+        await getOneProduct(id).then(x => setSItem(x[0]))
+    }
+    useEffect(() => {
+        console.log(sItem)
+    }, [sItem])
 
     return (
         <>
@@ -126,14 +134,16 @@ export default function Stocks() {
                                         autoComplete='disabled'
                                     />
                                 </InputGroup>
+
                             </Col>
+                            <Col sm="1"><Button variant="light" onClick={search}>Search</Button></Col>
                         </Row>
                     </Col>
                 </Row>
 
 
                 {/* search box */}
-                <Row>
+                {/* <Row>
                     <Col>
                         <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >
                             {/* close button
@@ -145,7 +155,7 @@ export default function Stocks() {
                             </div>
 
                             {/* search table */}
-                            {/* <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
+                {/* <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
                                 <Table striped bordered variant="dark" hover responsive="sm">
                                     <thead>
                                         <tr>
@@ -190,10 +200,10 @@ export default function Stocks() {
                                         })}
                                     </tbody>
                                 </Table>
-                            </div> */}
+                            </div>
                         </div>
                     </Col>
-                </Row>
+                </Row> */}
 
                 {/* stocks table */}
                 <Row>
@@ -202,18 +212,18 @@ export default function Stocks() {
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
                                 <thead>
-                                    <tr>
+                                     <tr>
                                         <th></th>
-                                        <th></th>       
                                         <th></th>
-                                        <th>STOCK LOCATION</th>
-                                        <th></th>                                        
-                                        <th>STOCK LOCATION</th>
+                                        <th></th>
+                                        <th colSpan={3}>{sItem && sItem.QTY_BY_STORE&& sItem.QTY_BY_STORE[0].STORE}</th>
+                                        <th></th>
+                                        <th colSpan={3}>{sItem && sItem.QTY_BY_STORE&& sItem.QTY_BY_STORE[0].STORE}</th>
                                     </tr>
                                     <tr>
                                         <th>MAKER</th>
-                                        <th>ITEM REF</th>  
-                                        <th></th>     
+                                        <th>ITEMS REF</th>
+                                        <th></th>
                                         <th>QUANTITY</th>
                                         <th>PUR MRP</th>
                                         <th>NEW MRP</th>
@@ -224,30 +234,25 @@ export default function Stocks() {
                                         <th>NEW MRP</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr >                                        
-                                        <td>{sItem&&sItem.MAKE}</td>
-                                        <td>{sItem&&sItem["ITEMS REF"]}</td>
+                                <tbody>                                   
+                                    <tr >
+                                        <td>{sItem && sItem.MAKE}</td>
+                                        <td>{sItem && sItem["ITEMS_REF"]}</td>
                                         <td></td>
-                                        <td>{sItem&&sItem.QTY}</td>
-                                        <td>{sItem&&sItem.MRP}</td>
-                                        <td>{sItem&&sItem["NEW MRP"]}</td>  
-                                        <td></td>     
-                                        <td>{sItem&&sItem.QTY}</td>
-                                        <td>{sItem&&sItem.MRP}</td>
-                                        <td>{sItem&&sItem["NEW MRP"]}</td>                                   
+                                        <td>{sItem&&sItem.QTY_BY_STORE && sItem.QTY_BY_STORE[0].QTY}</td>
+                                        <td>{sItem && sItem.MRP}</td>
+                                        <td>{sItem && sItem["NEW MRP"]}</td>
+                                        <td></td>
+                                        <td>{sItem && sItem.QTY}</td>
+                                        <td>{sItem && sItem.MRP}</td>
+                                        <td>{sItem && sItem["NEW MRP"]}</td>
                                     </tr>
                                 </tbody>
                             </Table>
                         </div>
                         {/* ITEMS DESCRIPTION */}
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
-                            <Table striped bordered hover variant='light' >
-                                <thead className="sticky-top">
-                                    <tr><th>DESCRIPTION</th></tr>
-                                    <tr><th>APPLICATION</th></tr>
-                                    <tr><th>O.E. REF</th></tr>
-                                </thead>
+                            <Table striped bordered hover variant='light' >                               
                                 <tbody>
                                     <tr>
                                         <th>DESCRIPTION</th>
@@ -276,7 +281,7 @@ export default function Stocks() {
                 // dialogClassName="modal-90w"
                 size="xl"
                 aria-labelledby="example-custom-modal-styling-title"
-            >
+                >
                 <Modal.Header closeButton>
                     <Modal.Title id="example-custom-modal-styling-title">
                         view stock
