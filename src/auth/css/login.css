@@ -7,6 +7,9 @@
     margin: 100px 0px 0px 800px;
     border: 0!important;
 }
+.pbtn:hover{
+    cursor: pointer;
+}
 /* .login{
     font-size: 30px;
     color: #428BCA;

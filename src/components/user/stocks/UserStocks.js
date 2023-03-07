@@ -8,9 +8,187 @@ import "./stocks.css"
 import { getAllProducts, getOneProduct } from '../../../api/Api';
 // import Modal from 'react-bootstrap/Modal';
 
-export default function Stocks() {
-    //data fetch from db.stock file
-    // const [data, setData] = useState([])
+export default function UserStocks() {
+    //data fetch
+    const [data, setData] = useState(
+        {
+            OE_REF: "FG123",
+            Descripation: "Air Filter",
+            APPLICATION: "Discovery V",
+            MAKER: [
+                {
+                    BRAND_NAME: "MEYLE",
+                    ITEMS_REF: 123,
+                    LOCATION: [
+                        {
+                            BRANCH_CODE:"GGM01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }                           
+                        },
+                        {
+                            LOCATION: "MUN01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+
+                        },
+                        {
+                            LOCATION: "DEL01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+                        }
+                    ]
+                },
+                {
+                    BRAND_NAME: "MAHLE",
+                    ITEMS_REF: 234,
+                    LOCATION: [
+                        {
+                            BRANCH_CODE:"GGM01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }                           
+                        },
+                        {
+                            LOCATION: "MUN01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+
+                        },
+                        {
+                            LOCATION: "DEL01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+                        }
+                    ]
+                },
+                {
+                    BRAND_NAME: "MANN",
+                    ITEMS_REF: 234,
+                    LOCATION: [
+                        {
+                            BRANCH_CODE:"GGM01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }                           
+                        },
+                        {
+                            LOCATION: "MUN01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+
+                        },
+                        {
+                            LOCATION: "DEL01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+                        }
+                    ]
+                },
+                {
+                    BRAND_NAME: "HENGEST/OTH",
+                    ITEMS_REF: 234,
+                    LOCATION: [
+                        {
+                            BRANCH_CODE:"GGM01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }                           
+                        },
+                        {
+                            LOCATION: "MUN01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+
+                        },
+                        {
+                            LOCATION: "DEL01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+                        }
+                    ]
+                },
+                {
+                    BRAND_NAME: "MEGMA/OTH",
+                    ITEMS_REF: 234,
+                    LOCATION: [
+                        {
+                            BRANCH_CODE:"GGM01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }                           
+                        },
+                        {
+                            LOCATION: "MUN01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+
+                        },
+                        {
+                            LOCATION: "DEL01",
+                            STOCK:{
+                                QUANTITY: 7,
+                                OLD_MRP: 1600,
+                                NEW_MRP: 1900,
+                                OP_Balance: 10,
+                            }    
+                        }
+                    ]
+                }
+            ],            
+        }
+    )
     // const callData = async () => {
     //     const d = await getAllProducts();
     //     setData([...d])
@@ -97,11 +275,12 @@ export default function Stocks() {
 
     async function search(e) {
         const id = q;
-        await getOneProduct(id).then(x => setSItem(x[0]))
+        setSItem(data)
+        // await getOneProduct(id).then(x => setSItem(x[0]))
     }
-    useEffect(() => {
-        console.log(sItem)
-    }, [sItem])
+    // useEffect(() => {
+    //     console.log(sItem)
+    // }, [sItem])
 
     return (
         <>
@@ -182,7 +361,7 @@ export default function Stocks() {
                                     </thead>
                                     <tbody>
                                         {sInput.map((e, i) => {
-                                            // console.log(v)                                                
+                                            // console.log(v)
                                             return (
                                                 <tr key={i} onClick={() => { view(i) }}>
                                                     <td >{i + 1}</td>
@@ -209,34 +388,54 @@ export default function Stocks() {
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
                                 <thead>
-                                     <tr>
+                                    <tr className="text-center">
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th colSpan={3}>{sItem && sItem.QTY_BY_STORE&& sItem.QTY_BY_STORE[0].STORE}</th>
-                                        <th></th>
-                                        <th colSpan={3}>{sItem && sItem.QTY_BY_STORE&& sItem.QTY_BY_STORE[1].STORE}</th>
+                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
+                                            return (
+                                                <>
+                                                    <th key={i} colSpan={5}>{ele.LOCATION}</th>
+                                                    <th key={i + 1}></th>
+                                                </>
+                                            )
+                                        })}
                                     </tr>
                                     <tr>
                                         <th>MAKER</th>
                                         <th>ITEMS REF</th>
-                                        <th></th>
-                                        <th>QUANTITY</th>
-                                        <th>PUR MRP</th>
-                                        <th>NEW MRP</th>                                        
-                                        {/* <th>COST</th> */}
-                                        <th></th>
-                                        <th>QUANTITY</th>
-                                        <th>PUR MRP</th>
-                                        <th>NEW MRP</th>                                        
+                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
+                                            return (
+                                                <>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>QUANTITY</th>
+                                                    <th>PUR MRP</th>
+                                                    <th>NEW MRP</th>
+                                                </>
+                                            )
+                                        })}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr >
                                         <td>{sItem && sItem.MAKE}</td>
-                                        <td>{sItem && sItem["ITEMS_REF"]}</td>
+                                        <td>{sItem.MAKER && sItem.MAKER["ITEMS_REF"]}</td>
+                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
+                                            return (
+                                                <>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{ele.QUANTITY}</td>
+                                                    <td>{ele["OLD_MRP"]}</td>
+                                                    <td>{ele["NEW_MRP"]}</td>
+                                                    <th>+</th>
+                                                </>
+                                            )
+                                        })}
+
                                         <td></td>
-                                        <td>{sItem&&sItem.QTY_BY_STORE && sItem.QTY_BY_STORE[0].QTY}</td>
+                                        <td>{sItem && sItem.QTY_BY_STORE && sItem.QTY_BY_STORE[0].QTY}</td>
                                         <td>{sItem && sItem.MRP}</td>
                                         <td>{sItem && sItem["NEW MRP"]}</td>
                                         <th>+</th>
@@ -251,7 +450,7 @@ export default function Stocks() {
                         </div>
                         {/* ITEMS DESCRIPTION */}
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
-                            <Table striped bordered hover variant='light' >                               
+                            <Table striped bordered hover variant='light' >
                                 <tbody>
                                     <tr>
                                         <th>DESCRIPTION</th>
@@ -263,7 +462,7 @@ export default function Stocks() {
                                     </tr>
                                     <tr>
                                         <th>O.E. REF</th>
-                                        <td>{sItem && sItem["O_E_REF"]}</td>                                        
+                                        <td>{sItem && sItem["O_E_REF"]}</td>
                                     </tr>
                                 </tbody>
                             </Table>

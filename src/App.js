@@ -1,14 +1,19 @@
 // import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Adminlogin from './auth/admin/Adminlogin';
-import Header from './components/header/Header';
 import GlobalContext from './context/ContextGlobal';
-import Dashboard from './components/user/dashboard/Dashboard';
-import Stocks from './components/user/stocks/Stocks';
-import Cart from './components/user/billing/Cart';
+import Header from './components/header/Header';
 import SideNav from './components/sidenav/SideNav';
-import Order from './components/user/order/Order';
+import Login from './auth/login';
+import Dashboard from './components/admin/dashboard/Dashboard';
+import AdminStocks from './components/admin/stocks/AdminStocks';
+import AdminCart from './components/admin/billing/AdminCart';
+import AdminOrder from './components/admin/order/AdminOrder';
+import UserStocks from './components/user/stocks/UserStocks';
+import UserCart from './components/user/billing/UserCart';
+import UserOrder from './components/user/order/UserOrder';
+
+
 
 
 function App() {
@@ -17,11 +22,15 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path={"/"} element={<Adminlogin />} />
-          <Route path={"/dashboard"} element={<SideNav><Dashboard /></SideNav>} />
-          <Route path={"/stocks"} element={<SideNav><Stocks /></SideNav>} />        
-          <Route path={"/order"} element={<SideNav><Order/></SideNav>} />
-          <Route path={"/cart"} element={<SideNav><Cart/></SideNav>}/>
+          <Route path={"/"} element={<Login />} />          
+          <Route path={"/admin/dashboard"} element={<SideNav><Dashboard /></SideNav>}/>
+          <Route path={"/admin/stocks"} element={<SideNav><AdminStocks /></SideNav>}/> 
+          <Route path={"/admin/cart"} element={<SideNav><AdminCart/></SideNav>}/>       
+          <Route path={"/admin/order"} element={<SideNav><AdminOrder/></SideNav>}/>
+          <Route path='/user/stocks' element={<SideNav><UserStocks /></SideNav>}/>
+          <Route path={"/user/cart"} element={<SideNav><UserCart/></SideNav>}/>       
+          <Route path={"/user/order"} element={<SideNav><UserOrder/></SideNav>}/>
+          
         </Routes>
       </Router>
     </GlobalContext>

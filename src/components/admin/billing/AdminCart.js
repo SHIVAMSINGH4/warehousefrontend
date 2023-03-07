@@ -1,13 +1,13 @@
 import { useReducer, useState, useEffect } from "react";
 import { Button, Col, Container, Row, InputGroup, Form, Dropdown } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
-import BillModal from "./Bill";
+import AdminBillModal from "./AdminBill";
 import db from "../../../db.json";
 import Card from 'react-bootstrap/Card';
 import * as ai from "react-icons/ai";
 import { continueStatement } from "@babel/types";
 
-export default function Cart() {
+export default function AdminCart() {
 
     //cart tab
     const cart = { type: "purchase", option: "sell" }
@@ -315,7 +315,7 @@ export default function Cart() {
             </Container>
 
             {/* bill */}
-            <BillModal cList={cList} show={modalShow} onHide={() => setModalShow(false)} />
+            <AdminBillModal cList={cList} show={modalShow} onHide={() => setModalShow(false)} />
         </>
     )
 }

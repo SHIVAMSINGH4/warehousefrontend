@@ -1,7 +1,7 @@
 import { Container, Row, Col, Table, Button, InputGroup, Form } from "react-bootstrap";
 import SideNav from "../../sidenav/SideNav";
 
-export default function Order() {
+export default function UserOrder() {
 
     return (
         <>

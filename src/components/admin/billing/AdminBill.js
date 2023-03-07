@@ -8,7 +8,7 @@ function CheckoutModal(props) {
     const navigate = useNavigate()
     function moveO() {
         props.onHide()
-        navigate("/order")
+        navigate("/admin/order")
     }
 
     return (
@@ -36,7 +36,7 @@ function CheckoutModal(props) {
 }
 
 
-export default function BillModal(props) {
+export default function AdminBillModal(props) {
     const [checkoutShow, setModalShow] = useState(false);
     function checkout(){
         setModalShow(true);
