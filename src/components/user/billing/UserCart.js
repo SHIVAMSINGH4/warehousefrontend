@@ -7,6 +7,26 @@ import Card from 'react-bootstrap/Card';
 import * as ai from "react-icons/ai";
 
 export default function UserCart() {
+    //data for cart list
+    const [data, setData] = useState();    //data state
+    const [itemId,setItemId] = useState();  
+    useEffect(() => {                       //cartlist update on page or page reload/ component render
+        if (sessionStorage.getItem("stockitem")){
+            setItemId(JSON.parse(sessionStorage.getItem("stockitem")))   
+            setData(JSON.parse(sessionStorage.getItem("srchproducts")))       
+        }            
+    }, [])
+    useEffect(()=>{
+        data.forEach(e=>{
+            e.MAKER.forEach(x=>{
+                itemId(ele=>{
+                    if(x.ITEMS_REF==ele){
+                        
+                    }
+                })                
+            })            
+        })
+    },[data])
 
     //cart tab
     const cart = { type: "purchase", option: "sell" }
@@ -21,13 +41,11 @@ export default function UserCart() {
         }
     }
 
-    // BILL
+    // BILL modal
     const [modalShow, setModalShow] = useState(false);
     function moveToBill() {
         setModalShow(true)
     }
-
-    const data = db.stock;    //data fetch from db.stock file
 
     // input box function 
     var searchD = {};   //filtered data on search
@@ -50,10 +68,8 @@ export default function UserCart() {
 
     //search box
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     useEffect(() => {
         var searchbox = document.getElementsByClassName("searchbox")[0];
         var card = document.getElementsByClassName("cad")[0];
@@ -77,7 +93,6 @@ export default function UserCart() {
 
     //cart list
     const [cList, setClist] = useState([]);
-
     function aList(i) {                         //add item in list
         let itemid = sInput[i].sapref;
         let newItem = {};
@@ -109,15 +124,13 @@ export default function UserCart() {
             })
         }
     }
-
     function rList(i) {                          //remove item in list
         let itemid = cList[i].data.sapref
         setClist([...cList.filter(e => e.data.sapref != itemid)])
     }
-
     function handleQty(e, id) {                  // increase/decrease funtion for quantity of item in list      
-            if(e.target.value>=0){    
-            let newQty = e.target.value             
+        if (e.target.value >= 0) {
+            let newQty = e.target.value
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
@@ -125,11 +138,11 @@ export default function UserCart() {
                 }
             })
             setClist([...obj])
-             }            
+        }
     }
-    function blurQty(e,id){                     //input quantity after focus out
-        if(e.target.value==""||e.target.value==0){    
-            let newQty = 1            
+    function blurQty(e, id) {                     //input quantity after focus out
+        if (e.target.value == "" || e.target.value == 0) {
+            let newQty = 1
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
@@ -137,7 +150,7 @@ export default function UserCart() {
                 }
             })
             setClist([...obj])
-             }    
+        }
     }
 
 
@@ -145,12 +158,12 @@ export default function UserCart() {
         <>
 
             {/* cart */}
-            <Container fluid id="main" style={{ display: "inline-block", verticalAlign: "middle" }}>
+            <Container fluid id="main" style={{caretColor:"transparent", display: "inline-block", verticalAlign: "middle" }}>
 
                 {/* header */}
                 <Row className=" mt-1" >
                     <Col sm="4"></Col>
-                    <Col sm="4" className="text-center" >
+                    <Col sm="4" className="text-center"  style={{cursor:"pointer"}}>
                         <h2>Cart</h2>
                         <div style={{ margin: "auto", width: "30%", height: "0.2rem", backgroundColor: "black" }}></div>
                     </Col>
@@ -170,7 +183,7 @@ export default function UserCart() {
                 </Row>
 
                 {/* add item block */}
-                <Row className=" mt-1 p-2" style={{ borderRadius: "1rem", backgroundColor: "#428BCA" }}>
+                <Row className=" mt-1 p-2" style={{ borderRadius: ".5rem", backgroundColor: "#428BCA" }}>
                     <Col sm="3">
                         <InputGroup>
                             <Form.Control
@@ -260,9 +273,9 @@ export default function UserCart() {
                 {/* CART LIST */}
                 <Row>
                     <Col>
-                        <div className='cTable' style={{ width: "100%", overflowY: "scroll", overflowX: "scroll" }}>
-                            <Table striped bordered hover >
-                                <thead className="sticky-top" style={{ backdropFilter: "blur(5px)" }}>
+                        <div className='cTable' style={{caretColor:"transparent", width: "100%", overflowY: "scroll", overflowX: "scroll" }}>
+                            <Table striped bordered hover style={{cursor:"pointer",}}>
+                                <thead className="sticky-top" style={{ zIndex: "1", backdropFilter: "blur(5px)" }}>
                                     <tr>
                                         <th>S.No.</th>
                                         <th>Ref. Id</th>
@@ -290,7 +303,7 @@ export default function UserCart() {
                                                 <td>{e.data.make}</td>
                                                 <td>
                                                     <input style={{ textAlign: 'center', display: "inline-block" }} name="quantity" type="number"
-                                                      onBlur={(e)=>blurQty(e,i)}  onChange={e=>handleQty(e, i)} value={e.qty} min={1} />
+                                                        onBlur={(e) => blurQty(e, i)} onChange={e => handleQty(e, i)} value={e.qty} min={1} />
                                                 </td>
                                                 <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>
                                             </tr>

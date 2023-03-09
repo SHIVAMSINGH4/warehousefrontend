@@ -3,7 +3,7 @@
     height: 93%;  /* 100% Full-height */
     width: 13%;   /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 2; /* Stay on top */
     bottom: 0;  /* Stay at the top */
     left: 0;   
     background-color: lightgray; /* Black*/
@@ -16,7 +16,7 @@
   } */
 .showbar {
   width: 50%!important;
-  height: 90%;
+  height: 93%;
 }
   
   /* The navigation menu links */
@@ -80,12 +80,12 @@
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
   @media screen and (max-width: 450px) {
     .sidenav {
-      padding-top: 5rem;    
+      padding-top: 30%;    
       position: absolute;
       width: 0;
-      margin-left: 0;
+      margin-left: 0;         
     }
-    .sidenav a {font-size: 18px;}
+    .sidenav a {font-size: 2rem;}
     .mbtn{
       margin-top: 5rem;
       display: inline-flex!important;

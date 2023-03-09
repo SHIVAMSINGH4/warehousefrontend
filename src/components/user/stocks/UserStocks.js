@@ -1,194 +1,13 @@
 import { Container, Row, Col, Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import db from "../../../db.json";
-import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 import * as ai from "react-icons/ai";
 import "./stocks.css"
 import { getAllProducts, getOneProduct } from '../../../api/Api';
-// import Modal from 'react-bootstrap/Modal';
 
 export default function UserStocks() {
     //data fetch
-    const [data, setData] = useState(
-        {
-            OE_REF: "FG123",
-            Descripation: "Air Filter",
-            APPLICATION: "Discovery V",
-            MAKER: [
-                {
-                    BRAND_NAME: "MEYLE",
-                    ITEMS_REF: 123,
-                    LOCATION: [
-                        {
-                            BRANCH_CODE:"GGM01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }                           
-                        },
-                        {
-                            LOCATION: "MUN01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-
-                        },
-                        {
-                            LOCATION: "DEL01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-                        }
-                    ]
-                },
-                {
-                    BRAND_NAME: "MAHLE",
-                    ITEMS_REF: 234,
-                    LOCATION: [
-                        {
-                            BRANCH_CODE:"GGM01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }                           
-                        },
-                        {
-                            LOCATION: "MUN01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-
-                        },
-                        {
-                            LOCATION: "DEL01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-                        }
-                    ]
-                },
-                {
-                    BRAND_NAME: "MANN",
-                    ITEMS_REF: 234,
-                    LOCATION: [
-                        {
-                            BRANCH_CODE:"GGM01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }                           
-                        },
-                        {
-                            LOCATION: "MUN01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-
-                        },
-                        {
-                            LOCATION: "DEL01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-                        }
-                    ]
-                },
-                {
-                    BRAND_NAME: "HENGEST/OTH",
-                    ITEMS_REF: 234,
-                    LOCATION: [
-                        {
-                            BRANCH_CODE:"GGM01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }                           
-                        },
-                        {
-                            LOCATION: "MUN01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-
-                        },
-                        {
-                            LOCATION: "DEL01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-                        }
-                    ]
-                },
-                {
-                    BRAND_NAME: "MEGMA/OTH",
-                    ITEMS_REF: 234,
-                    LOCATION: [
-                        {
-                            BRANCH_CODE:"GGM01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }                           
-                        },
-                        {
-                            LOCATION: "MUN01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-
-                        },
-                        {
-                            LOCATION: "DEL01",
-                            STOCK:{
-                                QUANTITY: 7,
-                                OLD_MRP: 1600,
-                                NEW_MRP: 1900,
-                                OP_Balance: 10,
-                            }    
-                        }
-                    ]
-                }
-            ],            
-        }
-    )
+    const [data, setData] = useState()
     // const callData = async () => {
     //     const d = await getAllProducts();
     //     setData([...d])
@@ -258,10 +77,11 @@ export default function UserStocks() {
 
     //search item
 
-    const [sItem, setSItem] = useState({})
-    const [q, setQ] = useState("")
-    function handleSChange(e) {
-        const q = e.target.value
+    const [sItem, setSItem] = useState()      //search items functions
+    const [sItemList,setSItemList] = useState()     //search items list to be used in cartList in cart section
+    const [q, setQ] = useState("")          //keywords being typed in search box input
+    function handleSChange(e) {     //search values on change in search tab input
+        const q = e.target.value    
         setQ(q)
         // data.filter(ele => {
         //     for (let key in ele) {
@@ -273,14 +93,64 @@ export default function UserStocks() {
         // })
     }
 
-    async function search(e) {
+    async function search(e) {          //on click search button data fetch from server for one product
         const id = q;
-        setSItem(data)
-        // await getOneProduct(id).then(x => setSItem(x[0]))
+        // setSItem(data)
+        await getOneProduct(q).then(x => setSItem(x))                
     }
-    // useEffect(() => {
-    //     console.log(sItem)
-    // }, [sItem])
+    useEffect(() => {      //then store that one product to sesssion storage everytime on click search
+        if(sItem){
+            sessionStorage.setItem("sItem",JSON.stringify(sItem)) 
+            setSItemList([sItem])
+            console.log("sItem1")
+        }
+        if(sItem&&sItemList){
+            setSItemList([...sItemList,sItem])
+        }
+        if(!sItem&&sessionStorage.getItem("sItem")){
+            console.log("sItem2")
+            setSItem(JSON.parse(sessionStorage.getItem("sItem")))  
+        }                    
+    }, [sItem])
+    useEffect(()=>{
+        if(sItemList){ 
+            sessionStorage.setItem("srchProducts",JSON.stringify(sItemList))
+        }        
+    },[sItemList])
+
+
+    const [cartList, setCartList] = useState()      //state of array of items to push in cart
+    const [cartItem, setCartItem] = useState()      //state for item ref.     
+    useEffect(() => {                                //setting cartlist by adding item from search table
+        if (cartItem && !cartList) {
+            setCartList([cartItem])
+            console.log("Ok1")
+        }
+        if (cartList) {
+            var counter = 0;
+            if (cartList)
+                cartList.forEach(i => {
+                    if (i == cartItem) {
+                        counter += 1;
+                    }
+                })
+            if (counter == 0){
+                console.log(cartList)
+                setCartList([...cartList, cartItem])            
+            }
+                
+        }
+    }, [cartItem])
+    useEffect(() => {           //cartlist connection with session storage
+        if (cartList) {               //setting cart list in session storage
+            sessionStorage.setItem("stockitem", JSON.stringify(cartList))
+            console.log("ok3")
+        }
+        if (!cartList && sessionStorage && sessionStorage.getItem("stockitem")) {    //setting cart list in session storage
+            setCartList(JSON.parse(sessionStorage.getItem("stockitem")))
+            console.log("ok4")
+        }
+    }, [cartList])
 
     return (
         <>
@@ -289,7 +159,7 @@ export default function UserStocks() {
                 <Row>
                     <Col className='text-center'>
                         <Row>
-                            <div style={{ marginTop: ".2%", width: "100%", paddingLeft: "35%", position: "fixed", zIndex: "1", backgroundColor: "white", height: "6%" }}>
+                            <div style={{ caretColor: "transparent", cursor: "pointer", marginTop: ".2%", width: "100%", paddingLeft: "35%", position: "fixed", zIndex: "1", backgroundColor: "white", height: "6%" }}>
                                 <div style={{ width: "18%" }}>
                                     <h2 style={{ marginBottom: "-0.1rem" }}>Stocks</h2>
                                     <div style={{ margin: "auto", display: "block", width: "100%", height: "0.1rem", backgroundColor: "black" }}></div>
@@ -298,7 +168,7 @@ export default function UserStocks() {
                         </Row>
 
                         {/* search input */}
-                        <Row className="justify-content-center p-1" style={{ borderRadius: "1rem", marginTop: "4.2%", backgroundColor: "#428BCA" }}  >
+                        <Row className="justify-content-center p-1 mb-1" style={{ borderRadius: ".5rem", marginTop: "4.2%", backgroundColor: "#428BCA" }}  >
                             <Col sm="5">
                                 <InputGroup >
                                     <Form.Control
@@ -386,16 +256,23 @@ export default function UserStocks() {
                     <Col >
                         {/* ITEMS TABLE */}
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
-                            <Table striped bordered hover variant='light' >
+                            <Table bordered hover striped variant='light'>
                                 <thead>
                                     <tr className="text-center">
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
+                                        {sItem&& sItem.MAKER[0].LOCATION.map((ele, i) => {
+                                            var loc;
+                                            if (ele.BRANCH_CODE == "GGM01")
+                                                loc = "GURUGRAM"
+                                            else if (ele.BRANCH_CODE == "MUN01")
+                                                loc = "MUNDKA"
+                                            else if (ele.BRANCH_CODE == "DEL01")
+                                                loc = "DELHI"
                                             return (
                                                 <>
-                                                    <th key={i} colSpan={5}>{ele.LOCATION}</th>
+                                                    <th key={i} colSpan={5}>{loc}</th>
                                                     <th key={i + 1}></th>
                                                 </>
                                             )
@@ -404,47 +281,46 @@ export default function UserStocks() {
                                     <tr>
                                         <th>MAKER</th>
                                         <th>ITEMS REF</th>
-                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
+                                        {sItem&& sItem.MAKER[0].LOCATION.map((ele, i) => {
                                             return (
                                                 <>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th>QUANTITY</th>
-                                                    <th>PUR MRP</th>
-                                                    <th>NEW MRP</th>
+                                                    <th key={i}></th>
+                                                    <th key={i + 1}></th>
+                                                    <th key={i + 2}>QUANTITY</th>
+                                                    <th key={i + 3}>OLD MRP</th>
+                                                    <th key={i + 4}>NEW MRP</th>
+                                                    <th key={i + 5}></th>
                                                 </>
                                             )
                                         })}
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr >
-                                        <td>{sItem && sItem.MAKE}</td>
-                                        <td>{sItem.MAKER && sItem.MAKER["ITEMS_REF"]}</td>
-                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
-                                            return (
-                                                <>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>{ele.QUANTITY}</td>
-                                                    <td>{ele["OLD_MRP"]}</td>
-                                                    <td>{ele["NEW_MRP"]}</td>
-                                                    <th>+</th>
-                                                </>
-                                            )
-                                        })}
-
-                                        <td></td>
-                                        <td>{sItem && sItem.QTY_BY_STORE && sItem.QTY_BY_STORE[0].QTY}</td>
-                                        <td>{sItem && sItem.MRP}</td>
-                                        <td>{sItem && sItem["NEW MRP"]}</td>
-                                        <th>+</th>
-                                        <td></td>
-                                        <td>{sItem && sItem.QTY}</td>
-                                        <td>{sItem && sItem.MRP}</td>
-                                        <td>{sItem && sItem["NEW MRP"]}</td>
-                                        <th>+</th>
-                                    </tr>
+                                <tbody >
+                                    {sItem && sItem.MAKER.map((e, i) => {
+                                        return (
+                                            <>
+                                                <tr     >
+                                                    <td>{e.BRAND_NAME}</td>
+                                                    <td>{e.ITEMS_REF}</td>
+                                                    {e.LOCATION.map((ele, j) => {
+                                                        return (
+                                                            <>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>{ele.STOCK.QUANTITY}</td>
+                                                                <td>{ele.STOCK["OLD_MRP"]}</td>
+                                                                <td>{ele.STOCK["NEW_MRP"]}</td>
+                                                                <td style={{ padding: "0" }} width="30">
+                                                                    <div style={{}} className="addbtn " onClick={() => { setCartItem(e.ITEMS_REF) }} >
+                                                                        +
+                                                                    </div>
+                                                                </td>
+                                                            </>
+                                                        )
+                                                    })}
+                                                </tr>
+                                            </>)
+                                    })}
                                 </tbody>
                             </Table>
                         </div>
@@ -462,7 +338,7 @@ export default function UserStocks() {
                                     </tr>
                                     <tr>
                                         <th>O.E. REF</th>
-                                        <td>{sItem && sItem["O_E_REF"]}</td>
+                                        <td>{sItem && sItem["OE_REF"]}</td>
                                     </tr>
                                 </tbody>
                             </Table>

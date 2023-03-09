@@ -19,6 +19,7 @@ export default function Login() {
         body: {
             user: "USER",
             role: "admin",
+            store:"GGN01"
         }
     }
 
@@ -36,7 +37,7 @@ export default function Login() {
         sessionStorage.setItem("userinfo", JSON.stringify(data.body))  
         profile.setProfile(JSON.parse(sessionStorage.getItem("userinfo")))    //set userinfo in context state              
         setTimeout(() => {
-            navigate("admin/dashboard")
+            navigate("user/stocks")
         }, 100)             
         // reducer(hello)
 
@@ -74,11 +75,11 @@ export default function Login() {
                 {/* profile button */}
                 <Row>
                     <Col className="pbtn mt-5 justify-content-center">
-                        <div onClick={() => setToggle(!toggle)} style={{ paddingLeft: "0", marginLeft: "70%", backgroundColor: "dodgerblue", color: "#f1f1f1", textAlign: "center", fontSize: "1rem", width: "5rem", border: ".1rem solid", borderRadius: ".4rem" }}>
+                        <div onClick={() => setToggle(!toggle)} style={{ position:"absolute",caretColor:"transparent",paddingLeft: "0", marginLeft: "70%", backgroundColor:`${toggle?"lightgrey":"dodgerblue"}`, color: `${toggle?'black':"#f1f1f1"}`, textAlign: "center", fontSize: "1rem", width: "5rem", border: ".1rem solid", borderRadius: ".4rem" }}>
                             {!toggle && User.user}
                             {toggle &&
                                 (<ul style={{ listStyle: "none", padding: "0", marginBottom: "0", }}>
-                                    <li onClick={() => setUser({ user: "USER" })}>USER</li>
+                                    <li onClick={() => setUser({ user: "USER" })}><span>USER</span></li>
                                     <li onClick={() => setUser({ user: "ADMIN" })}>ADMIN</li>
                                 </ul>)
                             }

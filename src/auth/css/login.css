@@ -8,7 +8,10 @@
     border: 0!important;
 }
 .pbtn:hover{
-    cursor: pointer;
+    cursor: pointer;  
+}
+.ptbtn div ul li:hover{
+    background-color: lightslategrey!important;
 }
 /* .login{
     font-size: 30px;

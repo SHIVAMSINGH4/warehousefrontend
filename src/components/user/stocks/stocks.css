@@ -1,28 +1,54 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
 /* .closebtn{    
     background-color: aqua;
 } */
-.closebtn:hover{    
-    color:white;
+.closebtn:hover {
+    color: white;
     cursor: pointer;
 }
-.searchbox{
-    display: none;    
-}   
-.anime{
+
+.searchbox {
+    display: none;
+}
+
+.anime {
     position: relative;
-    animation: name duration timing-function delay iteration-count direction fill-mode;;
+    animation: name duration timing-function delay iteration-count direction fill-mode;
+    ;
     animation-name: anim;
-    animation-duration: 1s ;
-    animation-delay: 0s;    
+    animation-duration: 1s;
+    animation-delay: 0s;
     animation-iteration-count: 1;
     animation-direction: normal;
-    animation-timing-function:ease-in-out ;
-    animation-fill-mode: both;    
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
 }
-@keyframes anim{
-    from{margin-top: -2rem;}
-    to{margin-bottom: 0;}
+
+@keyframes anim {
+    from {
+        margin-top: -2rem;
+    }
+
+    to {
+        margin-bottom: 0;
+    }
 }
+
 /* .cad{
     height:auto!important;
 } */
+.addbtn {
+    padding: 50% 0;
+    text-align:center; 
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.addbtn:hover {
+    cursor: pointer;
+    background-color: lightsteelblue !important;
+}
