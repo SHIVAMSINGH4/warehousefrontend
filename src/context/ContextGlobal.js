@@ -4,12 +4,17 @@ import { MainContext } from "./Context";
 export default function GlobalContext({ children }) {
     // profile 
     const [profile, setProfile] = useState()
+    const [cartCount,setCartCount] = useState(0)
 
     //values to be travelling around
     const value = {
         profile: {
             profile,
             setProfile
+        },
+        cart:{
+            cartCount,
+            setCartCount
         }
     }
 

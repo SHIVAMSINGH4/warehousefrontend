@@ -4,10 +4,16 @@ import { useEffect, useState } from 'react';
 import * as ai from "react-icons/ai";
 import "./stocks.css"
 import { getAllProducts, getOneProduct } from '../../../api/Api';
+import { useContext } from 'react';
+import { MainContext } from '../../../context/Context';
 
 export default function UserStocks() {
     //data fetch
     const [data, setData] = useState()
+
+    //cartCount
+    const{cart} = useContext(MainContext)
+
     // const callData = async () => {
     //     const d = await getAllProducts();
     //     setData([...d])
@@ -21,6 +27,8 @@ export default function UserStocks() {
 
     //filtered data on search
     var searchD = {};
+
+
 
     // input box function 
     var result = [];
@@ -75,13 +83,15 @@ export default function UserStocks() {
     //     setVbox(true);
     // }
 
-    //search item
 
-    const [sItem, setSItem] = useState()      //search items functions
-    const [sItemList,setSItemList] = useState()     //search items list to be used in cartList in cart section
+
+
+    //search items functions
+    const [sItem, setSItem] = useState()     
+    const [sItemList, setSItemList] = useState() //search items list to be used in cartList in cart section
     const [q, setQ] = useState("")          //keywords being typed in search box input
     function handleSChange(e) {     //search values on change in search tab input
-        const q = e.target.value    
+        const q = e.target.value
         setQ(q)
         // data.filter(ele => {
         //     for (let key in ele) {
@@ -93,40 +103,54 @@ export default function UserStocks() {
         // })
     }
 
-    async function search(e) {          //on click search button data fetch from server for one product
+    async function search(e) {  //on click search button data fetch from server for one product
         const id = q;
         // setSItem(data)
-        await getOneProduct(q).then(x => setSItem(x))                
+        await getOneProduct(q).then(x => setSItem(x))
     }
-    useEffect(() => {      //then store that one product to sesssion storage everytime on click search
-        if(sItem){
-            sessionStorage.setItem("sItem",JSON.stringify(sItem)) 
+    useEffect(() => {   //then store that one product to sesssion storage everytime on click search
+        if (!sItem && sessionStorage.getItem("stockItem")) { //reload product in stock from session if exists (during component re-render)            
+            setSItem(JSON.parse(sessionStorage.getItem("stockItem")))
+        }
+        if (sItem && !sItemList) {  //stock item on every search and every re render of stock component
+            sessionStorage.setItem("stockItem", JSON.stringify(sItem))
             setSItemList([sItem])
-            console.log("sItem1")
         }
-        if(sItem&&sItemList){
-            setSItemList([...sItemList,sItem])
+        if (sItem && sItemList) {   //check if product exists in cartList or not(on new search)
+            var counter = 0;
+            sItemList.forEach(e => {
+                e.MAKER.forEach(ele => {
+                    sItem.MAKER.forEach(x => {
+                        if (ele.ITEMS_REF == x.ITEMS_REF) {
+                            counter += 1;                            
+                        }
+                    })
+                })
+            })
+            if (counter == 0) {
+                setSItemList([...sItemList, sItem])
+                console.log("cartListProducts updates")
+            }
+            if(counter>0){
+                console.log("cartListProducts already exist")
+            }                
         }
-        if(!sItem&&sessionStorage.getItem("sItem")){
-            console.log("sItem2")
-            setSItem(JSON.parse(sessionStorage.getItem("sItem")))  
-        }                    
     }, [sItem])
-    useEffect(()=>{
-        if(sItemList){ 
-            sessionStorage.setItem("srchProducts",JSON.stringify(sItemList))
-        }        
-    },[sItemList])
-
-
-    const [cartList, setCartList] = useState()      //state of array of items to push in cart
-    const [cartItem, setCartItem] = useState()      //state for item ref.     
-    useEffect(() => {                                //setting cartlist by adding item from search table
-        if (cartItem && !cartList) {
-            setCartList([cartItem])
-            console.log("Ok1")
+    useEffect(() => {
+        if (sItemList) {
+            sessionStorage.setItem("cartListData", JSON.stringify(sItemList))            
         }
-        if (cartList) {
+
+    }, [sItemList])
+
+
+    const [cartList, setCartList] = useState()      //state of array of items for cart using session storage
+    const [cartItem, setCartItem] = useState()      //state for item ref. for cart using session storage  
+    useEffect(() => {               //setting cartlist by adding item from search table
+        if (cartItem && !cartList) {    //on first cartList item
+            setCartList([cartItem])            
+        }
+        if (cartList) {         //on adding item in cartList after first cartList item
             var counter = 0;
             if (cartList)
                 cartList.forEach(i => {
@@ -134,24 +158,42 @@ export default function UserStocks() {
                         counter += 1;
                     }
                 })
-            if (counter == 0){
-                console.log(cartList)
-                setCartList([...cartList, cartItem])            
-            }
-                
+            if (counter == 0) {
+                setCartList([...cartList, cartItem])                
+            }           
         }
     }, [cartItem])
     useEffect(() => {           //cartlist connection with session storage
         if (cartList) {               //setting cart list in session storage
-            sessionStorage.setItem("stockitem", JSON.stringify(cartList))
-            console.log("ok3")
+            sessionStorage.setItem("cartListItems", JSON.stringify(cartList))     
+            cart.setCartCount(cartList.length)                 
         }
-        if (!cartList && sessionStorage && sessionStorage.getItem("stockitem")) {    //setting cart list in session storage
-            setCartList(JSON.parse(sessionStorage.getItem("stockitem")))
-            console.log("ok4")
+        if (!cartList && sessionStorage && sessionStorage.getItem("cartListItems")) {   //setting cart list by session storage
+            setCartList(JSON.parse(sessionStorage.getItem("cartListItems")))                             
         }
     }, [cartList])
 
+    function addItemCart(id){     
+        console.log(cartItem)   
+        if(!cartItem){
+            setCartItem(id)
+        }
+        else{
+            var counter = 0 ;
+            cartList.forEach(e=>{               
+                if(e==id){
+                    counter+=1;                    
+                }                
+            })   
+            if(counter==0){
+                setCartItem(id)
+            }
+            else{
+                console.log("error")
+                window.alert("this item is already in cart list")
+            }        
+        }
+    }
     return (
         <>
             <Container fluid id='main'>
@@ -183,6 +225,11 @@ export default function UserStocks() {
 
                             </Col>
                             <Col sm="1"><Button variant="light" onClick={search}>Search</Button></Col>
+                            <Col >
+                                <Button variant="light" id="button-addon2">
+                                    SCAN
+                                </Button>
+                            </Col>
                         </Row>
                     </Col>
                 </Row>
@@ -262,7 +309,7 @@ export default function UserStocks() {
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        {sItem&& sItem.MAKER[0].LOCATION.map((ele, i) => {
+                                        {sItem && sItem.MAKER[0].LOCATION.map((ele, i) => {
                                             var loc;
                                             if (ele.BRANCH_CODE == "GGM01")
                                                 loc = "GURUGRAM"
@@ -281,7 +328,7 @@ export default function UserStocks() {
                                     <tr>
                                         <th>MAKER</th>
                                         <th>ITEMS REF</th>
-                                        {sItem&& sItem.MAKER[0].LOCATION.map((ele, i) => {
+                                        {sItem && sItem.MAKER[0].LOCATION.map((ele, i) => {
                                             return (
                                                 <>
                                                     <th key={i}></th>
@@ -310,8 +357,8 @@ export default function UserStocks() {
                                                                 <td>{ele.STOCK.QUANTITY}</td>
                                                                 <td>{ele.STOCK["OLD_MRP"]}</td>
                                                                 <td>{ele.STOCK["NEW_MRP"]}</td>
-                                                                <td style={{ padding: "0" }} width="30">
-                                                                    <div style={{}} className="addbtn " onClick={() => { setCartItem(e.ITEMS_REF) }} >
+                                                                <td style={{ padding: "0" ,caretColor:"transparent"}} width="30">
+                                                                    <div style={{}} className="addbtn " onClick={() => { addItemCart(e.ITEMS_REF) }} >
                                                                         +
                                                                     </div>
                                                                 </td>

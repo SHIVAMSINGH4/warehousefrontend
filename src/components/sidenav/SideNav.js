@@ -59,10 +59,7 @@ export default function SideNav({ children }) {
                 }
             })
         }
-      
-
-
-    }, [profile, menu])
+    }, [profile, menu,locations])
 
     return (
         <>
