@@ -45,6 +45,10 @@ export default function Header() {
         }
         setCartCount(cart.cartCount)
     }, [profile,cart])
+    useEffect(()=>{
+        if(sessionStorage.getItem("cartListItems"))
+        cart.setCartCount(JSON.parse(sessionStorage.getItem("cartListItems")).length)
+    },[])
 
     //cart count
     const [cartCount, setCartCount] = useState(0)

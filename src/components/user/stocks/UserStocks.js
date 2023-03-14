@@ -11,106 +11,35 @@ export default function UserStocks() {
     //data fetch
     const [data, setData] = useState()
 
+    //location get from session storage
+    const loc = JSON.parse(sessionStorage.getItem("userinfo")).store 
+    
     //cartCount
-    const{cart} = useContext(MainContext)
-
-    // const callData = async () => {
-    //     const d = await getAllProducts();
-    //     setData([...d])
-    // };
-    // useEffect(() => {        
-    //     callData()        
-    // }, [])
-    // useEffect(() => {
-    //     console.log(data)
-    // }, [data])
+    const { cart } = useContext(MainContext)
+  
+    useEffect(() => {
+        console.log(data)
+    }, [data])
 
     //filtered data on search
     var searchD = {};
 
-
-
-    // input box function 
-    var result = [];
-    const [sInput, setInput] = useState([{ keywords: "" }])
-    // const handleChange = function (event) {
-    //     searchD = { [event.target.name]: event.target.value }
-    //     if (searchD.keywords != "") {
-    //         handleShow();
-    //         result = data.filter(e => {
-    //             return e.sapref.toLowerCase().startsWith(searchD.keywords)
-    //         })
-    //         setInput(result)
-    //     };
-    //     if (searchD.keywords == "") {
-    //         setInput([searchD])
-    //         handleClose();
-    //     }
-    //     console.log(result);
-    // }
-
-    //search box
-    // const [show, setShow] = useState(false);
-
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
-
-    // useEffect(() => {
-    //     var searchbox = document.getElementsByClassName("searchbox")[0];
-    //     var card = document.getElementsByClassName("cad")[0];
-    //     var stable = document.getElementsByClassName("stable")[0];
-    //     if (show == true) {
-    //         searchbox.style.display = "block";
-    //         card.classList.add("anime");
-    //         stable.style.height = "35vh"
-    //     }
-    //     if (show == false) {
-    //         setTimeout(() => {
-    //             searchbox.style.display = "none";
-    //         }, 100);
-    //         card.classList.remove("anime");
-    //         stable.style.height = "79vh"
-    //     }
-
-    // }, [sInput, show]);
-
-    // item desc box
-
-    // const [showVbox, setVbox] = useState(false);
-    // const [Vdata, setVdata] = useState({});
-    // function view(i) {
-    //     setVdata(data[i]);
-    //     setVbox(true);
-    // }
-
-
-
-
     //search items functions
-    const [sItem, setSItem] = useState()     
+    const [sItem, setSItem] = useState()     //sItem/search item==stockitem
     const [sItemList, setSItemList] = useState() //search items list to be used in cartList in cart section
-    const [q, setQ] = useState("")          //keywords being typed in search box input
-    function handleSChange(e) {     //search values on change in search tab input
+    const [q, setQ] = useState("")     //keywords being typed in search box input
+    function handleSChange(e) {    //search values on change in search tab input
         const q = e.target.value
-        setQ(q)
-        // data.filter(ele => {
-        //     for (let key in ele) {
-        //         if (ele[`${key.toLowerCase()}`] == q.toLowerCase()) {
-        //             console.log(key)
-        //             // setSItem([...sItem])
-        //         }
-        //     }
-        // })
+        setQ(q)      
     }
 
     async function search(e) {  //on click search button data fetch from server for one product
-        const id = q;
-        // setSItem(data)
-        await getOneProduct(q).then(x => setSItem(x))
+        const id = q;        
+        await getOneProduct(q,loc).then(x => setSItem(x))
     }
     useEffect(() => {   //then store that one product to sesssion storage everytime on click search
         if (!sItem && sessionStorage.getItem("stockItem")) { //reload product in stock from session if exists (during component re-render)            
-            setSItem(JSON.parse(sessionStorage.getItem("stockItem")))
+            setSItem(JSON.parse(sessionStorage.getItem("stockItem")))           
         }
         if (sItem && !sItemList) {  //stock item on every search and every re render of stock component
             sessionStorage.setItem("stockItem", JSON.stringify(sItem))
@@ -122,7 +51,7 @@ export default function UserStocks() {
                 e.MAKER.forEach(ele => {
                     sItem.MAKER.forEach(x => {
                         if (ele.ITEMS_REF == x.ITEMS_REF) {
-                            counter += 1;                            
+                            counter += 1;
                         }
                     })
                 })
@@ -131,14 +60,14 @@ export default function UserStocks() {
                 setSItemList([...sItemList, sItem])
                 console.log("cartListProducts updates")
             }
-            if(counter>0){
+            if (counter > 0) {
                 console.log("cartListProducts already exist")
-            }                
+            }
         }
     }, [sItem])
     useEffect(() => {
         if (sItemList) {
-            sessionStorage.setItem("cartListData", JSON.stringify(sItemList))            
+            sessionStorage.setItem("cartListData", JSON.stringify(sItemList))
         }
 
     }, [sItemList])
@@ -146,54 +75,57 @@ export default function UserStocks() {
 
     const [cartList, setCartList] = useState()      //state of array of items for cart using session storage
     const [cartItem, setCartItem] = useState()      //state for item ref. for cart using session storage  
-    useEffect(() => {               //setting cartlist by adding item from search table
+    useEffect(() => {               //setting cartlist by adding item from search table                 
         if (cartItem && !cartList) {    //on first cartList item
-            setCartList([cartItem])            
+            setCartList([cartItem])
         }
-        if (cartList) {         //on adding item in cartList after first cartList item
+        if (cartItem&&cartList) {         //on adding item in cartList after first cartList item
             var counter = 0;
-            if (cartList)
-                cartList.forEach(i => {
-                    if (i == cartItem) {
-                        counter += 1;
-                    }
-                })
+            cartList.forEach(i => {
+                if (i == cartItem) {
+                    counter += 1;
+                }
+            })
             if (counter == 0) {
-                setCartList([...cartList, cartItem])                
-            }           
+                setCartList([...cartList, cartItem])
+            }
         }
     }, [cartItem])
     useEffect(() => {           //cartlist connection with session storage
-        if (cartList) {               //setting cart list in session storage
-            sessionStorage.setItem("cartListItems", JSON.stringify(cartList))     
-            cart.setCartCount(cartList.length)                 
+        if (cartList) {         //setting cart list in session storage
+            sessionStorage.setItem("cartListItems", JSON.stringify(cartList))
+            cart.setCartCount(cartList.length)
         }
         if (!cartList && sessionStorage && sessionStorage.getItem("cartListItems")) {   //setting cart list by session storage
-            setCartList(JSON.parse(sessionStorage.getItem("cartListItems")))                             
-        }
+            setCartList(JSON.parse(sessionStorage.getItem("cartListItems")))            
+        }     
+        if(!cartItem&&cartList){        //set cart item after stock comp reload to avoid adding duplicate item in cartList
+            setCartItem(cartList[cartList.length-1])            
+        }  
     }, [cartList])
 
-    function addItemCart(id){     
-        console.log(cartItem)   
-        if(!cartItem){
-            setCartItem(id)
+    function addItemCart(id) {      //setting cartItem  in this function
+        if (!cartItem) {
+            setCartItem(id)     
         }
-        else{
-            var counter = 0 ;
-            cartList.forEach(e=>{               
-                if(e==id){
-                    counter+=1;                    
-                }                
-            })   
-            if(counter==0){
+        else {
+            var counter = 0;
+            cartList.forEach(e => {
+                if (e == id) {
+                    counter += 1;
+                }
+            })
+            if (counter == 0) {
                 setCartItem(id)
             }
-            else{
-                console.log("error")
-                window.alert("this item is already in cart list")
-            }        
+            else {                
+                alert("this item is already in cart list")
+            }
         }
     }
+
+
+
     return (
         <>
             <Container fluid id='main'>
@@ -233,70 +165,6 @@ export default function UserStocks() {
                         </Row>
                     </Col>
                 </Row>
-
-
-                {/* search box */}
-                {/* <Row>
-                    <Col>
-                        <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >
-                            {/* close button
-                            <div style={{ width: "98%", display: "inline-block" }}></div>
-                            <div style={{ width: "1%", display: "inline-block" }}>
-                                <span className="closebtn" onClick={handleClose}>
-                                    <ai.AiOutlineClose size=".9rem" />
-                                </span>
-                            </div>
-
-                            {/* search table */}
-                {/* <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
-                                <Table striped bordered variant="dark" hover responsive="sm">
-                                    <thead>
-                                        <tr>
-                                            <th>S.No.</th>
-                                            <th>SAPREF</th>
-                                            <th>ITEMS REF</th>
-                                            <th>O.E. REF.</th>
-                                            <th>MEYLE REF.</th>
-                                            <th>Ref. Id</th>
-                                            <th>MAHLE REF.</th>
-                                            <th>MAAN REF.</th>
-                                            <th>HENGEST/OTH</th>
-                                            <th>OTHER REF</th>
-                                            <th>DESCRIPTION</th>
-                                            <th>APPLICATION</th>
-                                            <th>LOC</th>
-                                            <th>QUANTITY</th>
-                                            <th>MRP</th>
-                                            <th>MAKE</th>
-                                            <th>NEW MRP</th>
-                                            <th>P COST</th>
-                                            <th>OP BALANCE</th>
-                                            <th>PUR</th>
-                                            <th>SALES</th>
-                                            <th>MUNDKA</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {sInput.map((e, i) => {
-                                            // console.log(v)
-                                            return (
-                                                <tr key={i} onClick={() => { view(i) }}>
-                                                    <td >{i + 1}</td>
-                                                    <td>{e.sapref}</td>
-                                                    <td>{e.description}</td>
-                                                    <td>{e.application}</td>
-                                                    <td>{e.make}</td>
-                                                    <td>{e.qty}</td>
-                                                    <td>{e.mrp}</td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </Table>
-                            </div>
-                        </div>
-                    </Col>
-                </Row> */}
 
                 {/* stocks table */}
                 <Row>
@@ -346,7 +214,7 @@ export default function UserStocks() {
                                     {sItem && sItem.MAKER.map((e, i) => {
                                         return (
                                             <>
-                                                <tr     >
+                                                <tr>
                                                     <td>{e.BRAND_NAME}</td>
                                                     <td>{e.ITEMS_REF}</td>
                                                     {e.LOCATION.map((ele, j) => {
@@ -357,7 +225,7 @@ export default function UserStocks() {
                                                                 <td>{ele.STOCK.QUANTITY}</td>
                                                                 <td>{ele.STOCK["OLD_MRP"]}</td>
                                                                 <td>{ele.STOCK["NEW_MRP"]}</td>
-                                                                <td style={{ padding: "0" ,caretColor:"transparent"}} width="30">
+                                                                <td style={{ padding: "0", caretColor: "transparent" }} width="30">
                                                                     <div style={{}} className="addbtn " onClick={() => { addItemCart(e.ITEMS_REF) }} >
                                                                         +
                                                                     </div>
@@ -392,64 +260,7 @@ export default function UserStocks() {
                         </div>
                     </Col>
                 </Row>
-            </Container>
-
-            {/* view stock component */}
-
-            {/* <Modal
-                show={showVbox}
-                onHide={() => { setVbox(false); console.log(Vdata) }}
-                // dialogClassName="modal-90w"
-                size="xl"
-                aria-labelledby="example-custom-modal-styling-title"
-                >
-                <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">
-                        view stock
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
-                    <Table striped bordered hover responsive="sm">
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>SAPREF</th>
-                                <th>ITEMS REF</th>
-                                <th>O.E. REF.</th>
-                                <th>MEYLE REF.</th>
-                                <th>Ref. Id</th>
-                                <th>MAHLE REF.</th>
-                                <th>MAAN REF.</th>
-                                <th>HENGEST/OTH</th>
-                                <th>OTHER REF</th>
-                                <th>DESCRIPTION</th>
-                                <th>APPLICATION</th>
-                                <th>LOC</th>
-                                <th>QUANTITY</th>
-                                <th>MRP</th>
-                                <th>MAKE</th>
-                                <th>NEW MRP</th>
-                                <th>P COST</th>
-                                <th>OP BALANCE</th>
-                                <th>PUR</th>
-                                <th>SALES</th>
-                                <th>MUNDKA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr >
-                                <td>{Vdata.sapref}</td>
-                                <td>{Vdata.description}</td>
-                                <td>{Vdata.application}</td>
-                                <td>{Vdata.make}</td>
-                                <td>{Vdata.qty}</td>
-                                <td>{Vdata.mrp}</td>
-                                {/* <td><button value={i} onClick={deldata}>-</button></td> 
-                            </tr>
-                        </tbody>
-                    </Table>
-                </Modal.Body>
-             </Modal> */}
+            </Container>       
         </>
     )
 }

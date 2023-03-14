@@ -1,27 +1,109 @@
-import { useReducer, useState, useEffect } from "react";
+import { useReducer, useState, useEffect, useContext } from "react";
 import { Button, Col, Container, Row, InputGroup, Form, Dropdown } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
 import UserBillModal from "./UserBill";
 import db from "../../../db.json";
 import Card from 'react-bootstrap/Card';
 import * as ai from "react-icons/ai";
+import { MainContext } from "../../../context/Context";
 
 export default function UserCart() {
+    //context data
+    const { cart } = useContext(MainContext)
+
     //data for cart list
-    const [data, setData] = useState();    //data state (cartList data)
+    const [data, setData] = useState();         //data state (cartList data)
     const [itemId, setItemId] = useState();     //cartList item id of products
-    useEffect(() => {      //cartlist update on page or page reload/ component render
+    const [loc, setLoc] = useState();            //location of store
+    useEffect(() => {       //cartlist update on page or page reload/ component render
         if (sessionStorage.getItem("cartListItems")) {
             setItemId(JSON.parse(sessionStorage.getItem("cartListItems")))
             setData(JSON.parse(sessionStorage.getItem("cartListData")))
         }
-    }, []
-    )
+        if (sessionStorage.getItem("userinfo")) {
+            setLoc(JSON.parse(sessionStorage.getItem("userinfo")).store)
+        }
+    }, [])
+
+    //cart list
+    var b;
+    const [cList, setCList] = useState();     //array of objects having data nd quantity for cart
+    function updateList() {      //add item in Clist 
+        let newItem = {};
+        console.log(itemId)
+        if (itemId && itemId.length == 0) {
+            setCList()
+            console.log("nahi h item id")
+        }
+        else {
+            itemId && itemId.forEach(y => {         //loop on itemId/cartList
+                console.log("ok3")
+                data && data.forEach((e) => {       //loop on data/cartListData
+                    e.MAKER.forEach(x => {
+                        if (x.ITEMS_REF == y) {
+                            newItem = { data: e, item: y, qty: 1 }
+                            if (!cList) {                   //set cList if  cList empty
+                                setCList([newItem])
+                                console.log("ok1")
+                            }
+                            else {
+                                var counter = 0;
+                                cList.forEach(z => {
+                                    if (z.item == y)
+                                        counter += 1
+                                    console.log("ok9")
+                                })
+                                if (counter == 0) {
+                                    setCList([...cList, newItem])
+                                    console.log("ok2")
+                                }
+                            }
+                        }
+                    })
+                })
+            })
+        }
+    }
+    function rList(id) {                          //remove item in list        
+        var a = [...itemId.filter(e => e != id)]
+        sessionStorage.setItem("cartListItems", JSON.stringify(a))
+        cart.setCartCount(JSON.parse(sessionStorage.getItem("cartListItems")).length)
+        setItemId(JSON.parse(sessionStorage.getItem("cartListItems")))
+        setCList()
+    }
+    function handleQty(e, id) {                  // increase/decrease funtion for quantity of item in list      
+        if (e.target.value >= 0) {
+            let newQty = e.target.value
+            let obj = cList;
+            obj.forEach((x) => {
+                if (x.item == id) {
+                    x.qty = newQty;
+                }
+            })
+            setCList([...obj])
+        }
+    }
+    function blurQty(e, id) {                     //input quantity after focus out
+        if (e.target.value == "" || e.target.value == 0) {
+            let newQty = 1
+            let obj = cList;
+            obj.forEach((x) => {
+                if (x.item == id) {
+                    x.qty = newQty;
+                }
+            })
+            setCList([...obj])
+        }
+    }
+
+    //show cartlist after render cart component
+    useEffect(() => {
+        updateList()
+    }, [itemId, cList])
 
     //cart tab
-    const cart = { type: "purchase", option: "sell" }
-    const [state, dispatch] = useReducer(reducer, cart)
-
+    const carttype = { type: "purchase", option: "sell" }
+    const [state, dispatch] = useReducer(reducer, carttype)
     function reducer(state, action) {
         switch (action.type) {
             case "sell":
@@ -36,153 +118,6 @@ export default function UserCart() {
     function moveToBill() {
         setModalShow(true)
     }
-
-    // input box function 
-    // var searchD = {};   //filtered data on search
-    // var result = [];
-    // const [sInput, setInput] = useState([{ keywords: "" }])
-    // const handleChange = function (event) {
-    //     searchD = { [event.target.name]: event.target.value }
-    //     if (searchD.keywords != "") {
-    //         handleShow();
-    //         result = data.filter(e => {
-    //             return e.sapref.toLowerCase().startsWith(searchD.keywords)
-    //         })
-    //         setInput(result)
-    //     };
-    //     if (searchD.keywords == "") {
-    //         setInput([searchD])
-    //         handleClose();
-    //     }
-    // }
-
-    //search box
-    // const [show, setShow] = useState(false);
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
-    // useEffect(() => {
-    //     var searchbox = document.getElementsByClassName("searchbox")[0];
-    //     var card = document.getElementsByClassName("cad")[0];
-    //     var sTable = document.getElementsByClassName("sTable")[0];
-    //     var cTable = document.getElementsByClassName("cTable")[0];
-    //     if (show == true) {
-    //         searchbox.style.display = "block";
-    //         card.classList.add("anime");
-    //         sTable.style.height = "38vh";
-    //         cTable.style.height = "30vh";
-    //     }
-    //     if (show == false) {
-    //         setTimeout(() => {
-    //             searchbox.style.display = "none";
-    //         }, 500);
-    //         card.classList.remove("anime");
-    //         cTable.style.height = "70vh";
-    //     }
-
-    // }, [sInput, show]);
-
-    //cart list
-    const [cList, setClist] = useState();     //array of objects having data nd quantity for cart
-    function aList() {      //add item in Clist 
-        let newItem = {};        
-        console.log(data)
-        data && data.forEach((e) => {
-            
-            e.MAKER.forEach(x => {
-                itemId.forEach(y => {
-                    if (x.ITEMS_REF == y) {
-                        newItem = { data:e,item:y, qty: 1 }
-                        var counter = 0;
-                        if (!cList) {
-                            setClist([newItem])
-                            console.log("clist 1")
-                        }
-                        else {
-                             cList&&cList.data.forEach((z) => {
-                                z.MAKER.forEach((a) => {
-                                    if (a.ITEMS_REF == y){
-                                        counter += 1;
-                                        console.log("ok2");
-                                    }
-                                })
-                            })
-                            if(counter == 0) {
-                                console.log("ok3");
-                                setClist([...cList, newItem]);
-                            }
-                        }
-                    }
-                })
-            })
-        })
-
-        // if (cList.length == 0) {
-        //     data&&data.forEach((e) => {
-        //         itemId.forEach(x=>{
-        //             if (e.ITEMS_REF == x) {
-        //                 newItem = { data: e, qty: 1 }
-        //                 setClist([newItem])
-        //             }
-        //         })               
-        //     })
-        //     console.log("ok1")
-        // }
-        // else {
-        //     data.forEach((e) => {
-        //         e.MAKER.forEach(x=>{
-        //             itemId.forEach(y=>{
-        //                 if (x.ITEM_REF == y) {
-        //                     newItem = { data: e, qty: 1 }
-        //                     var counter = 0;
-        //                     cList.forEach((e, i) => {
-        //                         if (x.ITEMS_REF == y) {
-        //                             counter += 1;
-        //                             console.log("ok2");
-        //                         }
-        //                     })
-        //                     if (counter == 0) {
-        //                         console.log("ok3");
-        //                         setClist([...cList, newItem]);
-        //                     }
-        //                 }
-        //             })
-        //         })                
-        //     })
-        // }
-    }
-    function rList(i) {                          //remove item in list
-        let itemid = cList[i].data.sapref
-        setClist([...cList.filter(e => e.data.sapref != itemid)])
-    }
-    function handleQty(e, id) {                  // increase/decrease funtion for quantity of item in list      
-        if (e.target.value >= 0) {
-            let newQty = e.target.value
-            let obj = cList;
-            obj.forEach((e, i) => {
-                if (e.data.sapref == obj[id].data.sapref) {
-                    e.qty = newQty;
-                }
-            })
-            setClist([...obj])
-        }
-    }
-    function blurQty(e, id) {                     //input quantity after focus out
-        if (e.target.value == "" || e.target.value == 0) {
-            let newQty = 1
-            let obj = cList;
-            obj.forEach((e, i) => {
-                if (e.data.sapref == obj[id].data.sapref) {
-                    e.qty = newQty;
-                }
-            })
-            setClist([...obj])
-        }
-    }
-
-    //show cartlist after render cart component
-    useEffect(() => {
-        aList()
-    }, [itemId])
 
 
     return (
@@ -214,23 +149,6 @@ export default function UserCart() {
 
                 {/* add item block */}
                 <Row className=" mt-1 p-2 justify-content-" style={{ caretColor: "initial", borderRadius: ".5rem", backgroundColor: "#428BCA" }}>
-                    {/* <Col sm="3">
-                        <InputGroup>
-                            <Form.Control
-                                placeholder="search item"
-                                aria-label="Recipient's username"
-                                aria-describedby="basic-addon2"
-                                onChange={handleChange}
-                                name="keywords"
-                                autoComplete="disabled"
-                            />
-                        </InputGroup>
-                    </Col>
-                    <Col >
-                        <Button variant="light" id="button-addon2">
-                            SCAN
-                        </Button>
-                    </Col> */}
                     <Col sm="3">
                         <InputGroup>
                             <Form.Control
@@ -243,109 +161,63 @@ export default function UserCart() {
                     </Col>
                 </Row>
 
-                {/* search box */}
-                {/* <Row>
-                    <Col>
-                        <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >
-                            <div style={{ width: "98%", display: "inline-block" }}></div>
-                            close button 
-                            <div style={{ width: "1%", display: "inline-block" }}>
-                                <span className="closebtn" onClick={handleClose}>
-                                    <ai.AiOutlineClose size=".9rem" />
-                                </span>
-                            </div>
-
-                            search table
-                            <div className="sTable" style={{ width: "100%", marginBottom: "0.5rem", overflowY: "scroll", overflowX: "scroll", }}>
-                                <Table striped bordered variant="dark" hover responsive="sm">
-                                    <thead className="sticky-top" >
-                                        <tr>
-                                            <th>S.No.</th>
-                                            <th>Ref. Id</th>
-                                            <th>Desciption</th>
-                                            <th>Application</th>
-                                            <th>Maker</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {sInput.map((e, i) => {
-                                            // console.log(v)                                                
-                                            return (
-                                                <tr key={i} >
-                                                    <td >
-                                                        <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
-                                                        <span>
-                                                            <button style={{ border: ".09rem solid black" }} onClick={() => { aList(i) }}>
-                                                                +
-                                                            </button>
-                                                        </span>
-                                                    </td>
-                                                    <td>{e.sapref}</td>
-                                                    <td>{e.description}</td>
-                                                    <td>{e.application}</td>
-                                                    <td>{e.make}</td>
-                                                    <td>{e.qty}</td>
-                                                    <td>{e.mrp}</td>                                                    
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </Table>
-                            </div>
-                        </div>
-                    </Col>
-                </Row> */}
-
                 {/* CART LIST */}
                 <Row>
                     <Col>
                         <div className='cTable' style={{ caretColor: "transparent", width: "100%", overflowY: "scroll", overflowX: "scroll" }}>
                             <Table striped bordered hover style={{ cursor: "pointer", }}>
                                 <thead className="sticky-top" style={{ zIndex: "1", backdropFilter: "blur(5px)" }}>
-                                    <tr>
+                                    <tr style={{ textAlign: "center" }}>
                                         <th>S.No.</th>
+                                        <th></th>
                                         <th>MAKER</th>
                                         <th>ITEM ID</th>
                                         <th>DESCRIPTION</th>
                                         <th>APPLICATION</th>
-                                        <th>PRICE</th>
+                                        <th>MRP</th>
+                                        <th>NEW MRP </th>
                                         <th>QUANTITY</th>
+                                        <th>TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {cList && cList.map((e, i) => {  
-                                        let maker ;
-                                        let loc ;
+                                    {cList && cList.map((e, i) => {
+                                        let maker;
+                                        let loca;
                                         e.data.MAKER.forEach(x => {
-                                            if(x.ITEMS_REF==e.item){
-                                                maker=x
-                                                
-                                            }                                            
-                                        });          
-                                       
+                                            if (x.ITEMS_REF == e.item) {
+                                                maker = x
+                                            }
+                                            x.LOCATION.forEach(y => {
+                                                if (y.BRANCH_CODE == loc) {
+                                                    loca = y
+                                                }
+                                            })
+
+                                        });
 
                                         return (
                                             <tr key={i}>
-                                                <td >
+                                                <td>
                                                     <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
+                                                </td>
+                                                <td>
                                                     <span>
-                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { rList(i) }}>
+                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { rList(maker["ITEMS_REF"]) }}>
                                                             -
                                                         </button>
-                                                    </span>
-                                                </td>
+                                                    </span></td>
                                                 <td>{maker.BRAND_NAME}</td>
                                                 <td>{e.item}</td>
                                                 <td>{e.data.Descripation}</td>
                                                 <td>{e.data.APPLICATION}</td>
-                                                <td>{e.MRP}</td>
+                                                <td>{loca && loca.STOCK["OLD_MRP"]}</td>
+                                                <td>{loca && loca.STOCK["NEW_MRP"]}</td>
                                                 <td>
-                                                    <input style={{ textAlign: 'center', display: "inline-block" }} name="quantity" type="number"
-                                                        onBlur={(e) => blurQty(e, i)} onChange={e => handleQty(e, i)} value={e.qty} min={1} />
+                                                    <input style={{ width: "100%", caretColor: "auto", textAlign: 'center', overflowX: "scroll" }} name="quantity" type="number"
+                                                        onBlur={(eve) => blurQty(eve, i)} onChange={eve => handleQty(eve, maker["ITEMS_REF"])} value={e.qty} min={1} />
                                                 </td>
-                                                <td width="100"><div style={{ width: "100%" }}>{e.data.mrp * e.qty}</div></td>
+                                                <td width="100"><div style={{ width: "100%" }}>{loca.STOCK["NEW_MRP"] * e.qty}</div></td>
                                             </tr>
                                         )
                                     })}
@@ -366,7 +238,7 @@ export default function UserCart() {
             </Container>
 
             {/* bill */}
-            <UserBillModal cList={cList} show={modalShow} onHide={() => setModalShow(false)} />
+            <UserBillModal clist={cList} loc={loc} show={modalShow} onHide={() => setModalShow(false)} />
         </>
     )
 }

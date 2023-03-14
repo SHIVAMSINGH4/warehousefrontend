@@ -5,11 +5,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function CheckoutModal(props) {
+
     const navigate = useNavigate()
     function moveO() {
         props.onHide()
         navigate("/user/order")
     }
+
 
     return (
         <Modal
@@ -37,8 +39,14 @@ function CheckoutModal(props) {
 
 
 export default function UserBillModal(props) {
+    // clist data
+    const cList = props.clist
+    const loc = props.loc
+
+    console.log(cList)
+
     const [checkoutShow, setModalShow] = useState(false);
-    function checkout(){
+    function checkout() {
         setModalShow(true);
         // props.onHide()
     }
@@ -46,22 +54,22 @@ export default function UserBillModal(props) {
     return (
         <>
             {/* checkout dialog */}
-            <CheckoutModal show={checkoutShow} onHide={()=>{setModalShow(false)}} />
-            
+            <CheckoutModal show={checkoutShow} onHide={() => { setModalShow(false) }} />
+
             {/* modal */}
-            <Modal {...props} 
-                aria-labelledby="contained-modal-title-vcenter" 
+            <Modal {...props}
+                aria-labelledby="contained-modal-title-vcenter"
                 size="lg"
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                     Receipt
+                        Receipt
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="show-grid">
-                    <Container fluid id="main" className="mb-5" style={{padding:"1rem"}}>
+                    <Container fluid id="main" className="mb-5" style={{ padding: "1rem" }}>
                         {/* gap / blue line*/}
-                        <Row className="mt-1" style={{ backgroundColor: "#428BCA" }}>   
+                        <Row className="mt-1" style={{ backgroundColor: "#428BCA" }}>
                             <Col>
                                 <div style={{ width: "100%", height: "1rem" }}></div>
                             </Col>
@@ -114,7 +122,53 @@ export default function UserBillModal(props) {
                         <Row>
                             <Col className="px-5 mt-4">
                                 <Table striped bordered hover responsive="sm">
-                                    <thead>
+                                    <thead className="sticky-top" style={{ zIndex: "1", backdropFilter: "blur(5px)" }}>
+                                        <tr style={{ textAlign: "center" }}>
+                                            <th>S.No.</th>                                          
+                                            <th>MAKER</th>
+                                            <th>ITEM ID</th>
+                                            <th>DESCRIPTION</th>
+                                            <th>APPLICATION</th>
+                                            <th>MRP</th>
+                                            <th>NEW MRP </th>
+                                            <th>QUANTITY</th>
+                                            <th>TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {cList && cList.map((e, i) => {
+                                            let maker;
+                                            let loca;
+                                            e.data.MAKER.forEach(x => {
+                                                if (x.ITEMS_REF == e.item) {
+                                                    maker = x
+                                                }
+                                                x.LOCATION.forEach(y => {
+                                                    if (y.BRANCH_CODE == loc) {
+                                                        loca = y
+                                                    }
+                                                })
+
+                                            });
+
+                                            return (
+                                                <tr key={i}>
+                                                    <td>
+                                                        <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
+                                                    </td>                                                   
+                                                    <td>{maker.BRAND_NAME}</td>
+                                                    <td>{e.item}</td>
+                                                    <td>{e.data.Descripation}</td>
+                                                    <td>{e.data.APPLICATION}</td>
+                                                    <td>{loca && loca.STOCK["OLD_MRP"]}</td>
+                                                    <td>{loca && loca.STOCK["NEW_MRP"]}</td>
+                                                    <td>{e.qty}</td>
+                                                    <td width="100"><div style={{ width: "100%" }}>{loca.STOCK["NEW_MRP"] * e.qty}</div></td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                    {/* <thead>
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Desciption</th>
@@ -133,7 +187,7 @@ export default function UserBillModal(props) {
                                             <td>1688</td>
                                             <td>1688</td>
                                         </tr>
-                                    </tbody>
+                                    </tbody> */}
                                 </Table>
                             </Col>
                         </Row>
@@ -168,10 +222,10 @@ export default function UserBillModal(props) {
                                             <span style={{ display: "block", paddingRight: "3rem" }}>0</span>
                                         </div>
                                     </div>
-                                    <div style={{width:"30%",display:"inline-block",verticalAlign:"middle"}}></div>
-                                    <div style={{width: "70%", height: "0.1rem", backgroundColor: "black",display:"inline-block",verticalAlign:"middle" }}></div>
-                                    <div style={{width:"30%",display:"inline-block",verticalAlign:"middle"}}></div>
-                                    <div style={{ marginBottom: "1rem", width: "70%" ,display:"inline-block",verticalAlign:"middle"}}>
+                                    <div style={{ width: "30%", display: "inline-block", verticalAlign: "middle" }}></div>
+                                    <div style={{ width: "70%", height: "0.1rem", backgroundColor: "black", display: "inline-block", verticalAlign: "middle" }}></div>
+                                    <div style={{ width: "30%", display: "inline-block", verticalAlign: "middle" }}></div>
+                                    <div style={{ marginBottom: "1rem", width: "70%", display: "inline-block", verticalAlign: "middle" }}>
                                         <div style={{ textAlign: "center", display: "inline-block", width: "50%", fontSize: "1rem", fontWeight: "bold" }}>
                                             BALANCE
                                         </div>
@@ -198,7 +252,7 @@ export default function UserBillModal(props) {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() => {checkout()}}>CHECKOUT</Button>
+                    <Button onClick={() => { checkout() }}>CHECKOUT</Button>
                 </Modal.Footer>
             </Modal>
         </>

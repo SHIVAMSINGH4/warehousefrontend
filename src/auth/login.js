@@ -19,7 +19,7 @@ export default function Login() {
         body: {
             user: "USER",
             role: "admin",
-            store:"GGN01"
+            store:"GGM01"
         }
     }
 
