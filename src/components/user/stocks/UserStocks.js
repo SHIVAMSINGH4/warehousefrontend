@@ -12,11 +12,11 @@ export default function UserStocks() {
     const [data, setData] = useState()
 
     //location get from session storage
-    const loc = JSON.parse(sessionStorage.getItem("userinfo")).store 
-    
+    const loc = JSON.parse(sessionStorage.getItem("userinfo")).store
+
     //cartCount
     const { cart } = useContext(MainContext)
-  
+
     useEffect(() => {
         console.log(data)
     }, [data])
@@ -30,16 +30,17 @@ export default function UserStocks() {
     const [q, setQ] = useState("")     //keywords being typed in search box input
     function handleSChange(e) {    //search values on change in search tab input
         const q = e.target.value
-        setQ(q)      
+        setQ(q)
     }
 
     async function search(e) {  //on click search button data fetch from server for one product
-        const id = q;        
-        await getOneProduct(q,loc).then(x => setSItem(x))
+        const id = q;
+        console.log(q)
+        await getOneProduct(id, loc).then(x => setSItem(x))
     }
     useEffect(() => {   //then store that one product to sesssion storage everytime on click search
         if (!sItem && sessionStorage.getItem("stockItem")) { //reload product in stock from session if exists (during component re-render)            
-            setSItem(JSON.parse(sessionStorage.getItem("stockItem")))           
+            setSItem(JSON.parse(sessionStorage.getItem("stockItem")))
         }
         if (sItem && !sItemList) {  //stock item on every search and every re render of stock component
             sessionStorage.setItem("stockItem", JSON.stringify(sItem))
@@ -47,15 +48,15 @@ export default function UserStocks() {
         }
         if (sItem && sItemList) {   //check if product exists in cartList or not(on new search)
             var counter = 0;
-            sItemList.forEach(e => {
-                e.MAKER.forEach(ele => {
-                    sItem.MAKER.forEach(x => {
-                        if (ele.ITEMS_REF == x.ITEMS_REF) {
-                            counter += 1;
-                        }
-                    })
-                })
-            })
+            // sItemList.forEach(e => {
+            //     e.MAKER.forEach(ele => {
+            //         sItem.MAKER.forEach(x => {
+            //             if (ele.ITEMS_REF == x.ITEMS_REF) {
+            //                 counter += 1;
+            //             }
+            //         })
+            //     })
+            // })
             if (counter == 0) {
                 setSItemList([...sItemList, sItem])
                 console.log("cartListProducts updates")
@@ -79,7 +80,7 @@ export default function UserStocks() {
         if (cartItem && !cartList) {    //on first cartList item
             setCartList([cartItem])
         }
-        if (cartItem&&cartList) {         //on adding item in cartList after first cartList item
+        if (cartItem && cartList) {         //on adding item in cartList after first cartList item
             var counter = 0;
             cartList.forEach(i => {
                 if (i == cartItem) {
@@ -97,16 +98,16 @@ export default function UserStocks() {
             cart.setCartCount(cartList.length)
         }
         if (!cartList && sessionStorage && sessionStorage.getItem("cartListItems")) {   //setting cart list by session storage
-            setCartList(JSON.parse(sessionStorage.getItem("cartListItems")))            
-        }     
-        if(!cartItem&&cartList){        //set cart item after stock comp reload to avoid adding duplicate item in cartList
-            setCartItem(cartList[cartList.length-1])            
-        }  
+            setCartList(JSON.parse(sessionStorage.getItem("cartListItems")))
+        }
+        if (!cartItem && cartList) {        //set cart item after stock comp reload to avoid adding duplicate item in cartList
+            setCartItem(cartList[cartList.length - 1])
+        }
     }, [cartList])
 
     function addItemCart(id) {      //setting cartItem  in this function
         if (!cartItem) {
-            setCartItem(id)     
+            setCartItem(id)
         }
         else {
             var counter = 0;
@@ -118,7 +119,7 @@ export default function UserStocks() {
             if (counter == 0) {
                 setCartItem(id)
             }
-            else {                
+            else {
                 alert("this item is already in cart list")
             }
         }
@@ -177,65 +178,28 @@ export default function UserStocks() {
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        {sItem && sItem.MAKER[0].LOCATION.map((ele, i) => {
-                                            var loc;
-                                            if (ele.BRANCH_CODE == "GGM01")
-                                                loc = "GURUGRAM"
-                                            else if (ele.BRANCH_CODE == "MUN01")
-                                                loc = "MUNDKA"
-                                            else if (ele.BRANCH_CODE == "DEL01")
-                                                loc = "DELHI"
-                                            return (
-                                                <>
-                                                    <th key={i} colSpan={5}>{loc}</th>
-                                                    <th key={i + 1}></th>
-                                                </>
-                                            )
-                                        })}
+                                        <th colSpan={5}>{`${"GURUGRAM"?loc=="GGN_001":"MUNDKA"?loc=="MUN_001":"DELHI"?loc=="DEL_001":"NULL"}`}</th>
+                                        <th></th>
                                     </tr>
                                     <tr>
                                         <th>MAKER</th>
                                         <th>ITEMS REF</th>
-                                        {sItem && sItem.MAKER[0].LOCATION.map((ele, i) => {
+                                        {/* {sItem && sItem.LOC.map((ele, i) => {
                                             return (
                                                 <>
                                                     <th key={i}></th>
                                                     <th key={i + 1}></th>
-                                                    <th key={i + 2}>QUANTITY</th>
-                                                    <th key={i + 3}>OLD MRP</th>
+                                                    <th key={i + 2}>sItem.QUANTITY</th>
+                                                    <th key={i + 3}>SiTEMOLD MRP</th>
                                                     <th key={i + 4}>NEW MRP</th>
                                                     <th key={i + 5}></th>
                                                 </>
                                             )
-                                        })}
+                                        })} */}
                                     </tr>
                                 </thead>
                                 <tbody >
-                                    {sItem && sItem.MAKER.map((e, i) => {
-                                        return (
-                                            <>
-                                                <tr>
-                                                    <td>{e.BRAND_NAME}</td>
-                                                    <td>{e.ITEMS_REF}</td>
-                                                    {e.LOCATION.map((ele, j) => {
-                                                        return (
-                                                            <>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td>{ele.STOCK.QUANTITY}</td>
-                                                                <td>{ele.STOCK["OLD_MRP"]}</td>
-                                                                <td>{ele.STOCK["NEW_MRP"]}</td>
-                                                                <td style={{ padding: "0", caretColor: "transparent" }} width="30">
-                                                                    <div style={{}} className="addbtn " onClick={() => { addItemCart(e.ITEMS_REF) }} >
-                                                                        +
-                                                                    </div>
-                                                                </td>
-                                                            </>
-                                                        )
-                                                    })}
-                                                </tr>
-                                            </>)
-                                    })}
+                                   
                                 </tbody>
                             </Table>
                         </div>
@@ -260,7 +224,7 @@ export default function UserStocks() {
                         </div>
                     </Col>
                 </Row>
-            </Container>       
+            </Container>
         </>
     )
 }
