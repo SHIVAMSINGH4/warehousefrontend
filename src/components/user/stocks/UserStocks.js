@@ -7,32 +7,23 @@ import { getAllProducts, getOneProduct } from '../../../api/Api';
 import { useContext } from 'react';
 import { MainContext } from '../../../context/Context';
 
-export default function UserStocks() {
-    //data fetch
-    const [data, setData] = useState()
-
-    //location get from session storage
-    const loc = JSON.parse(sessionStorage.getItem("userinfo")).store
-
-    //cartCount
-    const { cart } = useContext(MainContext)
-
-    useEffect(() => {
+export default function UserStocks() {   
+    const [data, setData] = useState() // state for data 
+    useEffect(() => {           //data fetch
         console.log(data)
     }, [data])
+    const loc = JSON.parse(sessionStorage.getItem("userinfo")).store //location get from session storage
+    const { cart } = useContext(MainContext)   //cartCount  
 
-    //filtered data on search
-    var searchD = {};
 
     //search items functions
-    const [sItem, setSItem] = useState()     //sItem/search item==stockitem
-    const [sItemList, setSItemList] = useState() //search items list to be used in cartList in cart section
+    var searchD = {}; //filtered data on search
+    const [sItem, setSItem] = useState()     //sItem/search item==stockitem   
     const [q, setQ] = useState("")     //keywords being typed in search box input
     function handleSChange(e) {    //search values on change in search tab input
         const q = e.target.value
         setQ(q)
     }
-
     async function search(e) {  //on click search button data fetch from server for one product
         const id = q;        
         await getOneProduct(id, loc).then(x => setSItem(x))
@@ -43,51 +34,29 @@ export default function UserStocks() {
         }
         if (sItem) {  //stock item on every search and every re render of stock component
             sessionStorage.setItem("searchItem", JSON.stringify(sItem))            
-        }
-        if (sItem && sItemList) {   //check if product exists in cartList or not(on new search)
-            var counter = 0;
-            sItemList.forEach(e => {                
-                    sItem.forEach(x => {
-                        if (e.ITEMS_REF == x.ITEMS_REF) {
-                            counter += 1;
-                        }
-                    })            
-            })
-            if (counter == 0) {
-                setSItemList([...sItemList, sItem])
-                console.log("cartListProducts updates")
-            }
-            if (counter > 0) {
-                console.log("cartListProducts already exist")
-            }
-        }
-    }, [sItem])
-    useEffect(() => {
-        if (sItemList) {
-            sessionStorage.setItem("cartListData", JSON.stringify(sItemList))
-        }
-
-    }, [sItemList])
+        }      
+    }, [sItem])   
 
 
     const [cartList, setCartList] = useState()      //state of array of items for cart using session storage
-    const [cartItem, setCartItem] = useState()      //state for item ref. for cart using session storage  
+    const [ItemId, setItemId] = useState()      //state for item ref. for cart using session storage  
+    const [listData, setListData] = useState() //data of cartlist items to be used in cartList in cart section
     useEffect(() => {               //setting cartlist by adding item from search table                 
-        if (cartItem && !cartList) {    //on first cartList item
-            setCartList([cartItem])
+        if (ItemId && !cartList) {    //on first cartList item
+            setCartList([ItemId])
         }
-        if (cartItem && cartList) {         //on adding item in cartList after first cartList item
+        if (ItemId && cartList) {         //on adding item in cartList after first cartList item
             var counter = 0;
             cartList.forEach(i => {
-                if (i == cartItem) {
+                if (i == ItemId) {
                     counter += 1;
                 }
             })
             if (counter == 0) {
-                setCartList([...cartList, cartItem])
+                setCartList([...cartList,ItemId])
             }
         }
-    }, [cartItem])
+    }, [ItemId])
     useEffect(() => {           //cartlist connection with session storage
         if (cartList) {         //setting cart list in session storage            
             sessionStorage.setItem("cartList", JSON.stringify(cartList))
@@ -96,15 +65,23 @@ export default function UserStocks() {
         if (!cartList && sessionStorage && sessionStorage.getItem("cartList")) {   //setting cart list by session storage
             setCartList(JSON.parse(sessionStorage.getItem("cartList")))
         }
-        if (!cartItem && cartList) {        //set cart item after stock comp reload to avoid adding duplicate item in cartList
-            setCartItem(cartList[cartList.length - 1])
+        if (!ItemId && cartList) {        //set cart item after stock comp reload to avoid adding duplicate item in cartList
+            setItemId(cartList[cartList.length - 1])
         }
     }, [cartList])
+    useEffect(() => {
+        if(!listData&&sessionStorage.getItem("cartListData")){
+            setListData(JSON.parse(sessionStorage.getItem("cartListData")))
+        }
+        if (listData) {
+            sessionStorage.setItem("cartListData", JSON.stringify(listData))
+        }
 
-    function addItemCart(e,id) {      //setting cartItem  in this function
-        if (!cartItem) {
-            setCartItem(id)
-            console.log("ok")
+    }, [listData])
+    function addItemCart(eve,id,data) {      //setting itemId  in this function
+        if (!ItemId) {
+            setItemId(id)
+            setListData([data])
         }
         else {
             var counter = 0;
@@ -114,9 +91,8 @@ export default function UserStocks() {
                 }
             })
             if (counter == 0) {
-                setCartItem(id)
-                
-                console.log("ok2")
+                setItemId(id)
+                setListData([...listData, data])                                         
             }
             else {
                 alert("this item is already in cart list")
@@ -219,15 +195,15 @@ export default function UserStocks() {
                                 <tbody>
                                     <tr>
                                         <th>DESCRIPTION</th>
-                                        <td>{sItem && sItem.Descripation}</td>
+                                        <td>{sItem && sItem[0].Descripation}</td>
                                     </tr >
                                     <tr>
                                         <th>APPLICATION</th>
-                                        <td>{sItem && sItem.APPLICATION}</td>
+                                        <td>{sItem && sItem[0].APPLICATION}</td>
                                     </tr>
                                     <tr>
                                         <th>O.E. REF</th>
-                                        <td>{sItem && sItem["OE_REF"]}</td>
+                                        <td>{sItem && sItem[0]["OE_REF"]}</td>
                                     </tr>
                                 </tbody>
                             </Table>
