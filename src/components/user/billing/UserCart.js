@@ -1,23 +1,23 @@
-import { useReducer, useState, useEffect, useContext } from "react";
+import { useReducer, useState, useEffect, useContext, useRef } from "react";
 import { Button, Col, Container, Row, InputGroup, Form, Dropdown } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
-import UserBillModal from "./UserBill";
+import {UserBillModal} from "./UserBill";
 import db from "../../../db.json";
 import Card from 'react-bootstrap/Card';
 import * as ai from "react-icons/ai";
 import { MainContext } from "../../../context/Context";
+import { useReactToPrint } from "react-to-print";
 
 export default function UserCart() {
-    //context data
-    const { cart } = useContext(MainContext)
+    const { cart } = useContext(MainContext) //context data
 
     //data for cart list
     const [data, setData] = useState();         //data state (cartList data)
     const [itemId, setItemId] = useState();     //cartList item id of products
     const [loc, setLoc] = useState();            //location of store
     useEffect(() => {       //cartlist update on page or page reload/ component render
-        if (sessionStorage.getItem("cartListItems")) {
-            setItemId(JSON.parse(sessionStorage.getItem("cartListItems")))
+        if (sessionStorage.getItem("cartList")) {
+            setItemId(JSON.parse(sessionStorage.getItem("cartList")))
             setData(JSON.parse(sessionStorage.getItem("cartListData")))
         }
         if (sessionStorage.getItem("userinfo")) {
@@ -25,51 +25,51 @@ export default function UserCart() {
         }
     }, [])
 
-    //cart list
-    var b;
+    //cart list   
     const [cList, setCList] = useState();     //array of objects having data nd quantity for cart
-    function updateList() {      //add item in Clist 
+    function updateList() {      //add item in Clist                 
         let newItem = {};
-        console.log(itemId)
-        if (itemId && itemId.length == 0) {
-            setCList()
-            console.log("nahi h item id")
-        }
-        else {
-            itemId && itemId.forEach(y => {         //loop on itemId/cartList
-                console.log("ok3")
-                data && data.forEach((e) => {       //loop on data/cartListData
-                    e.MAKER.forEach(x => {
-                        if (x.ITEMS_REF == y) {
-                            newItem = { data: e, item: y, qty: 1 }
-                            if (!cList) {                   //set cList if  cList empty
-                                setCList([newItem])
-                                console.log("ok1")
-                            }
-                            else {
-                                var counter = 0;
-                                cList.forEach(z => {
-                                    if (z.item == y)
-                                        counter += 1
-                                    console.log("ok9")
-                                })
-                                if (counter == 0) {
-                                    setCList([...cList, newItem])
-                                    console.log("ok2")
-                                }
-                            }
+        itemId && itemId.forEach(y => {         //loop on itemId/cartList            
+            data && data.forEach((e) => {       //loop on data/cartListData
+                if (e.ITEMS_REF == y) {
+                    newItem = { data: e, item: y, qty: 1 }
+                    if (!cList) {                   //set cList if  cList empty
+                        setCList([newItem])
+                        console.log("ok9")
+                    }
+                    else {
+                        var counter = 0;
+                        cList.forEach(z => {
+                            if (z.item == y)
+                                counter += 1
+                        })
+                        if (counter == 0) {
+                            setCList([...cList, newItem])
                         }
-                    })
-                })
+                    }
+                }
             })
-        }
+        })
     }
     function rList(id) {                          //remove item in list        
-        var a = [...itemId.filter(e => e != id)]
-        sessionStorage.setItem("cartListItems", JSON.stringify(a))
-        cart.setCartCount(JSON.parse(sessionStorage.getItem("cartListItems")).length)
-        setItemId(JSON.parse(sessionStorage.getItem("cartListItems")))
-        setCList()
+        let a = [...itemId.filter(e => e != id)]
+        let b = [...cList.filter(e => e.item != id)]
+        let c = [...data.filter(e => e.ITEMS_REF != id)]
+        if (a.length == 0) {
+            sessionStorage.removeItem("cartList")
+            sessionStorage.removeItem("cList")
+            sessionStorage.removeItem("cartListData")
+            cart.setCartCount(0)
+        }
+        else {
+            sessionStorage.setItem("cartList", JSON.stringify(a))
+            sessionStorage.setItem("cList", JSON.stringify(b))
+            sessionStorage.setItem("cartListData", JSON.stringify(c))
+            cart.setCartCount(JSON.parse(sessionStorage.getItem("cartList")).length)
+        }
+        setItemId(JSON.parse(sessionStorage.getItem("cartList")))
+        setCList(JSON.parse(sessionStorage.getItem("cList")))
+        setData(JSON.parse(sessionStorage.getItem("cartListData")))
     }
     function handleQty(e, id) {                  // increase/decrease funtion for quantity of item in list      
         if (e.target.value >= 0) {
@@ -90,6 +90,7 @@ export default function UserCart() {
             obj.forEach((x) => {
                 if (x.item == id) {
                     x.qty = newQty;
+                    console.log("Ok")
                 }
             })
             setCList([...obj])
@@ -98,6 +99,12 @@ export default function UserCart() {
 
     //show cartlist after render cart component
     useEffect(() => {
+        if (!cList && sessionStorage.getItem("cList")) {
+            setCList(JSON.parse(sessionStorage.getItem("cList")))
+        }
+        if (cList) {
+            sessionStorage.setItem("cList", JSON.stringify(cList))
+        }
         updateList()
     }, [itemId, cList])
 
@@ -119,6 +126,14 @@ export default function UserCart() {
         setModalShow(true)
     }
 
+    //print setting
+    const printRef = useRef();
+    const handlePrint = useReactToPrint  (
+        {
+            content:()=>printRef.current
+          
+        }
+    )
 
     return (
         <>
@@ -182,20 +197,6 @@ export default function UserCart() {
                                 </thead>
                                 <tbody>
                                     {cList && cList.map((e, i) => {
-                                        let maker;
-                                        let loca;
-                                        e.data.MAKER.forEach(x => {
-                                            if (x.ITEMS_REF == e.item) {
-                                                maker = x
-                                            }
-                                            x.LOCATION.forEach(y => {
-                                                if (y.BRANCH_CODE == loc) {
-                                                    loca = y
-                                                }
-                                            })
-
-                                        });
-
                                         return (
                                             <tr key={i}>
                                                 <td>
@@ -203,21 +204,22 @@ export default function UserCart() {
                                                 </td>
                                                 <td>
                                                     <span>
-                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { rList(maker["ITEMS_REF"]) }}>
+                                                        <button style={{ border: ".09rem solid black" }} onClick={() => { rList(e.data["ITEMS_REF"]) }}>
                                                             -
                                                         </button>
-                                                    </span></td>
-                                                <td>{maker.BRAND_NAME}</td>
+                                                    </span>
+                                                </td>
+                                                <td>{e.data.MAKE}</td>
                                                 <td>{e.item}</td>
                                                 <td>{e.data.Descripation}</td>
                                                 <td>{e.data.APPLICATION}</td>
-                                                <td>{loca && loca.STOCK["OLD_MRP"]}</td>
-                                                <td>{loca && loca.STOCK["NEW_MRP"]}</td>
+                                                <td>{e.data["PUR"]}</td>
+                                                <td>{e.data["MRP"]}</td>
                                                 <td>
                                                     <input style={{ width: "100%", caretColor: "auto", textAlign: 'center', overflowX: "scroll" }} name="quantity" type="number"
-                                                        onBlur={(eve) => blurQty(eve, i)} onChange={eve => handleQty(eve, maker["ITEMS_REF"])} value={e.qty} min={1} />
+                                                        onBlur={(eve) => blurQty(eve, e.item)} onChange={eve => handleQty(eve, e.data["ITEMS_REF"])} value={e.qty} min={1} />
                                                 </td>
-                                                <td width="100"><div style={{ width: "100%" }}>{loca.STOCK["NEW_MRP"] * e.qty}</div></td>
+                                                <td width="100"><div style={{ width: "100%" }}>{e.data["MRP"] * e.qty}</div></td>
                                             </tr>
                                         )
                                     })}
@@ -238,7 +240,10 @@ export default function UserCart() {
             </Container>
 
             {/* bill */}
-            <UserBillModal clist={cList} loc={loc} show={modalShow} onHide={() => setModalShow(false)} />
+        
+            <UserBillModal print={handlePrint} ref={printRef} clist={cList} loc={loc} show={modalShow} onHide={() => setModalShow(false)} />
+           
+            
         </>
     )
 }
