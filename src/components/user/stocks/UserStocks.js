@@ -128,6 +128,7 @@ export default function UserStocks() {
                                         onChange={handleSChange}
                                         name="keywords"
                                         autoComplete='disabled'
+                                        
                                     />
                                 </InputGroup>
 
@@ -153,14 +154,13 @@ export default function UserStocks() {
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th colSpan={5}>{loc == "GGN_001" ? "GURUGRAM" : '' || loc == "MUN_001" ? "MUNDKA" : '' || loc == "DEL_001" ? "DELHI" : ''}</th>
-                                        <th></th>
+                                        <th colSpan={4}>{loc == "GGN_001" ? "GURUGRAM" : '' || loc == "MUN_001" ? "MUNDKA" : '' || loc == "DEL_001" ? "DELHI" : ''}</th>
+                                        
                                     </tr>
                                     <tr>
                                         <th>MAKER</th>
                                         <th>ITEMS REF</th>
-                                        <th></th>
-                                        <th ></th>
+                                        <th></th>                                        
                                         <th >QUANTITY</th>
                                         <th>OLD MRP</th>
                                         <th>NEW MRP</th>
@@ -173,16 +173,16 @@ export default function UserStocks() {
                                         <tr key={i}>
                                             <td>{e.MAKE}</td>
                                             <td>{e.ITEMS_REF}</td>
-                                            <td></td>
+                                            <td></td>                                                                                   
+                                            <td>{e.QTY}</td>
+                                            <td>{e.PUR}</td>
+                                            <td>{e.MRP}</td>
                                             <td>
                                                 <Button onClick={eve=>addItemCart(eve,e.ITEMS_REF,e)}>
                                                     +
                                                 </Button>
                                             </td>
-                                            <td>{e.QTY}</td>
-                                            <td>{e.PUR}</td>
-                                            <td>{e.MRP}</td>
-                                            <td></td>
+                                            
                                         </tr>
                                         )
                                     })}
