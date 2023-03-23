@@ -26,7 +26,7 @@ export default function UserStocks() {
     }
     async function search(e) {  //on click search button data fetch from server for one product
         const id = q;        
-        await getOneProduct(id, loc).then(x => setSItem(x))
+        await getOneProduct(id, loc).then(x => {if(x.length<1) alert("data is not found");else setSItem(x)})
     }
     useEffect(() => {   //then store that one product to sesssion storage everytime on click search
         if (!sItem && sessionStorage.getItem("searchItem")) { //reload product in stock from session if exists (during component re-render)            

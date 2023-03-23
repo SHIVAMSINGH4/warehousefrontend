@@ -4,6 +4,7 @@ import logo from "../../../public/img/logo.jpg";
 import Table from 'react-bootstrap/Table';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { addBill } from "../../../api/Api";
 
 function CheckoutModal(props) {
 
@@ -48,7 +49,8 @@ export const UserBillModal = React.forwardRef((props, ref) => {
     // console.log(cList)
 
     const [checkoutShow, setModalShow] = useState(false);
-    function checkout() {
+    async function checkout() {
+        await addBill();
         setModalShow(true);
         // props.print()
         // props.onHide()
