@@ -110,7 +110,8 @@ export const getOneProduct = async (id, loc) => {
 //         UNIT: "EA"
 //     }
 // ]
-    console.log(body)
+    console.log(data)
+    // console.log(`${API_URL.Auth_URL}${ApiRoute.get_one_product}/${loc}?OE_REF=${id}&ITEMS_REF=${id}`, header)
     return data;
 }
 
@@ -123,12 +124,13 @@ export const addBill = async (bill) => {
         },
         body: JSON.stringify(bill)
     }
-    // const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.addCustomerBill}?O_E_REF=${id}&ITEMS_REF=${id}`,header);
-    // const body = await response.json();
-    // const data = body.data;
-    // console.log(data)
-    // return data;
-    console.log(`${API_URL.Auth_URL}${ApiRoute.addCustomerBill}?Bill_no:${bill}`,header)
+    const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.add_bill}`,header);
+    const body = await response.json();
+    
+    console.log(body)
+    console.log(`${API_URL.Auth_URL}${ApiRoute.addCustomerBill}`,header)
+    return body;
+  
 }
 export const getBill = async (bill) => {
     const header = {
@@ -137,11 +139,27 @@ export const getBill = async (bill) => {
             'content-type': "application/json",
             // 'authorization':`bearer${getToken()}`
         },
-        body: JSON.stringify(bill)
+        // body: JSON.stringify(bill)
     };
-    // const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.getCustomerBill}?O_E_REF=${id}&ITEMS_REF=${id}`,header);
-    // const body = await response.json();
-    // const data = body.data;
-    // console.log(data);
-    // return data;
+    const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_bill}?bill=${bill}`,header);
+    const body = await response.json();
+    const data = body.data;     
+    console.log(data);
+    return data;
+}
+
+export const getCustBill = async (custNo) => {
+    const header = {
+        method: "get",
+        headers: {
+            'content-type': "application/json",
+            // 'authorization':`bearer${getToken()}`
+        },
+        // body: JSON.stringify(bill)
+    };
+    const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_custBill}?phone_no=${custNo}`,header);
+    const body = await response.json();
+    const data = body.data;     
+    console.log(data);
+    return data;
 }

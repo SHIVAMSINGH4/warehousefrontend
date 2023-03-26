@@ -134,6 +134,12 @@ export default function UserCart() {
           
         }
     )
+    
+    //customer Phone
+    const [custPhone,setCustPhone]=useState();
+    const handleCustPhone = (event)=>{
+        setCustPhone(event.target.value)
+    }
 
     return (
         <>
@@ -170,7 +176,7 @@ export default function UserCart() {
                                 placeholder="CUSTOMER PHONE NO."
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
-                            // onChange={{ cphone }}
+                                onChange={handleCustPhone}
                             />
                         </InputGroup>
                     </Col>
@@ -241,7 +247,7 @@ export default function UserCart() {
 
             {/* bill */}
         
-            <UserBillModal print={handlePrint} ref={printRef} clist={cList} loc={loc} show={modalShow} onHide={() => setModalShow(false)} />
+            <UserBillModal custphone={custPhone} print={handlePrint} ref={printRef} clist={cList} loc={loc} show={modalShow} onHide={() => setModalShow(false)} />
            
             
         </>

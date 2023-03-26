@@ -8,10 +8,10 @@ import { useContext } from 'react';
 import { MainContext } from '../../../context/Context';
 
 export default function UserStocks() {   
-    const [data, setData] = useState() // state for data 
-    useEffect(() => {           //data fetch
-        console.log(data)
-    }, [data])
+    // const [data, setData] = useState() // state for data 
+    // useEffect(() => {           //data fetch
+    //     console.log(data)
+    // }, [data])
     const loc = JSON.parse(sessionStorage.getItem("userinfo")).store //location get from session storage
     const { cart } = useContext(MainContext)   //cartCount  
 
@@ -22,11 +22,21 @@ export default function UserStocks() {
     const [q, setQ] = useState("")     //keywords being typed in search box input
     function handleSChange(e) {    //search values on change in search tab input
         const q = e.target.value
-        setQ(q)
+        setQ(q.toUpperCase())
     }
     async function search(e) {  //on click search button data fetch from server for one product
         const id = q;        
-        await getOneProduct(id, loc).then(x => {if(x.length<1) alert("data is not found");else setSItem(x)})
+        await getOneProduct(id, loc).then(async x => {
+            if(x.length<1) alert("data is not found");
+            else {
+                if(x[0].OE_REF!=q){
+                    await getOneProduct(x[0].OE_REF,loc).then(y=>{setSItem(y);console.log(q)})
+                }
+                else{
+                    setSItem(x)
+                }
+            }
+        })
     }
     useEffect(() => {   //then store that one product to sesssion storage everytime on click search
         if (!sItem && sessionStorage.getItem("searchItem")) { //reload product in stock from session if exists (during component re-render)            

@@ -45,12 +45,28 @@ export const UserBillModal = React.forwardRef((props, ref) => {
     // clist data
     const cList = props.clist
     const loc = props.loc
-
+    const custPhone = props.custphone
     // console.log(cList)
 
     const [checkoutShow, setModalShow] = useState(false);
     async function checkout() {
-        await addBill();
+       
+        await addBill(
+            {
+                phoneNO:custPhone,
+                PRODUCTS:cList.map(x=>{
+                    return (
+                        {
+                            ITEMS_REF:x.item,
+                            LOCATION:loc,
+                            QUANTITY:x.qty
+                        }
+                    )
+                })
+            }
+        ).then(res=>{
+            sessionStorage.setItem("bill",JSON.stringify(res))
+        })
         setModalShow(true);
         // props.print()
         // props.onHide()
@@ -120,7 +136,7 @@ export const UserBillModal = React.forwardRef((props, ref) => {
                                         </span>
                                         <hr style={{ margin: "0", marginBottom: "0.5rem" }} />
                                         <span>
-                                            CUSTOMER PHONE : 9555356244
+                                            CUSTOMER PHONE : {custPhone}
                                         </span>
 
                                     </div>
@@ -222,8 +238,7 @@ export const UserBillModal = React.forwardRef((props, ref) => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={() => { checkout() }}>CHECKOUT</Button>
-                    </Modal.Footer>
-                {/* </div> */}
+                    </Modal.Footer>                
             </Modal>
 
         </>

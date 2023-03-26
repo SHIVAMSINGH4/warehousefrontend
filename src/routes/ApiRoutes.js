@@ -5,4 +5,5 @@ export const ApiRoute = {
     update_product : "updateProduct",
     add_bill:"addCustomerBill",
     get_bill:"getCustomerBill",
+    get_custBill:"getCustomerBillHistory",
 }
