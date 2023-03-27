@@ -1,26 +1,38 @@
 import { Container, Row, Col, Table, Button, InputGroup, Form } from "react-bootstrap";
 import { getBill, getCustBill } from "../../../api/Api";
-import { useMemo, useState } from "react";
+import { useMemo, useState ,useEffect} from "react";
 
 
 export default function UserOrder() {
-    const [BillNo, setBill] = useState();    //bill no. by input
-    function handleBillNo(event) {
-        setBill(event.target.value)
+   
+    const [data, setData] = useState();     //data fetch by bill
+    const [Bill,setBill] = useState();      // bill use to fetch by api and for session storage link
+    useEffect(()=>{                         // set bill on first render by session storage link
+        if(sessionStorage.getItem("bill")){
+            setBill(JSON.parse(sessionStorage.getItem("bill")).billno)
+            console.log("ok")
+        }
+    },[])
+    useEffect(()=>{         // fetch bill data if bill no. changes
+        if(Bill)
+            fetchBill()
+    },[Bill])
+
+    const [BillNo, setBillNo] = useState();    //bill no. by input
+    function handleBillNo(event) {      // handle bill no. onChange
+        setBillNo(event.target.value)
+    }
+    function fetchBill() {
+        setBill(BillNo)      
     }
 
     const [custBill, setCustBill] = useState();  //customer no. by input
-    function handleCustBill(event) {
+    function handleCustBill(event) {         // handle custBill no. onChange
         setCustBill(event.target.value)
     }
-
-    const [data, setData] = useState();
-    function fetchBill() {
-        getBill(BillNo).then(x => { setData(x) })
-    }
-
     function fetchCustBill() {
-        getCustBill(custBill).then()
+        setBill(custBill)
+        getCustBill(custBill).then()        
     }
     
     let totalItem;
