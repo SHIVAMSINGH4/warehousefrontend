@@ -2,16 +2,21 @@ import React from "react";
 import { Button, Col, Container, Row, Modal } from "react-bootstrap";
 import logo from "../../../public/img/logo.jpg";
 import Table from 'react-bootstrap/Table';
-import { useState } from "react";
+import { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { addBill } from "../../../api/Api";
+import { MainContext } from "../../../context/Context";
 
 function CheckoutModal(props) {
+    const { cart } = useContext(MainContext) //context data
 
     const navigate = useNavigate()
     function moveO() {
         props.onHide()
         props.print()
+        const arr = ["cList","searchItem","cartListData","cartList"]
+        arr.forEach(x=> {sessionStorage.removeItem(x);console.log("ok")})
+        cart.setCartCount(0)
         navigate("/user/order")
     }
 

@@ -123,7 +123,11 @@ export default function UserCart() {
     // BILL modal
     const [modalShow, setModalShow] = useState(false);
     function moveToBill() {
-        setModalShow(true)
+        if(custPhone)
+            setModalShow(true)
+        else{
+           alert("add customer phone no.")
+        }
     }
 
     //print setting

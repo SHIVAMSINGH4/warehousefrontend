@@ -127,8 +127,8 @@ export const addBill = async (bill) => {
     const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.add_bill}`,header);
     const body = await response.json();
     
-    console.log(body)
-    console.log(`${API_URL.Auth_URL}${ApiRoute.add_bill}`,header)
+    // console.log(body)
+    // console.log(`${API_URL.Auth_URL}${ApiRoute.add_bill}`,header)
     return body;
   
 }
