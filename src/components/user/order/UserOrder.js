@@ -1,18 +1,35 @@
 import { Container, Row, Col, Table, Button, InputGroup, Form, Modal } from "react-bootstrap";
-import { getBill, getCustBill } from "../../../api/Api";
+import { getBill, getCustBill, getOneProduct } from "../../../api/Api";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import logo from "../../../public/img/logo.jpg";
 import { Suspense } from "react";
+import "../order/userOrder.css"
 
 
 export default function UserOrder(props) {
     const [dataCust, setDataCust] = useState();     //data fetch by customer no.
     const [dataBill, setDataBill] = useState();     //data fetch by bill no.
     const [loading, setLoading] = useState();        //state forloading 
+    const [loc, setLoc] = useState();            //location of store
+    useEffect(() => {       //cartlist update on page or page reload/ component render
+        // if (sessionStorage.getItem("cartList")) {
+        //     setItemId(JSON.parse(sessionStorage.getItem("cartList")))
+        //     setData(JSON.parse(sessionStorage.getItem("cartListData")))
+        // }
+        if (sessionStorage.getItem("userinfo")) {
+            setLoc(JSON.parse(sessionStorage.getItem("userinfo")).store)
+        }
+    }, [])
     function LoadingSpinner() {
-        return <h2>🌀 Loading...</h2>;
+        return (
+            <div className="spinner-container">
+                <div className="loading-spinner">
+                </div>
+            </div>
+        )
     }
+
 
     const [Bill, setBill] = useState();      // bill use to fetch by api and for session storage link
     useEffect(() => {                         // set bill on first render by session storage link
@@ -36,19 +53,26 @@ export default function UserOrder(props) {
     }, [dataCust, dataBill])
     useEffect(() => {         // fetch bill data if bill no. changes
         if (Bill && Bill.type == "billNo") {
+
             setDataCust()
+            setLoading(true)
             getBill(Bill.id).then(d => {
                 setDataBill(d)
                 sessionStorage.setItem("orderDataBill", JSON.stringify(d))
                 sessionStorage.removeItem("orderDataCust")
+                setLoading(false)
             })
+
         }
         else if (Bill && Bill.type == "custBill") {
+
             setDataBill()
+            setLoading(true)
             getCustBill(Bill.id).then(d => {
                 setDataCust(d[0])
                 sessionStorage.setItem("orderDataCust", JSON.stringify(d))
                 sessionStorage.removeItem("orderDataBill")
+                setLoading(false)
             })
 
         }
@@ -59,7 +83,7 @@ export default function UserOrder(props) {
         setBillNo(event.target.value)
     }
     function fetchBill() {
-        setLoading(true)
+
         setBill({
             type: "billNo",
             id: BillNo
@@ -84,13 +108,15 @@ export default function UserOrder(props) {
     if (dataBill) {         //table for data fetched by bill no.
         table = dataBill.map((d, i) => {
             return (
-                <tr key={i} onClick={() => orderDetails(d.Bill_no)}>
-                    <td>{i + 1}</td>
-                    <td>{d.Bill_no}</td>
-                    <td>{d.phoneNo}</td>
-                    {/* <td>{totalItem}</td>
+                <tbody>
+                    <tr key={i} onClick={() => {orderDetails(dataBill);console.log(dataBill)}}>
+                        <td>{i + 1}</td>
+                        <td>{d.Bill_no}</td>
+                        <td>{d.phoneNo}</td>
+                        {/* <td>{totalItem}</td>
                     <td>price</td> */}
-                </tr>
+                    </tr>
+                </tbody>
             )
         });
         totalItem = dataBill.map(e => { return (e.Quantity) }).reduce((a, b) => { return a + b })
@@ -98,21 +124,37 @@ export default function UserOrder(props) {
     if (dataCust) {         //table for data fetched by customer phone no.
         table = dataCust.billNo.map((d, i) => {
             return (
-                <tr key={i} onClick={() => { console.log("orderId") }}>
-                    <td>{i + 1}</td>
-                    <td>{d}</td>
-                    <td>{dataCust.phoneNO}</td>
-                    {/* <td>{totalItem}</td>
+                <tbody>
+                    <tr key={i} onClick={() => { console.log("orderId") }}>
+                        <td>{i + 1}</td>
+                        <td>{d}</td>
+                        <td>{dataCust.phoneNO}</td>
+                        {/* <td>{totalItem}</td>
                     <td>price</td> */}
-                </tr>
+                    </tr>
+                </tbody>
             )
         })
     }
 
     const [modalShow, setModalShow] = useState(false);   //modal for order view box
-    const [DataBox, setDataBox] = useState();
-    function orderDetails(id) {
-        getBill(id).then(d => { setDataBox(d) })
+    const [DataBox, setDataBox] = useState();       //order data state
+    function orderDetails(data) {           // order details function
+        if (data.Bill_no) {         
+            let orderData ;         //temporary variable to store order data fetching live
+            data.PRODUCTS.forEach(x => {    //loop on data get by onclick
+                if (!orderData) getOneProduct(x.ITEMS_REF, loc).then(d => {orderData([d]) })    //first cycle of loop to store data fetched inorderdata
+                else{       //other cycle of loop 
+                    // let counter = 0 ;
+                    // orderData.forEach(e=>{  //loop to check data if data is already within
+                    //     if(e.ITEMS_REF==x.ITEMS_REF)counter+=1
+                    // });
+                    // if(counter==0)
+                     getOneProduct(x.ITEMS_REF,loc).then(d=> orderData.push(d))                     
+                }     
+            })
+            console.log(orderData)
+        }
         // modalShow(true)
     }
 
@@ -178,13 +220,7 @@ export default function UserOrder(props) {
                                     <th>Price</th> */}
                                 </tr>
                             </thead>
-                            <tbody>
-                                <Suspense fallback={<LoadingSpinner />}>
-                                    {
-                                        table
-                                    }
-                                </Suspense>
-                            </tbody>
+                            {loading ? <LoadingSpinner /> : table}
                         </Table>
                     </Col>
                 </Row>
