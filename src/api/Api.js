@@ -39,7 +39,7 @@ export const getOneProduct = async (id, loc) => {
     }
         const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_one_product}/${loc}?OE_REF=${id}&ITEMS_REF=${id}`, header);        
         const body = await response.json();
-        const data = body.data;
+        const data = body.data[0];
 //     const data = [
 //         {
 //         APPLICATION: "DISCOVERY V",
@@ -144,7 +144,7 @@ export const getBill = async (bill) => {
     const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_bill}?bill=${bill}`,header);
     const body = await response.json();
     const data = body.data;     
-    console.log(data);
+    console.log(body);
     return data;
 }
 

@@ -30,6 +30,15 @@ export default function UserOrder(props) {
         )
     }
 
+    function errorComp(string) {
+        return (
+            <div className="error-container">
+                <div className="error">
+                    {string}
+                </div>
+            </div>
+        )
+    }
 
     const [Bill, setBill] = useState();      // bill use to fetch by api and for session storage link
     useEffect(() => {                         // set bill on first render by session storage link
@@ -48,33 +57,39 @@ export default function UserOrder(props) {
         }
     }, [])
 
-    useEffect(() => {               //on render refresh data
-
-    }, [dataCust, dataBill])
+    useEffect(() => {}, [dataCust, dataBill]) //on render refresh data
     useEffect(() => {         // fetch bill data if bill no. changes
         if (Bill && Bill.type == "billNo") {
 
             setDataCust()
             setLoading(true)
             getBill(Bill.id).then(d => {
-                setDataBill(d)
-                sessionStorage.setItem("orderDataBill", JSON.stringify(d))
-                sessionStorage.removeItem("orderDataCust")
+                if(d!=undefined){
+                    setDataBill(d)
+                    sessionStorage.setItem("orderDataBill", JSON.stringify(d))
+                    sessionStorage.removeItem("orderDataCust")
+                }
+                else{
+                    alert("data not found")
+                }
                 setLoading(false)
             })
 
         }
         else if (Bill && Bill.type == "custBill") {
-
             setDataBill()
             setLoading(true)
             getCustBill(Bill.id).then(d => {
-                setDataCust(d[0])
-                sessionStorage.setItem("orderDataCust", JSON.stringify(d))
-                sessionStorage.removeItem("orderDataBill")
-                setLoading(false)
+                if(d!=undefined){
+                    setDataCust(d[0])
+                    sessionStorage.setItem("orderDataCust", JSON.stringify(d))
+                    sessionStorage.removeItem("orderDataBill")
+                }
+                else{
+                    alert("data not found")
+                }
+                setLoading(false)                               
             })
-
         }
     }, [Bill])
 
@@ -109,7 +124,7 @@ export default function UserOrder(props) {
         table = dataBill.map((d, i) => {
             return (
                 <tbody>
-                    <tr key={i} onClick={() => {orderDetails(dataBill);console.log(dataBill)}}>
+                    <tr key={i} onClick={() => { orderDetails(dataBill[0]) }}>
                         <td>{i + 1}</td>
                         <td>{d.Bill_no}</td>
                         <td>{d.phoneNo}</td>
@@ -138,23 +153,40 @@ export default function UserOrder(props) {
     }
 
     const [modalShow, setModalShow] = useState(false);   //modal for order view box
-    const [DataBox, setDataBox] = useState();       //order data state
+    const [DataBox, setDataBox] = useState([]);       //order data state
+    useEffect(()=>{
+        
+    },[DataBox])
     function orderDetails(data) {           // order details function
-        if (data.Bill_no) {         
-            let orderData ;         //temporary variable to store order data fetching live
+        setLoading(true)
+        if (data.Bill_no) {
+            let orderData = [];         //temporary variable to store order data fetching live
             data.PRODUCTS.forEach(x => {    //loop on data get by onclick
-                if (!orderData) getOneProduct(x.ITEMS_REF, loc).then(d => {orderData([d]) })    //first cycle of loop to store data fetched inorderdata
-                else{       //other cycle of loop 
-                    // let counter = 0 ;
-                    // orderData.forEach(e=>{  //loop to check data if data is already within
-                    //     if(e.ITEMS_REF==x.ITEMS_REF)counter+=1
-                    // });
-                    // if(counter==0)
-                     getOneProduct(x.ITEMS_REF,loc).then(d=> orderData.push(d))                     
-                }     
+                getOneProduct(x.ITEMS_REF, loc).then(d=>{
+                    orderData.push(d)
+                    console.log(orderData,"ok")
+               })    //first cycle of loop to store data fetched in orderdata     
+              
+               
+               setLoading(false)
             })
-            console.log(orderData)
+            
         }
+        // if (data.billNo) {
+        //     let orderData;         //temporary variable to store order data fetching live
+        //     data.PRODUCTS.forEach(x => {    //loop on data get by onclick
+        //         if (!orderData) getOneProduct(x.ITEMS_REF, loc).then(d => { orderData(d) })    //first cycle of loop to store data fetched inorderdata
+        //         else {       //other cycle of loop 
+        //             // let counter = 0 ;
+        //             // orderData.forEach(e=>{  //loop to check data if data is already within
+        //             //     if(e.ITEMS_REF==x.ITEMS_REF)counter+=1
+        //             // });
+        //             // if(counter==0)
+        //             getOneProduct(x.ITEMS_REF, loc).then(d => orderData.push(d))
+        //         }
+        //     })
+        //     console.log(orderData)
+        // }
         // modalShow(true)
     }
 
