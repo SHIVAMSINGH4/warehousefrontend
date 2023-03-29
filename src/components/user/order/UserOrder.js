@@ -49,7 +49,7 @@ export default function UserOrder(props) {
             })
         }
         if (sessionStorage.getItem("orderDataBill")) {
-            setDataBill(JSON.parse(sessionStorage.getItem("orderDataBill")))
+            setDataBill(JSON.parse(sessionStorage.getItem("orderDataBill"))[0])
         }
         if (sessionStorage.getItem("orderDataCust")) {
             setDataCust(JSON.parse(sessionStorage.getItem("orderDataCust"))[0])
@@ -57,19 +57,21 @@ export default function UserOrder(props) {
         }
     }, [])
 
-    useEffect(() => {}, [dataCust, dataBill]) //on render refresh data
+    useEffect(() => { }, [dataCust, dataBill]) //on render refresh data
     useEffect(() => {         // fetch bill data if bill no. changes
         if (Bill && Bill.type == "billNo") {
 
             setDataCust()
             setLoading(true)
             getBill(Bill.id).then(d => {
-                if(d!=undefined){
-                    setDataBill(d)
+                if (d != undefined) {
+                    setDataBill(d[0])
+                    sessionStorage.removeItem("orderDataBill")
                     sessionStorage.setItem("orderDataBill", JSON.stringify(d))
                     sessionStorage.removeItem("orderDataCust")
+
                 }
-                else{
+                else {
                     alert("data not found")
                 }
                 setLoading(false)
@@ -80,15 +82,16 @@ export default function UserOrder(props) {
             setDataBill()
             setLoading(true)
             getCustBill(Bill.id).then(d => {
-                if(d!=undefined){
+                if (d != undefined) {
                     setDataCust(d[0])
+                    sessionStorage.removeItem("orderDataCust")
                     sessionStorage.setItem("orderDataCust", JSON.stringify(d))
                     sessionStorage.removeItem("orderDataBill")
                 }
-                else{
+                else {
                     alert("data not found")
                 }
-                setLoading(false)                               
+                setLoading(false)
             })
         }
     }, [Bill])
@@ -121,73 +124,60 @@ export default function UserOrder(props) {
     let totalItem;
     let table;
     if (dataBill) {         //table for data fetched by bill no.
-        table = dataBill.map((d, i) => {
-            return (
-                <tbody>
-                    <tr key={i} onClick={() => { orderDetails(dataBill[0]) }}>
-                        <td>{i + 1}</td>
-                        <td>{d.Bill_no}</td>
-                        <td>{d.phoneNo}</td>
-                        {/* <td>{totalItem}</td>
+
+        table = [
+            <tr key={1} onClick={() => { orderDetails(dataBill.Bill_no) }}>
+                <td>1</td>
+                <td>{dataBill.Bill_no}</td>
+                <td>{dataBill.phoneNo}</td>
+                {/* <td>{totalItem}</td>
                     <td>price</td> */}
-                    </tr>
-                </tbody>
-            )
-        });
-        totalItem = dataBill.map(e => { return (e.Quantity) }).reduce((a, b) => { return a + b })
+            </tr>
+        ]
+        totalItem = dataBill.PRODUCTS.map(e => { return (e.QUANTITY) }).reduce((a, b) => { return a + b })
     }
     if (dataCust) {         //table for data fetched by customer phone no.
         table = dataCust.billNo.map((d, i) => {
+
             return (
-                <tbody>
-                    <tr key={i} onClick={() => { console.log("orderId") }}>
-                        <td>{i + 1}</td>
-                        <td>{d}</td>
-                        <td>{dataCust.phoneNO}</td>
-                        {/* <td>{totalItem}</td>
+                <tr key={i} onClick={() => { orderDetails(d.Bill_no) }}>
+                    <td>{i + 1}</td>
+                    <td>{d}</td>
+                    <td>{dataCust.phoneNO}</td>
+                    {/* <td>{totalItem}</td>
                     <td>price</td> */}
-                    </tr>
-                </tbody>
+                </tr>
+
             )
         })
     }
 
     const [modalShow, setModalShow] = useState(false);   //modal for order view box
-    const [DataBox, setDataBox] = useState([]);       //order data state
-    useEffect(()=>{
-        
-    },[DataBox])
-    function orderDetails(data) {           // order details function
+    const [DataBox, setDataBox] = useState();       //order data state
+    useEffect(() => {
+        console.log(DataBox)
+    }, [DataBox])
+    async function orderDetails(data) {           // order details function
         setLoading(true)
-        if (data.Bill_no) {
-            let orderData = [];         //temporary variable to store order data fetching live
-            data.PRODUCTS.forEach(x => {    //loop on data get by onclick
-                getOneProduct(x.ITEMS_REF, loc).then(d=>{
+        let orderData = [];          //temporary variable to store order data fetching live
+        await getBill(data).then(data => {                   //loop on data get by onclick
+            data[0].PRODUCTS.forEach(async x => {
+                await getOneProduct(x.ITEMS_REF, loc).then(d => {
                     orderData.push(d)
-                    console.log(orderData,"ok")
-               })    //first cycle of loop to store data fetched in orderdata     
-              
-               
-               setLoading(false)
+                    console.log(orderData)                   
+                        setDataBox({
+                            bill: data,
+                            data: orderData,    
+                        });                                       
+                })                                  
+                setModalShow(true)
+                setLoading(false)                
             })
-            
-        }
-        // if (data.billNo) {
-        //     let orderData;         //temporary variable to store order data fetching live
-        //     data.PRODUCTS.forEach(x => {    //loop on data get by onclick
-        //         if (!orderData) getOneProduct(x.ITEMS_REF, loc).then(d => { orderData(d) })    //first cycle of loop to store data fetched inorderdata
-        //         else {       //other cycle of loop 
-        //             // let counter = 0 ;
-        //             // orderData.forEach(e=>{  //loop to check data if data is already within
-        //             //     if(e.ITEMS_REF==x.ITEMS_REF)counter+=1
-        //             // });
-        //             // if(counter==0)
-        //             getOneProduct(x.ITEMS_REF, loc).then(d => orderData.push(d))
-        //         }
-        //     })
-        //     console.log(orderData)
-        // }
-        // modalShow(true)
+        }).then(
+            console.log(orderData)
+        )
+       
+
     }
 
     //print setting
@@ -252,7 +242,10 @@ export default function UserOrder(props) {
                                     <th>Price</th> */}
                                 </tr>
                             </thead>
-                            {loading ? <LoadingSpinner /> : table}
+                            <tbody>
+                                {loading ? <tr><td><LoadingSpinner /></td></tr> : table}
+                            </tbody>
+
                         </Table>
                     </Col>
                 </Row>
@@ -263,6 +256,8 @@ export default function UserOrder(props) {
             <Modal {...props}
                 aria-labelledby="contained-modal-title-vcenter"
                 size="lg"
+                show={modalShow}
+                onHide={() => { setModalShow(false) }}
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
@@ -339,22 +334,32 @@ export default function UserOrder(props) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {cList && cList.map((e, i) => {
-                                                return (
-                                                    <tr key={i}>
-                                                        <td>
-                                                            <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
-                                                        </td>
-                                                        <td>{e.data.MAKE}</td>
-                                                        <td>{e.item}</td>
-                                                        <td>{e.data.Descripation}</td>
-                                                        <td>{e.data.APPLICATION}</td>
-                                                        <td>{e.data.MRP}</td>
-                                                        <td>{e.qty}</td>
-                                                        <td width="100"><div style={{ width: "100%" }}>{e.data.MRP * e.qty}</div></td>
-                                                    </tr>
-                                                )
-                                            })} */}
+                                        {DataBox && DataBox.data.map((e, i) => {
+                                            return (
+                                                <tr key={i}>
+                                                    <td>
+                                                        <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
+                                                    </td>
+                                                    <td>{e.MAKE}</td>
+                                                    <td>{e.item}</td>
+                                                    <td>{e.Descripation}</td>
+                                                    <td>{e.APPLICATION}</td>
+                                                    <td>{e.MRP}</td>
+                                                    {/* <td>
+                                                        {
+                                                            DataBox.bill.PRODUCTS.map(d => {
+                                                                if (d.ITEMS_REF == e.ITEMS_REF) {
+                                                                    return (
+                                                                        d.QUANTITY
+                                                                    )
+                                                                }
+                                                            })
+                                                        }
+                                                    </td> */}
+                                                    <td width="100"><div style={{ width: "100%" }}>{e.MRP}</div></td>
+                                                </tr>
+                                            )
+                                        })}
                                     </tbody>
                                 </Table>
                             </Col>
