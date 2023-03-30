@@ -132,7 +132,7 @@ export const addBill = async (bill) => {
     return body;
   
 }
-export const getBill = async (bill) => {
+export const getBill = async (bill,loc) => {
     const header = {
         method: "get",
         headers: {
@@ -141,11 +141,17 @@ export const getBill = async (bill) => {
         },
         // body: JSON.stringify(bill)
     };
-    const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_bill}?bill=${bill}`,header);
+    const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_bill}?bill=${bill}&loc=${loc}`,header);
     const body = await response.json();
-    const data = body.data;     
-    // console.log(data);
-    return data;
+    var key = Object.keys(body)
+    if(key[0]=="MSG")
+        return ("ERROR")
+    else{
+        const data = body.data;     
+        console.log(body);
+        return data;
+    }
+   
 }
 
 export const getCustBill = async (custNo) => {
@@ -160,6 +166,6 @@ export const getCustBill = async (custNo) => {
     const response = await fetch(`${API_URL.Auth_URL}${ApiRoute.get_custBill}?phone_no=${custNo}`,header);
     const body = await response.json();
     const data = body.data;     
-    console.log(data);
+    console.log(body);
     return data;
 }

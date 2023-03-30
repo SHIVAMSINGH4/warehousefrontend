@@ -12,6 +12,7 @@ export default function UserOrder(props) {
     const [dataBill, setDataBill] = useState();     //data fetch by bill no.
     const [loading, setLoading] = useState();        //state forloading 
     const [loc, setLoc] = useState();            //location of store
+    const [update,setupdate]=useState(false);
     useEffect(() => {       //cartlist update on page or page reload/ component render
         // if (sessionStorage.getItem("cartList")) {
         //     setItemId(JSON.parse(sessionStorage.getItem("cartList")))
@@ -47,6 +48,7 @@ export default function UserOrder(props) {
                 type: "billNo",
                 id: JSON.parse(sessionStorage.getItem("bill")).billno
             })
+            console.log("OK")
         }
         if (sessionStorage.getItem("orderDataBill")) {
             setDataBill(JSON.parse(sessionStorage.getItem("orderDataBill"))[0])
@@ -55,16 +57,19 @@ export default function UserOrder(props) {
             setDataCust(JSON.parse(sessionStorage.getItem("orderDataCust"))[0])
 
         }
-    }, [])
+    }, [update])
 
     useEffect(() => { }, [dataCust, dataBill]) //on render refresh data
     useEffect(() => {         // fetch bill data if bill no. changes
+        console.log(Bill)
         if (Bill && Bill.type == "billNo") {
 
             setDataCust()
             setLoading(true)
-            getBill(Bill.id).then(d => {
+            getBill(Bill.id, loc).then(d => {
+                
                 if (d != undefined) {
+
                     setDataBill(d[0])
                     sessionStorage.removeItem("orderDataBill")
                     sessionStorage.setItem("orderDataBill", JSON.stringify(d))
@@ -81,6 +86,7 @@ export default function UserOrder(props) {
         else if (Bill && Bill.type == "custBill") {
             setDataBill()
             setLoading(true)
+
             getCustBill(Bill.id).then(d => {
                 if (d != undefined) {
                     setDataCust(d[0])
@@ -140,7 +146,7 @@ export default function UserOrder(props) {
         table = dataCust.billNo.map((d, i) => {
 
             return (
-                <tr key={i} onClick={() => { orderDetails(d.Bill_no) }}>
+                <tr key={i} onClick={() => { orderDetails(d) }}>
                     <td>{i + 1}</td>
                     <td>{d}</td>
                     <td>{dataCust.phoneNO}</td>
@@ -160,23 +166,36 @@ export default function UserOrder(props) {
     async function orderDetails(data) {           // order details function
         setLoading(true)
         let orderData = [];          //temporary variable to store order data fetching live
-        await getBill(data).then(data => {                   //loop on data get by onclick
-            data[0].PRODUCTS.forEach(async x => {
-                await getOneProduct(x.ITEMS_REF, loc).then(d => {
-                    orderData.push(d)
-                    console.log(orderData)                   
+        await getBill(data, loc).then(data => {                   //loop on data get by onclick
+            console.log(data)                       
+            if (data!="ERROR")
+                data[0].PRODUCTS.forEach(async x => {
+                    await getOneProduct(x.ITEMS_REF, loc).then(d => {
+                        orderData.push(d)
+                        console.log(orderData)
                         setDataBox({
                             bill: data,
-                            data: orderData,    
-                        });                                       
-                })                                  
-                setModalShow(true)
-                setLoading(false)                
-            })
-        }).then(
-            console.log(orderData)
-        )
+                            data: orderData,
+                        });
+                    })
+                    setModalShow(true)
+                    setLoading(false)
+                })
+            else{
+                 alert("data isnt found")
+                // if(sessionStorage.getItem("bill"))
+                // setBill({
+                //     type: "billNo",
+                //     id: JSON.parse(sessionStorage.getItem("bill")).billno
+                // })
+                setupdate(update?false:true)
+                    setLoading(false)
+                    console.log("ok")
        
+              
+            }
+        })
+
 
     }
 
@@ -340,11 +359,11 @@ export default function UserOrder(props) {
                                                     <td>
                                                         <div style={{ display: "inline-block", width: "50%" }}>{i + 1}</div>
                                                     </td>
-                                                    <td>{e.MAKE}</td>
-                                                    <td>{e.item}</td>
-                                                    <td>{e.Descripation}</td>
-                                                    <td>{e.APPLICATION}</td>
-                                                    <td>{e.MRP}</td>
+                                                    <td>{e[0].MAKE}</td>
+                                                    <td>{e[0].ITEMS_REF}</td>
+                                                    <td>{e[0].Descripation}</td>
+                                                    <td>{e[0].APPLICATION}</td>
+                                                    <td>{e[0].MRP}</td>
                                                     {/* <td>
                                                         {
                                                             DataBox.bill.PRODUCTS.map(d => {
@@ -356,7 +375,8 @@ export default function UserOrder(props) {
                                                             })
                                                         }
                                                     </td> */}
-                                                    <td width="100"><div style={{ width: "100%" }}>{e.MRP}</div></td>
+                                                    <td></td>
+                                                    <td width="100"><div style={{ width: "100%" }}>{e[0].MRP}</div></td>
                                                 </tr>
                                             )
                                         })}
