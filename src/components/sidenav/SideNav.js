@@ -14,6 +14,8 @@ import { MainContext } from "../../context/Context";
 export default function SideNav({ children }) {
     //context state
     const { profile } = useContext(MainContext)
+    const navigate = useNavigate()
+    // useEffect(()=>{if(!localStorage.getItem("customer-info").info)navigate("/")},[])
 
     //sidenav functions for small devices
     function openNav() {
@@ -37,7 +39,7 @@ export default function SideNav({ children }) {
     const locations = useLocation().pathname;   //for getting current page's url 
 
     useEffect(() => {
-        if (profile.profile && profile.profile.user == "ADMIN" && !menu) {
+        if (profile.profile && profile.profile.role == "ADMIN" && !menu) {
             setMenu([
                 { title: "Dashboard", path: '/admin/dashboard', icon: <AiOutlineAreaChart /> },
                 { title: "Stocks", path: '/admin/stocks', icon: <AiOutlineShop /> },
@@ -45,7 +47,7 @@ export default function SideNav({ children }) {
                 { title: "Order", path: '/admin/order', icon: <AiOutlineSnippets /> },
             ])
         }
-        if (profile.profile && profile.profile.user == "USER" && !menu) {
+        if (profile.profile && profile.profile.role == "USER" && !menu) {
             setMenu([
                 { title: "Stocks", path: '/user/stocks', icon: <AiOutlineShop /> },
                 { title: "Cart", path: '/user/cart', icon: <AiOutlineShoppingCart /> },

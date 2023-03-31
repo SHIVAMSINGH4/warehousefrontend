@@ -17,9 +17,9 @@ export default function Login() {
     const data = {
         token: "token",
         body: {
-            user: "USER",
-            role: "admin",
-            store:"GGN_001"
+            user: "Admin",
+            role: "USER",
+            store:"GGN_001",
         }
     }
 
@@ -37,8 +37,9 @@ export default function Login() {
         sessionStorage.setItem("userinfo", JSON.stringify(data.body))  
         profile.setProfile(JSON.parse(sessionStorage.getItem("userinfo")))    //set userinfo in context state              
         setTimeout(() => {
+            if(data.body.role=="USER")
             navigate("user/stocks")
-        }, 100)             
+        }, 100)
         // reducer(hello)
 
         // console.log(form)
@@ -95,7 +96,7 @@ export default function Login() {
                             width: '25rem'
                         }}
                             className="card mx-auto">                            
-                            <Card.Body>                                
+                            <Card.Body>
                                 <Form>
                                     <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
                                         <Form.Control type="email" name="email" onChange={handleChange} placeholder="Enter email" />
