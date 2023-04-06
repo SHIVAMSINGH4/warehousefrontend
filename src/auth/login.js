@@ -2,12 +2,13 @@ import React, { Component, useContext, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
-import "./css/login.css";
+import "./login.css";
 import { Container, Navbar, Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import { MainContext } from "../context/Context";
+import { userLogin } from "../api/Api";
 
 export default function Login() {
     // context data
@@ -16,16 +17,10 @@ export default function Login() {
     // toggle 
     const [toggle, setToggle] = useState(false);
     const [User, setUser] = useState({ user: "ADMIN" });
+    const [info, setInfo] = useState();
 
     //data from response (dummy)
-    const data = {
-        token: "token",
-        body: {
-            user: "Admin",
-            role: "USER",
-            store: "GGN_001",
-        }
-    }
+
 
     //form handling
     const [form, setForm] = useState();
@@ -37,19 +32,20 @@ export default function Login() {
     const navigate = useNavigate();
     async function handleSubmit(event) {
         event.preventDefault();             //prevent reload page after clicking form submit
-        import("../constant/Constant").then(ff => { ff.SetToken({ token: data.token }) })  //dynamice import       
-        sessionStorage.setItem("userinfo", JSON.stringify(data.body))       //session storage setup for userInfo
-        profile.setProfile(JSON.parse(sessionStorage.getItem("userinfo")))    //set userinfo in context state   
-        data.body.role=User.user
-        
-        if (data.body.role == "ADMIN")
-            setTimeout(() => {
-                navigate("admin/dashboard")
-            }, 100)
-        else if (data.body.role == "USER")
-            setTimeout(() => {
-                navigate("user/stocks")
-            }, 100)
+        await userLogin(form).then(data => {
+            data.body.role = User.user
+            data.body.user = User.user
+            import("../constant/Constant").then(ff => { ff.SetToken(data) })  //dynamice import //session storage setup for userInfo      
+            profile.setProfile(data.body)    //set userinfo in context state   
+            if (data.body.role == "ADMIN")
+                setTimeout(() => {
+                    navigate("admin/dashboard")
+                }, 100)
+            else if (data.body.role == "USER")
+                setTimeout(() => {
+                    navigate("user/stocks")
+                }, 100)
+        })
         // reducer(hello)
 
         // console.log(form)
@@ -76,7 +72,7 @@ export default function Login() {
         // return response.data;
     }
 
-    
+
 
     return (
         <>

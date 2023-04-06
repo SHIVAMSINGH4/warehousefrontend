@@ -5,106 +5,147 @@ import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 import * as ai from "react-icons/ai";
 import "./stocks.css"
-import { getAllProducts, getOneProduct } from '../../../api/Api';
+import { getAllProducts, getOneProduct, updateProduct } from '../../../api/Api';
+import index from 'toastify';
 // import Modal from 'react-bootstrap/Modal';
 
 export default function AdminStocks() {
-    //data fetch
-    const [data, setData] = useState(
-       
-    )
-    // const callData = async () => {
-    //     const d = await getAllProducts();
-    //     setData([...d])
-    // };
-    // useEffect(() => {        
-    //     callData()        
-    // }, [])
-    // useEffect(() => {
-    //     console.log(data)
-    // }, [data])
-
-    //filtered data on search
-    var searchD = {};
-
-    // input box function 
-    var result = [];
-    const [sInput, setInput] = useState([{ keywords: "" }])
-    // const handleChange = function (event) {
-    //     searchD = { [event.target.name]: event.target.value }
-    //     if (searchD.keywords != "") {
-    //         handleShow();
-    //         result = data.filter(e => {
-    //             return e.sapref.toLowerCase().startsWith(searchD.keywords)
-    //         })
-    //         setInput(result)
-    //     };
-    //     if (searchD.keywords == "") {
-    //         setInput([searchD])
-    //         handleClose();
-    //     }
-    //     console.log(result);
-    // }
-
-    //search box
-    // const [show, setShow] = useState(false);
-
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
-
-    // useEffect(() => {
-    //     var searchbox = document.getElementsByClassName("searchbox")[0];
-    //     var card = document.getElementsByClassName("cad")[0];
-    //     var stable = document.getElementsByClassName("stable")[0];
-    //     if (show == true) {
-    //         searchbox.style.display = "block";
-    //         card.classList.add("anime");
-    //         stable.style.height = "35vh"
-    //     }
-    //     if (show == false) {
-    //         setTimeout(() => {
-    //             searchbox.style.display = "none";
-    //         }, 100);
-    //         card.classList.remove("anime");
-    //         stable.style.height = "79vh"
-    //     }
-
-    // }, [sInput, show]);
-
-    // item desc box
-
-    // const [showVbox, setVbox] = useState(false);
-    // const [Vdata, setVdata] = useState({});
-    // function view(i) {
-    //     setVdata(data[i]);
-    //     setVbox(true);
-    // }
-
     //search item
-
-    const [sItem, setSItem] = useState({})
+    const [sItem, setSItem] = useState()
     const [q, setQ] = useState("")
-    function handleSChange(e) {
+    function handleSChange(e) {    //search values on change in search tab input
         const q = e.target.value
-        setQ(q)
-        // data.filter(ele => {
-        //     for (let key in ele) {
-        //         if (ele[`${key.toLowerCase()}`] == q.toLowerCase()) {
-        //             console.log(key)
-        //             // setSItem([...sItem])
-        //         }
-        //     }
-        // })
+        setQ(q.toUpperCase())
+    }
+    function keydown(event) {
+        if (event.key == 'Enter') search()
     }
 
-    async function search(e) {
+    async function search(e) {  //on click search button data fetch from server for one product
         const id = q;
-        setSItem(data)
-        // await getOneProduct(id).then(x => setSItem(x[0]))
+        const loc = ["GGN_001", "MUN_001", "DEL_001"];
+        Promise.all(loc.map((e, i) => {
+            return getOneProduct(id, e)
+        })
+        )
+            .then(res => {
+
+                Promise.all(res.map((ele) => {
+                    return getOneProduct(ele[0].OE_REF, ele[0].LOC)
+                })).then(res => setSItem(res))
+
+            })
     }
+
     useEffect(() => {
         console.log(sItem)
+        if (sItem)
+            sessionStorage.setItem("sItem", JSON.stringify(sItem))
+        if (!sItem && sessionStorage.getItem("sItem")) {
+            setSItem(JSON.parse(sessionStorage.getItem("sItem")))
+        }
     }, [sItem])
+
+    //TABLE COMPONENTS
+    let items;
+    if (sItem) items = sItem[0].map(x => { return (x.ITEMS_REF) })
+    let MAKE;
+    if (sItem) MAKE = sItem[0].map(x => { return (<td></td>) })
+
+    let GGN = [];
+    let MUN = [];
+    let DEL = [];
+    let row;
+    if (sItem) {
+        items.forEach((a) => {
+
+            sItem.forEach((ele) => {
+                ele.forEach(x => {
+                    if (x.LOC == "GGN_001") {
+                        if (x.ITEMS_REF == a) {
+                            console.log("ok")
+                            row = <>
+                                <td>{x.QTY}</td>
+                                <td>{x.PUR}</td>
+                                <td>{x.MRP}</td>
+                                <td></td>
+                            </>
+                            GGN.push(row)
+                            row = ""
+                        }
+                    }
+                    else if (x.LOC == "MUN_001") {
+                        if (x.ITEMS_REF == a) {
+                            row = <>
+                                <td>{x.QTY}</td>
+                                <td>{x.PUR}</td>
+                                <td>{x.MRP}</td>
+                                <td></td>
+                            </>
+                            MUN.push(row)
+                            row = ""
+                        }
+                    }
+                    else if (x.LOC == "DEL_001") {
+                        if (x.ITEMS_REF == a) {
+                            row = <>
+                                <td>{x.QTY}</td>
+                                <td>{x.PUR}</td>
+                                <td>{x.MRP}</td>
+                                <td></td>
+                            </>
+                            DEL.push(row)
+                            row = ""
+                        }
+                    }
+                })
+            })
+        });
+
+    }
+
+    // item desc box
+    const [showVbox, setVbox] = useState(false);
+    const [Vdata, setVdata] = useState({});
+    const [locOne, setLocOne] = useState();
+    const [locTwo, setLocTwo] = useState();
+    const [qty, setQty] = useState(1);
+
+    function vBox(event, e, i) {        //vbox or view box
+        console.log(e)
+        setVdata(e)
+        setVbox(true)
+    }
+    async function swap() {          //swap function
+        let objOne;
+        let objTwo;
+        sItem.forEach(e => {
+            e.forEach(x => {
+                if (x.ITEMS_REF == Vdata.ITEMS_REF && x.LOC == locOne) {
+                    objOne = x
+                    // console.log(`obj 1 :${objOne.LOC}`)
+                }
+                if (x.ITEMS_REF == Vdata.ITEMS_REF && x.LOC == locTwo) {
+                    objTwo = x
+                    // console.log(`obj 1 :${objTwo.LOC}`)
+                }
+            })
+        })
+        if (objOne.QTY - qty > 0) objOne.QTY = objOne.QTY - qty
+        else alert("select appropriate quantity")
+        
+        objTwo.QTY = parseFloat(objTwo.QTY) +parseFloat(qty)
+        console.log(objOne.QTY,objTwo.QTY)
+        await updateProduct(objOne,locOne).then(async res=>{
+            console.log(res)
+            await updateProduct(objTwo,locTwo).then(res => console.log(res))
+        }
+            
+        )
+    }
+    useEffect(() => {
+        console.log(Vdata)
+    }, [Vdata])
 
     return (
         <>
@@ -132,83 +173,19 @@ export default function AdminStocks() {
                                         onChange={handleSChange}
                                         name="keywords"
                                         autoComplete='disabled'
+                                        onKeyDown={keydown}
                                     />
                                 </InputGroup>
-
                             </Col>
                             <Col sm="1"><Button variant="light" onClick={search}>Search</Button></Col>
                         </Row>
                     </Col>
                 </Row>
 
-
-                {/* search box */}
-                {/* <Row>
-                    <Col>
-                        <div className='searchbox cad' style={{ borderRadius: "1rem", backgroundColor: "lightgray", width: "100%" }} >
-                            {/* close button
-                            <div style={{ width: "98%", display: "inline-block" }}></div>
-                            <div style={{ width: "1%", display: "inline-block" }}>
-                                <span className="closebtn" onClick={handleClose}>
-                                    <ai.AiOutlineClose size=".9rem" />
-                                </span>
-                            </div>
-
-                            {/* search table */}
-                {/* <div style={{ width: "100%", marginBottom: "0.5rem", height: "auto", overflowY: "scroll", overflowX: "scroll", }}>
-                                <Table striped bordered variant="dark" hover responsive="sm">
-                                    <thead>
-                                        <tr>
-                                            <th>S.No.</th>
-                                            <th>SAPREF</th>
-                                            <th>ITEMS REF</th>
-                                            <th>O.E. REF.</th>
-                                            <th>MEYLE REF.</th>
-                                            <th>Ref. Id</th>
-                                            <th>MAHLE REF.</th>
-                                            <th>MAAN REF.</th>
-                                            <th>HENGEST/OTH</th>
-                                            <th>OTHER REF</th>
-                                            <th>DESCRIPTION</th>
-                                            <th>APPLICATION</th>
-                                            <th>LOC</th>
-                                            <th>QUANTITY</th>
-                                            <th>MRP</th>
-                                            <th>MAKE</th>
-                                            <th>NEW MRP</th>
-                                            <th>P COST</th>
-                                            <th>OP BALANCE</th>
-                                            <th>PUR</th>
-                                            <th>SALES</th>
-                                            <th>MUNDKA</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {sInput.map((e, i) => {
-                                            // console.log(v)
-                                            return (
-                                                <tr key={i} onClick={() => { view(i) }}>
-                                                    <td >{i + 1}</td>
-                                                    <td>{e.sapref}</td>
-                                                    <td>{e.description}</td>
-                                                    <td>{e.application}</td>
-                                                    <td>{e.make}</td>
-                                                    <td>{e.qty}</td>
-                                                    <td>{e.mrp}</td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </Table>
-                            </div>
-                        </div>
-                    </Col>
-                </Row> */}
-
                 {/* stocks table */}
                 <Row>
                     <Col >
-                        {/* ITEMS TABLE */}
+
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
                                 <thead>
@@ -216,77 +193,69 @@ export default function AdminStocks() {
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
+                                        {sItem && sItem.map((e, i) => {
+                                            let loc;
+                                            if (e[0].LOC == "GGN_001") loc = "GURUGRAM"
+                                            if (e[0].LOC == "MUN_001") loc = "MUNDKA"
+                                            if (e[0].LOC == "DEL_001") loc = "DELHI"
+
                                             return (
-                                                <>
-                                                    <th key={i} colSpan={5}>{ele.LOCATION}</th>
-                                                    <th key={i + 1}></th>
-                                                </>
+                                                <th key={i} colSpan={4}>
+                                                    {loc}
+                                                </th>
                                             )
                                         })}
+
+
                                     </tr>
                                     <tr>
                                         <th>MAKER</th>
                                         <th>ITEMS REF</th>
-                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
+                                        <th></th>
+                                        {sItem && sItem.map((ele, i) => {
                                             return (
                                                 <>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th>QUANTITY</th>
-                                                    <th>PUR MRP</th>
-                                                    <th>NEW MRP</th>
+                                                    <th key={i}>QUANTITY</th>
+                                                    <th key={i + 1}>PUR MRP</th>
+                                                    <th key={i + 2}>NEW MRP</th>
+                                                    <th key={i + 3}></th>
+
                                                 </>
                                             )
                                         })}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr >
-                                        <td>{sItem && sItem.MAKE}</td>
-                                        <td>{sItem.MAKER && sItem.MAKER["ITEMS_REF"]}</td>
-                                        {sItem.MAKER && sItem.MAKER[0].STORE.map((ele, i) => {
-                                            return (
-                                                <>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>{ele.QUANTITY}</td>
-                                                    <td>{ele["OLD_MRP"]}</td>
-                                                    <td>{ele["NEW_MRP"]}</td>
-                                                    <th>+</th>
-                                                </>
-                                            )
-                                        })}
-
-                                        <td></td>
-                                        <td>{sItem && sItem.QTY_BY_STORE && sItem.QTY_BY_STORE[0].QTY}</td>
-                                        <td>{sItem && sItem.MRP}</td>
-                                        <td>{sItem && sItem["NEW MRP"]}</td>
-                                        <th>+</th>
-                                        <td></td>
-                                        <td>{sItem && sItem.QTY}</td>
-                                        <td>{sItem && sItem.MRP}</td>
-                                        <td>{sItem && sItem["NEW MRP"]}</td>
-                                        <th>+</th>
-                                    </tr>
+                                    {sItem && sItem[0].map((e, i) => {
+                                        return (
+                                            <tr onClick={(event) => vBox(event, e, i)}>
+                                                <td>{e.MAKE}</td>
+                                                <td>{e.ITEMS_REF}</td>
+                                                <td></td>
+                                                {GGN[i]}
+                                                {MUN[i]}
+                                                {DEL[i]}
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
                         </div>
-                        {/* ITEMS DESCRIPTION */}
+
                         <div className='stable' style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                             <Table striped bordered hover variant='light' >
                                 <tbody>
                                     <tr>
                                         <th>DESCRIPTION</th>
-                                        <td>{sItem && sItem.Descripation}</td>
+                                        <td>{sItem && sItem[0][0].Descripation}</td>
                                     </tr >
                                     <tr>
                                         <th>APPLICATION</th>
-                                        <td>{sItem && sItem.APPLICATION}</td>
+                                        <td>{sItem && sItem[0][0].APPLICATION}</td>
                                     </tr>
                                     <tr>
                                         <th>O.E. REF</th>
-                                        <td>{sItem && sItem["O_E_REF"]}</td>
+                                        <td>{sItem && sItem[0][0]["OE_REF"]}</td>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -295,15 +264,14 @@ export default function AdminStocks() {
                 </Row>
             </Container>
 
-            {/* view stock component */}
 
-            {/* <Modal
+            <Modal
                 show={showVbox}
                 onHide={() => { setVbox(false); console.log(Vdata) }}
                 // dialogClassName="modal-90w"
-                size="xl"
+                size="lg"
                 aria-labelledby="example-custom-modal-styling-title"
-                >
+            >
                 <Modal.Header closeButton>
                     <Modal.Title id="example-custom-modal-styling-title">
                         view stock
@@ -311,46 +279,75 @@ export default function AdminStocks() {
                 </Modal.Header>
                 <Modal.Body style={{ width: "100%", overflowY: "scroll", overflowX: "auto" }}>
                     <Table striped bordered hover responsive="sm">
-                        <thead>
-                            <tr>
-                                <th>S.No.</th>
-                                <th>SAPREF</th>
-                                <th>ITEMS REF</th>
-                                <th>O.E. REF.</th>
-                                <th>MEYLE REF.</th>
-                                <th>Ref. Id</th>
-                                <th>MAHLE REF.</th>
-                                <th>MAAN REF.</th>
-                                <th>HENGEST/OTH</th>
-                                <th>OTHER REF</th>
-                                <th>DESCRIPTION</th>
-                                <th>APPLICATION</th>
-                                <th>LOC</th>
-                                <th>QUANTITY</th>
-                                <th>MRP</th>
-                                <th>MAKE</th>
-                                <th>NEW MRP</th>
-                                <th>P COST</th>
-                                <th>OP BALANCE</th>
-                                <th>PUR</th>
-                                <th>SALES</th>
-                                <th>MUNDKA</th>
-                            </tr>
-                        </thead>
                         <tbody>
-                            <tr >
-                                <td>{Vdata.sapref}</td>
-                                <td>{Vdata.description}</td>
-                                <td>{Vdata.application}</td>
-                                <td>{Vdata.make}</td>
-                                <td>{Vdata.qty}</td>
-                                <td>{Vdata.mrp}</td>
-                                {/* <td><button value={i} onClick={deldata}>-</button></td> 
+                            <tr>
+                                <th>MAKER</th>
+                                <td>{Vdata.MAKE}</td>
+                            </tr >
+                            <tr>
+                                <th>ITEM_REF</th>
+                                <td>{Vdata.ITEMS_REF}</td>
+                            </tr >
+
+                            <tr>
+                                <th>DESCRIPTION</th>
+                                <td>{sItem && sItem[0][0].Descripation}</td>
+                            </tr >
+                            <tr>
+                                <th>APPLICATION</th>
+                                <td>{sItem && sItem[0][0].APPLICATION}</td>
                             </tr>
+                            <tr>
+                                <th>O.E. REF</th>
+                                <td>{sItem && sItem[0][0]["OE_REF"]}</td>
+                            </tr>
+                            <tr>
+                                <th>QUANTITY</th>
+                                <td>
+                                    <input style={{ width: "100%", caretColor: "auto", textAlign: 'center', overflowX: "scroll" }} name="quantity" type="number"
+                                        onBlur={(eve) => setQty(eve.target.value)} onChange={eve => setQty(eve.target.value)} value={qty} min={1} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>FROM</th>
+                                <th>
+                                    <Form.Select
+                                        onChange={(e) => { setLocOne(e.target.value) }}
+                                        aria-label="Default select example"
+                                        placeholder='FROM WHICH STORE'
+                                    >
+                                        <option>FORM WHICH STORE</option>
+                                        <option value="GGN_001">GURUGRAM</option>
+                                        <option value="MUN_001">MUNDKA</option>
+                                        <option value="DEL_001">DELHI</option>
+                                    </Form.Select>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>TO</th>
+                                <th>
+                                    <Form.Select
+                                        onChange={(e) => { setLocTwo(e.target.value) }}
+                                        aria-label="Default select example"
+                                        placeholder='TO WHICH STORE'
+                                    >
+                                        <option>TO WHICH STORE</option>
+                                        <option value="GGN_001">GURUGRAM</option>
+                                        <option value="MUN_001">MUNDKA</option>
+                                        <option value="DEL_001">DELHI</option>
+                                    </Form.Select>
+                                </th>
+                            </tr>
+
                         </tbody>
                     </Table>
+                    <div style={{ textAlign: "center", marginBottom: "5%" }}>
+                        <Button onClick={swap}>
+                            SWAP
+                        </Button>
+                    </div>
                 </Modal.Body>
-             </Modal> */}
+            </Modal>
         </>
     )
 }

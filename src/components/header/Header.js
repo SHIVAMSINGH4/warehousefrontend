@@ -9,7 +9,7 @@ import { Row } from 'react-bootstrap';
 import * as bs from "react-icons/bs";
 
 export default function Header() {
-    const { profile,cart } = useContext(MainContext)
+    const { profile, cart } = useContext(MainContext)
     // const [user, setUser] = useState({ type: "user" })  
 
     const navigate = useNavigate()
@@ -19,43 +19,32 @@ export default function Header() {
         import("../../constant/Constant").then(ff => {
             ff.clearToken()
             profile.setProfile()
-            cart.setCartCount(0)    
+            cart.setCartCount(0)
             navigate('/')
         })
-    }
-
-    //useEffect(() => {
-    // var admin = document.querySelector(".li");
-    // console.log("id.name")
-    // console.log(admin)
-    // console.log(id.name)
-    //setUser({ type: id.name })
-    // if(!user.type==id.name)
-    // }, [id])
-
-    // useEffect(()=>{
-    //     var admin = document.querySelector(".logout");
-    //     console.log(admin)
-    // },[])
+    }    
 
     //set context state again if page get reload
     useEffect(() => {
-        if (sessionStorage.getItem("userinfo") && !profile.profile) {
-            profile.setProfile(JSON.parse(sessionStorage.getItem("userinfo")))
+        if (sessionStorage.getItem("userInfo") && !profile.profile) {
+            profile.setProfile(JSON.parse(sessionStorage.getItem("userInfo")).body)
         }
         setCartCount(cart.cartCount)
-    }, [profile,cart])
-    useEffect(()=>{
-        if(sessionStorage.getItem("cartListItems"))
-        cart.setCartCount(JSON.parse(sessionStorage.getItem("cartListItems")).length)
-    },[])
+    }, [profile, cart])
+    useEffect(() => {
+        if (sessionStorage.getItem("cartListItems"))
+            cart.setCartCount(JSON.parse(sessionStorage.getItem("cartListItems")).length)
+    }, [])
 
     //cart count
     const [cartCount, setCartCount] = useState(0)
 
     //move to cart function
-    function moveToCart(){
-        navigate("user/cart")
+    function moveToCart() {
+        if (profile.profile.role == "USER")
+            navigate("user/cart")
+        if (profile.profile.role == "ADMIN")
+            navigate("admin/cart")
     }
 
     return (
@@ -68,9 +57,9 @@ export default function Header() {
 
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     {profile.profile && <Navbar.Collapse id="basic-navbar-nav" className='justify-content-end'>
-                        <div className='' onClick={moveToCart} style={{cursor:"pointer",display: "block", marginRight: "2%" }}>
+                        <div className='' onClick={moveToCart} style={{ cursor: "pointer", display: "block", marginRight: "2%" }}>
                             <bs.BsCartFill size="25" />
-                            <div style={{display: "block",marginTop:"-3%",marginLeft:"2%",width:"100%",color:"white",position: "absolute", backgroundcolour: "white" }}>
+                            <div style={{ display: "block", marginTop: "-3%", marginLeft: "2%", width: "100%", color: "white", position: "absolute", backgroundcolour: "white" }}>
                                 <span >{cartCount}</span>
                             </div>
                         </div>

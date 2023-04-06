@@ -20,8 +20,8 @@ export default function UserCart() {
             setItemId(JSON.parse(sessionStorage.getItem("cartList")))
             setData(JSON.parse(sessionStorage.getItem("cartListData")))
         }
-        if (sessionStorage.getItem("userinfo")) {
-            setLoc(JSON.parse(sessionStorage.getItem("userinfo")).store)
+        if (sessionStorage.getItem("userInfo")) {
+            setLoc(JSON.parse(sessionStorage.getItem("userInfo")).body.store)
         }
     }, [])
 
@@ -118,6 +118,12 @@ export default function UserCart() {
             case "purchase":
                 return { type: "sell", option: "purchase" };
         }
+    }    
+    
+    //customer Phone
+    const [custPhone,setCustPhone]=useState();
+    const handleCustPhone = (event)=>{
+        setCustPhone(event.target.value)
     }
 
     // BILL modal
@@ -130,21 +136,23 @@ export default function UserCart() {
         }
     }
 
-    //print setting
-    const printRef = useRef();
-    const handlePrint = useReactToPrint  (
-        {
-            content:()=>printRef.current
-          
+    //enter key function
+    const keydown = (event)=>{
+        if(event.key=="Enter"){
+            moveToBill()
         }
-    )
-    
-    //customer Phone
-    const [custPhone,setCustPhone]=useState();
-    const handleCustPhone = (event)=>{
-        setCustPhone(event.target.value)
     }
 
+     //print setting
+     const printRef = useRef();
+     const handlePrint = useReactToPrint  (
+         {
+             content:()=>printRef.current
+           
+         }
+     )
+
+     
     return (
         <>
             {/* cart */}
@@ -181,6 +189,7 @@ export default function UserCart() {
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
                                 onChange={handleCustPhone}
+                                onKeyDown={keydown}
                             />
                         </InputGroup>
                     </Col>

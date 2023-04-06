@@ -1,7 +1,6 @@
 *{
     margin: 0;
-    box-sizing: border-box;
-    
+    box-sizing: border-box;    
 }
 .card{
     margin: 100px 0px 0px 800px;
@@ -13,6 +12,26 @@
 .ptbtn div ul li:hover{
     background-color: lightslategrey!important;
 }
+
+ /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+ @media screen and (max-width: 450px) {
+    .sidenav {
+      padding-top: 30%;    
+      position: absolute;
+      width: 0;
+      margin-left: 0;         
+    }
+    .sidenav a {font-size: 2rem;}
+    .mbtn{
+      margin-top: 5rem;
+      display: inline-flex!important;
+      vertical-align: middle!important;      
+    }    
+    .closebtn{
+      display: block!important;
+    }
+  }
+
 /* .login{
     font-size: 30px;
     color: #428BCA;

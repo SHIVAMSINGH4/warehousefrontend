@@ -54,6 +54,11 @@ export const UserBillModal = React.forwardRef((props, ref) => {
     // console.log(cList)
 
     const [checkoutShow, setModalShow] = useState(false);
+    function keydown(event){
+        if(event.key=="Enter"){
+            checkout()
+        }
+    }
     async function checkout() {
        
         await addBill(
@@ -70,6 +75,7 @@ export const UserBillModal = React.forwardRef((props, ref) => {
                 })
             }
         ).then(res=>{
+            console.log(res)
             sessionStorage.setItem("bill",JSON.stringify(res))
         })
         setModalShow(true);
@@ -88,6 +94,8 @@ export const UserBillModal = React.forwardRef((props, ref) => {
             <Modal {...props}
                 aria-labelledby="contained-modal-title-vcenter"
                 size="lg"
+                tabIndex={"0"} 
+                onKeyDown={keydown}
             >
                  <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">

@@ -12,14 +12,15 @@ export default function UserOrder(props) {
     const [dataBill, setDataBill] = useState();     //data fetch by bill no.
     const [loading, setLoading] = useState();        //state forloading 
     const [loc, setLoc] = useState();            //location of store
-    const [update,setupdate]=useState(false);
+    const [update, setupdate] = useState(false);
     useEffect(() => {       //cartlist update on page or page reload/ component render
         // if (sessionStorage.getItem("cartList")) {
         //     setItemId(JSON.parse(sessionStorage.getItem("cartList")))
         //     setData(JSON.parse(sessionStorage.getItem("cartListData")))
         // }
-        if (sessionStorage.getItem("userinfo")) {
-            setLoc(JSON.parse(sessionStorage.getItem("userinfo")).store)
+        if (sessionStorage.getItem("userInfo")) {
+            console.log(JSON.parse(sessionStorage.getItem("userInfo")).body.store)
+            setLoc(JSON.parse(sessionStorage.getItem("userInfo")).body.store)
         }
     }, [])
     function LoadingSpinner() {
@@ -61,13 +62,13 @@ export default function UserOrder(props) {
 
     useEffect(() => { }, [dataCust, dataBill]) //on render refresh data
     useEffect(() => {         // fetch bill data if bill no. changes
-        console.log(Bill)
-        if (Bill && Bill.type == "billNo") {
 
+        if (Bill && Bill.type == "billNo") {
+            console.log(Bill)
             setDataCust()
             setLoading(true)
             getBill(Bill.id, loc).then(d => {
-                
+                console.log(Bill.id, loc)
                 if (d != undefined) {
 
                     setDataBill(d[0])
@@ -167,12 +168,12 @@ export default function UserOrder(props) {
         setLoading(true)
         let orderData = [];          //temporary variable to store order data fetching live
         await getBill(data, loc).then(data => {                   //loop on data get by onclick
-            console.log(data)                       
-            if (data!="ERROR")
+
+            if (data != "ERROR")
                 data[0].PRODUCTS.forEach(async x => {
                     await getOneProduct(x.ITEMS_REF, loc).then(d => {
                         orderData.push(d)
-                        console.log(orderData)
+
                         setDataBox({
                             bill: data,
                             data: orderData,
@@ -181,18 +182,18 @@ export default function UserOrder(props) {
                     setModalShow(true)
                     setLoading(false)
                 })
-            else{
-                 alert("data isnt found")
+            else {
+                alert("data isnt found")
                 // if(sessionStorage.getItem("bill"))
                 // setBill({
                 //     type: "billNo",
                 //     id: JSON.parse(sessionStorage.getItem("bill")).billno
                 // })
-                setupdate(update?false:true)
-                    setLoading(false)
-                    console.log("ok")
-       
-              
+                setupdate(update ? false : true)
+                setLoading(false)
+                console.log("ok")
+
+
             }
         })
 
@@ -424,7 +425,7 @@ export default function UserOrder(props) {
                                         </div>
                                         <div style={{ backgroundColor: "lightblue", display: "inline-block", width: "50%", fontSize: "1rem" }}>
                                             <div style={{ textAlign: "center", display: "inline-block", width: "50%" }}>
-                                                <span style={{}}>$</span>
+                                                <span style={{}}>Rs.</span>
                                             </div>
                                             <div style={{ textAlign: "center", display: "inline-block", width: "25%" }}>
                                                 <span style={{}}>
@@ -441,9 +442,11 @@ export default function UserOrder(props) {
                         </Row>
                     </Container>
                 </Modal.Body>
-                {/* <Modal.Footer>
-                        <Button onClick={() => { checkout() }}>CHECKOUT</Button>
-                    </Modal.Footer>                 */}
+                <Modal.Footer style={{textAlign:"center"}}>
+                    <div style={{textAlign:"center"}}>
+                        <Button onClick={() => { handlePrint() }}>Print</Button>
+                    </div>
+                </Modal.Footer>
             </Modal>
 
         </>

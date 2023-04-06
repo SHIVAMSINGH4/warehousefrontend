@@ -7,25 +7,25 @@ import { getAllProducts, getOneProduct } from '../../../api/Api';
 import { useContext } from 'react';
 import { MainContext } from '../../../context/Context';
 
-export default function UserStocks() {   
-    // const [data, setData] = useState() // state for data 
-    // useEffect(() => {           //data fetch
-    //     console.log(data)
-    // }, [data])
-    const loc = JSON.parse(sessionStorage.getItem("userinfo")).store //location get from session storage
+export default function UserStocks() {       
+    const loc = JSON.parse(sessionStorage.getItem("userInfo")).body.store //location get from session storage
     const { cart } = useContext(MainContext)   //cartCount  
 
 
     //search items functions
     var searchD = {}; //filtered data on search
-    const [sItem, setSItem] = useState()     //sItem/search item==stockitem   
+    const [sItem, setSItem] = useState()     //sItem/search item(stockitem in session storage)
     const [q, setQ] = useState("")     //keywords being typed in search box input
     function handleSChange(e) {    //search values on change in search tab input
         const q = e.target.value
         setQ(q.toUpperCase())
     }
-    async function search(e) {  //on click search button data fetch from server for one product
-        const id = q;        
+    function keydown(event){
+        console.log("ok")
+        if(event.key=='Enter')search()
+    }
+    async function search(e) {  //on click search button data fetch from server for one product        
+        const id = q;                
         await getOneProduct(id, loc).then(async x => {
             if(x.length<1) alert("data is not found");
             else {
@@ -138,12 +138,13 @@ export default function UserStocks() {
                                         onChange={handleSChange}
                                         name="keywords"
                                         autoComplete='disabled'
+                                        onKeyDown={keydown}
                                         
                                     />
                                 </InputGroup>
 
                             </Col>
-                            <Col sm="1"><Button variant="light" onClick={search}>Search</Button></Col>
+                            <Col sm="1"><Button variant="light" onClick={search} >Search</Button></Col>
                             <Col >
                                 <Button variant="light" id="button-addon2">
                                     SCAN

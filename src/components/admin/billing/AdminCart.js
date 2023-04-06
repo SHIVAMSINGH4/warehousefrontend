@@ -129,8 +129,8 @@ export default function AdminCart() {
              }            
     }
     function blurQty(e,id){                     //input quantity after focus out
-        if(e.target.value==""||e.target.value==0){    
-            let newQty = 1            
+        if(e.target.value==""||e.target.value==0){
+            let newQty = 1
             let obj = cList;
             obj.forEach((e, i) => {
                 if (e.data.sapref == obj[id].data.sapref) {
@@ -164,7 +164,7 @@ export default function AdminCart() {
                                 {state.type}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => { dispatch({ type: state.type }); console.log(state) }}>{state.option}</Dropdown.Item>
+                                <Dropdown.Item onClick={() => { dispatch({ type: state.type }) }}>{state.option}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>

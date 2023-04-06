@@ -43,7 +43,7 @@ export default function SideNav({ children }) {
             setMenu([
                 { title: "Dashboard", path: '/admin/dashboard', icon: <AiOutlineAreaChart /> },
                 { title: "Stocks", path: '/admin/stocks', icon: <AiOutlineShop /> },
-                { title: "Cart", path: '/admin/cart', icon: <AiOutlineShoppingCart /> },
+                // { title: "Cart", path: '/admin/cart', icon: <AiOutlineShoppingCart /> },
                 { title: "Order", path: '/admin/order', icon: <AiOutlineSnippets /> },
             ])
         }
