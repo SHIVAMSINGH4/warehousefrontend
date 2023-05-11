@@ -270,6 +270,11 @@ export default function UserOrder(props) {
                                     onChange={(date) => setStartDate(date)}
                                     showYearDropdown
                                     scrollableMonthYearDropdown
+                                    format={{
+                                        day: "numeric",
+                                        year: "numeric",
+                                        month: "long",
+                                      }}
                                 />
                             </div>
                             <span>Select End Date :</span>

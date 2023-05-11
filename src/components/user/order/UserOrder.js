@@ -376,7 +376,7 @@ export default function UserOrder(props) {
                                                             })
                                                         }
                                                     </td> */}
-                                                    <td></td>
+                                                    <td>{DataBox.bill[0].PRODUCTS[0].QUANTITY}</td>
                                                     <td width="100"><div style={{ width: "100%" }}>{e[0].MRP}</div></td>
                                                 </tr>
                                             )
@@ -429,9 +429,11 @@ export default function UserOrder(props) {
                                             </div>
                                             <div style={{ textAlign: "center", display: "inline-block", width: "25%" }}>
                                                 <span style={{}}>
-                                                    {/* {cList&&cList.map(e=>{
-                                                            return e.data.MRP * e.qty
-                                                        }).reduce((a,b)=>{return a+b},0)} */}
+                                                    {DataBox&&DataBox.data.map(e=>{
+                                                        const qty = DataBox.bill[0].PRODUCTS[0].QUANTITY
+                                                        console.log(qty)
+                                                            return e[0].MRP * qty
+                                                        }).reduce((a,b)=>{return a+b},0)}
                                                 </span>
                                             </div>
                                         </div>
